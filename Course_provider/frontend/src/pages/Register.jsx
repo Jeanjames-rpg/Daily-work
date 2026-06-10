@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 function Register() {
     const[form, setForm] = useState({
@@ -20,6 +21,8 @@ function Register() {
             alert("Registered Successfully");
         } catch (err) {
             console.log(err)
+            console.log("Status:", err.response.status);
+            console.log("Errors:", err.response.data);
         }
     };
 
@@ -39,6 +42,15 @@ function Register() {
             </select>
 
             <button type="submit">Register</button>
+
+            <p>
+                Return to our Homepage? <Link to='/'>Home</Link>
+            </p>
+
+            <p>
+                Already have an account ?
+                <Link to='/login' >Login</Link>
+            </p>
 
         </form>
     );
