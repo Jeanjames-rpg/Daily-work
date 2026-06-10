@@ -1,3 +1,4 @@
+
 a=input("enter ur 1 string")
 b=input("enter ur 2 string")
 h=0
