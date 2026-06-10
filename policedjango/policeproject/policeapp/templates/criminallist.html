@@ -1,0 +1,52 @@
+<h1 style="text-align: center;">CRIMINAL LIST</h1>
+
+<title>criminals</title>
+<style>
+    th{
+        color: blueviolet;
+    }
+
+    tr{
+        color: firebrick;
+    }
+
+    body{
+        background-color: khaki;
+    }
+
+</style>
+<body>
+
+
+<table border="4">
+
+    <tr>
+        <th>criminalid</th>
+        <th>cr_name</th>
+        <th>age</th>
+        <th>crime_type</th>
+        <th>location</th>
+        <th>phnum</th>
+        <th>idmark</th>
+        <th>emergency_no</th>
+
+    </tr>
+
+
+    {% for cr in criminal %}
+    <tr>
+        <td>{{cr.criminalid}}</td>
+        <td>{{cr.cr_name}}</td>
+        <td>{{cr.age}}</td>
+        <td>{{cr.crime_type}}</td>
+        <td>{{cr.location}}</td>
+        <td>{{cr.phnum}}</td>
+        <td>{{cr.idmark}}</td>
+        <td>{{cr.emergency_no}}</td>
+    </tr>
+    {% endfor %}
+
+
+
+</table>
+</body>

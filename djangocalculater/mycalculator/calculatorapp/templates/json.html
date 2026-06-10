@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>sql</title>
+    <h1 style="text-align: center">ALL DETAILS</h1>
+</head>
+<body>
+
+<table border="1">
+
+         <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>EMAIL</th>
+            <th>PHONE</th>
+            <th>PASSWORD</th>
+            <th>LOCATION</th>
+        </tr>
+
+        {% for i in data_json %}
+
+        <tr>
+
+            <td>{{ i.id }}</td>
+
+            <td>{{ i.name }}</td>
+
+            <td>{{ i.email }}</td>
+
+            <td>{{ i.phno }}</td>
+
+            <td>{{ i.password }}</td>
+
+            <td>{{ i.location }}</td>
+        
+        
+        
+        <td>
+            <a href="/update/{{i.id}}">UPDATE</a>
+        </td>
+
+        <td>
+            <a href="/delete/{{i.id}}">DELETE</a>
+        </td>
+        
+        </tr>
+
+        {% endfor %}
+
+
+</table>
+
+
+
+
+</body>
+
+
+
+
+</html>

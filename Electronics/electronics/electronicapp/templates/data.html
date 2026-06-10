@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV DATA</title>
+    <h1 style="text-align: center;">DATA TABLE</h1>
+</head>
+
+<body>
+    <table border="3">
+        {% for row in data %}
+        <tr>
+            {% for column in row %}
+            <td>{{column}}</td>
+            {% endfor %}
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+
+</body>
+
+
+</html>

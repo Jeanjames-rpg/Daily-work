@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data</title>
+</head>
+<body>
+
+    <button onclick="loaddata()">Show</button>
+
+    <div id="result"></div>
+
+    <button onclick="loadprev()">Previous</button>
+
+    <button onclick="loadnext()">Next</button>
+
+    <script>
+        let currentpage = 1;
+        function loaddata() {
+
+            fetch(`http://127.0.0.1:8000/csv/?page=${currentpage}`)
+            .then(res => res.json())
+            .then(data => {
+
+                // console.log(data)
+
+                let output = `
+                <table border="1">
+                    <tr>
+                        <th>Customer_ID</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Loyalty_Member</th>
+                        <th>Product_Type</th>
+                        <th>SKU</th>
+                        <th>Rating</th>
+                        <th>Order_Status</th>
+                        <th>Payment_Method</th>
+                        <th>Total_Price</th>
+                        <th>Unit_Price</th>
+                        <th>Quantity</th>
+                        <th>Purchase_Date</th>
+                        <th>Shipping_Type</th>
+                        <th>Add-ons_Purchased</th>
+                        <th>Add-on_Total</th>
+                    </tr>
+                `;
+
+                data.data.forEach(item => {
+                    output += `
+                        <tr>
+                            <td>${item["Customer ID"]}</td>
+                            <td>${item["Age"]}</td>
+                            <td>${item["Gender"]}</td>
+                            <td>${item["Loyalty Member"]}</td>
+                            <td>${item["Product Type"]}</td>
+                            <td>${item["SKU"]}</td>
+                            <td>${item["Rating"]}</td>
+                            <td>${item["Order Status"]}</td>
+                            <td>${item["Payment Method"]}</td>
+                            <td>${item["Total Price"]}</td>
+                            <td>${item["Unit Price"]}</td>
+                            <td>${item["Quantity"]}</td>
+                            <td>${item["Purchase Date"]}</td>
+                            <td>${item["Shipping Type"]}</td>
+                            <td>${item["Add-ons Purchased"]}</td>
+                            <td>${item["Add-on Total"]}</td>
+                        </tr>
+                    `;
+                });
+
+                output += `</table>`;
+
+                document.getElementById("result").innerHTML = output;
+
+            })
+            .catch(error => {
+                console.log("Error:", error);
+            });
+            
+
+        }
+
+        function loadnext(){
+            currentpage++;
+            loaddata()
+        }
+
+        function loadprev(){
+            if(currentpage > 1){
+                currentpage--;
+                loaddata()
+            }
+        }
+    </script>
+
+</body>
+</html>

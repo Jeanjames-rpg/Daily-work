@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script>
+
+        // var counter = 0;
+
+        var sample= function (){
+            var counter = 0; 
+        function incre() {
+            ++counter;
+            document.getElementById("clickCount").innerHTML = counter;
+
+        }
+    }();
+
+        function min() {
+            --counter;
+            document.getElementById("clickCount").innerHTML = counter;
+        }
+
+    </script>
+</head>
+
+<body>
+    <button onclick="sample()">click me</button>
+
+    <button onclick="min()">minus</button>
+
+    <div>
+        You have clicked <span id="clickCount">0</span> times!
+
+    </div>
+
+
+</body>
+
+</html>

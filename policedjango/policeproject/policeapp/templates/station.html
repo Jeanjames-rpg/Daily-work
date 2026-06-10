@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>police station</title>
+<h1 style="text-align: center;"> POLICE STATION </h1>
+
+
+
+<style>
+    body{
+        background-color:darkkhaki;
+    }
+</style>
+
+</head>
+
+<body >
+<table border="5">
+
+    <tr>
+        <th>station</th>
+        <th>name</th>
+        <th>location</th>
+        <th>phno</th>
+        <th>noofficers</th>
+        <th>cellcount</th>
+        <th>vehicles</th>
+    </tr>
+
+    {% for station in pstation %}
+    <tr>
+
+        <td>{{station.stationid}}</td>
+        <td>{{station.name}}</td>
+        <td>{{station.location}}</td>
+        <td>{{station.phno}}</td>
+        <td>{{station.noofficers}}</td>
+        <td>{{station.cellcount}}</td>
+        <td>{{station.vehicles}}</td>
+
+    </tr>
+    {% endfor %}
+
+
+
+
+</table>
+</body>
+</html>

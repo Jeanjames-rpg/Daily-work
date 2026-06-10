@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OFFICERS</title>
+    <h1 style="text-align: center;">OFFICER LIST</h1>
+
+    <style>
+
+        body{
+            background-color: darkkhaki;
+        }
+    </style>
+
+</head>
+<body>
+<table border="4">
+
+<tr>
+    <th>officerid</th>
+    <th>pname</th>
+    <th>prank</th>
+    <th>station</th>
+    <th>salary</th>
+    <th>location</th>
+    <th>ph</th>
+    <th>gender</th>
+    <th>age</th>
+    <th>emergency_contact</th>
+
+</tr>
+
+    {% for of in officer %}
+    <tr>
+        <td>{{of.officerid}}</td>
+        <td>{{of.pname}}</td>
+        <td>{{of.prank}}</td>
+        <td>{{of.stationid}}</td>
+        <td>{{of.salary}}</td>
+        <td>{{of.location}}</td>
+        <td>{{of.ph}}</td>
+        <td>{{of.gender}}</td>
+        <td>{{of.age}}</td>
+        <td>{{of.emergency_contact}}</td>
+
+    </tr>
+    {% endfor %}
+
+
+
+
+</table>
+</body>
+</html>

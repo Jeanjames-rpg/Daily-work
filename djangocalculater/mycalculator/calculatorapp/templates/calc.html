@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CALCULATOR APP</title>
+    <H1 style="text-align: center;">WELCOME TO MY CALCULATOR</H1>
+</head>
+<body>
+        <form method="post">
+            {% csrf_token %}
+
+            <input type="number" name="num1" step="any" placeholder="FIRST NUMBER"  required>
+
+            <select name="operator">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+                <option value="**">**</option>
+                <option value="//">//</option> 
+                <option value="%">%</option>
+                
+            </select>
+
+            <input type="number" name="num2" step="any" placeholder="SECOND NUMBER"  required>
+
+            <button type="submit">CALCULATE</button>
+
+        </form>
+        {% if result != None %}
+            <h2>Result:{{result}}</h2>
+        {% endif %}
+
+        {% if result == None %}
+            <h2>Result:{{"NOT DIVISIBLE BY 0"}}</h2>
+        {% endif %}
+</body>
+
+
+</html>

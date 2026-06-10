@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UPDATE</title>
+    <h1 style="text-align: center;">Update</h1>
+</head>
+<body>
+
+    <form method="post">
+        {% csrf_token  %}
+        <label>Name</label>
+        <input type="text" name="name" value={{data.name}}><br></br>
+
+        <label>Email</label>
+        <input type="email" name="email" value="{{data.email}}"><br></br>
+
+        <label>Phone</label>
+        <input type="number" name="phno" value="{{data.phno}}"><br></br>
+
+        <label>Password</label>
+        <input type="password" name="password" value="{{data.password}}"><br></br>
+        
+        <label>Confirm password</label>
+        <input type="password" name="confirm_password" ><br></br>
+
+        <label>Location</label>
+        <input type="text" name="location" value="{{data.location}}"><br></br>
+
+
+        <button type="submit">UPDATE</button>
+    </form>
+
+
+</body>
+
+
+
+</html>

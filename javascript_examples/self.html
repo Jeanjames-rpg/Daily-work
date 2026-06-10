@@ -1,0 +1,22 @@
+<html>
+<head>
+    <script>
+        function resul (){
+            const result = mylogic.sum()
+            console.log("result is ",result);
+            document.getElementById('summ').innerHTML=result;
+        }
+    </script>
+
+</head>
+
+<body>
+    <button onclick="resul()">Click</button>
+
+    <script type="text/javascript" src="self_invoke.js"></script>
+
+    <div id="summ"></div>
+
+</body>
+
+</html>

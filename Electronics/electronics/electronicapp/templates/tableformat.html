@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV DATA</title>
+</head>
+
+<body style="background-color: grey;">
+
+    <h1 style="text-align: center;">CSV TABLE</h1>
+
+    <table border="3">
+
+        <tr>
+            <th>Customer_ID</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Loyalty_Member</th>
+            <th>Product_Type</th>
+            <th>SKU</th>
+            <th>Rating</th>
+            <th>Order_Status</th>
+            <th>Payment_Method</th>
+            <th>Total_Price</th>
+            <th>Unit_Price</th>
+            <th>Quantity</th>
+            <th>Purchase_Date</th>
+            <th>Shipping_Type</th>
+            <th>Add-ons_Purchased</th>
+            <th>Add-on_Total</th>
+        </tr>
+
+        {% for i in sales %}
+        <tr>
+            <td>{{ i.Customer_ID }}</td>
+            <td>{{ i.Age }}</td>
+            <td>{{ i.Gender }}</td>
+            <td>{{ i.Loyalty_Member }}</td>
+            <td>{{ i.Product_Type }}</td>
+            <td>{{ i.SKU }}</td>
+            <td>{{ i.Rating }}</td>
+            <td>{{ i.Order_Status }}</td>
+            <td>{{ i.Payment_Method }}</td>
+            <td>{{ i.Total_Price }}</td>
+            <td>{{ i.Unit_Price }}</td>
+            <td>{{ i.Quantity }}</td>
+            <td>{{ i.Purchase_Date }}</td>
+            <td>{{ i.Shipping_Type }}</td>
+            <td>{{ i.Add_ons_Purchased }}</td>
+            <td>{{ i.Add_on_Total }}</td>
+        </tr>   
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>

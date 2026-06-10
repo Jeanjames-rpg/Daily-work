@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+
+
+
+        {% endblock %}   
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/myfile.css' %}">
+
+    <!-- <style>
+        div{
+            background-color: aquamarine;
+        }
+
+        li{
+            display: inline-block;
+            padding: 10px
+        }
+
+        a{
+            text-decoration: none;
+        }
+    </style> -->
+
+</head>
+    <body>
+    
+    <div>
+        <ul style="list-style-type: none;">
+            <li style="color:chocolate;">
+                <a href="home" > Home </a>
+            </li>
+            <li style="color: blue;">
+                <a href="abc" > abc </a>
+            </li>
+            <li style="color: blueviolet;">
+                <a href="" > products </a>
+            </li>
+            <li style="color: black;">
+                <a href="" > Productlist </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+        <div>
+        {% block main %}
+
+
+
+        {% endblock %}
+        </div>
+    
+
+    <div>
+
+    </div>
+        
+    </body>
+
+
+</html>

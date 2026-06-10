@@ -1,0 +1,98 @@
+{
+    "officer_Rahul Das": {
+        "location": "Aluva",
+        "pname": "Rahul Das",
+        "officerid": 2,
+        "prank": "SI",
+        "gender": "Male",
+        "age": 30,
+        "caseid": 2,
+        "title": "Accident Case",
+        "description": "Road accident investigation",
+        "cr_name": "Manoj"
+    },
+    "officer_Rohit Nair": {
+        "location": "Aluva",
+        "pname": "Rohit Nair",
+        "officerid": 18,
+        "prank": "Inspector",
+        "gender": "Male",
+        "age": 36,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    },
+    "officer_Anu Paul": {
+        "location": "Aluva",
+        "pname": "Anu Paul",
+        "officerid": 19,
+        "prank": "SI",
+        "gender": "Female",
+        "age": 30,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    },
+    "officer_Vimal Raj": {
+        "location": "Aluva",
+        "pname": "Vimal Raj",
+        "officerid": 49,
+        "prank": "SI",
+        "gender": "Male",
+        "age": 33,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    },
+    "officer_Arya S": {
+        "location": "Aluva",
+        "pname": "Arya S",
+        "officerid": 50,
+        "prank": "Constable",
+        "gender": "Female",
+        "age": 24,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    },
+    "officer_Officer B1": {
+        "location": "Aluva",
+        "pname": "Officer B1",
+        "officerid": 72,
+        "prank": "Constable",
+        "gender": "Male",
+        "age": 28,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    },
+    "officer_Officer B2": {
+        "location": "Aluva",
+        "pname": "Officer B2",
+        "officerid": 73,
+        "prank": "Constable",
+        "gender": "Female",
+        "age": 29,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    },
+    "officer_Officer B3": {
+        "location": "Aluva",
+        "pname": "Officer B3",
+        "officerid": 74,
+        "prank": "ASI",
+        "gender": "Male",
+        "age": 32,
+        "caseid": null,
+        "title": null,
+        "description": null,
+        "cr_name": null
+    }
+}

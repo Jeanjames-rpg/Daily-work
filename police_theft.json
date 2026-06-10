@@ -1,0 +1,57 @@
+{
+    "desc_Bike stolen near bus stand": {
+        "caseid": 1,
+        "title": "Theft Case",
+        "description": "Bike stolen near bus stand",
+        "status": "Open",
+        "officerid": 1,
+        "firid": null,
+        "case_date": "2026-04-01",
+        "open_date": "2026-04-01",
+        "close_date": null
+    },
+    "desc_Mobile phone theft in market": {
+        "caseid": 27,
+        "title": "Theft Case",
+        "description": "Mobile phone theft in market",
+        "status": "Pending",
+        "officerid": 15,
+        "firid": null,
+        "case_date": "2026-04-10",
+        "open_date": "2026-04-10",
+        "close_date": null
+    },
+    "desc_House burglary at night": {
+        "caseid": 25,
+        "title": "Theft Case",
+        "description": "House burglary at night",
+        "status": "Open",
+        "officerid": 15,
+        "firid": null,
+        "case_date": "2026-04-30",
+        "open_date": "2026-04-30",
+        "close_date": null
+    },
+    "desc_Chain snatching incident": {
+        "caseid": 23,
+        "title": "Theft Case",
+        "description": "Chain snatching incident",
+        "status": "Closed",
+        "officerid": 15,
+        "firid": null,
+        "case_date": "2026-07-05",
+        "open_date": "2026-07-05",
+        "close_date": "2026-07-10"
+    },
+    "desc_Pickpocketing in crowded area": {
+        "caseid": 43,
+        "title": "Theft Case",
+        "description": "Pickpocketing in crowded area",
+        "status": "Open",
+        "officerid": 9,
+        "firid": null,
+        "case_date": "2026-11-10",
+        "open_date": "2026-11-10",
+        "close_date": null
+    }
+}

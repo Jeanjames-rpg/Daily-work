@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cases</title>
+    <h1 style="text-align: center;">CASE LIST</h1>
+
+    <style>
+        body{
+            background-color: darkkhaki;
+        }
+
+    </style>
+</head>
+
+<body>
+<table border="5">
+    <tr>
+        <th>Case Id</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Description</th>
+        <th>Officer </th>
+        <th>Fir Id</th>
+        <th>Case Date</th>
+        <th>Open Date</th>
+        <th>Close Date</th>
+    </tr>
+
+
+    {% for case in cases %}
+    <tr>
+        <td>{{ case.caseid}}</td>
+        <td>{{ case.title}}</td>
+        <td>{{ case.status}}</td>
+        <td>{{ case.description}}</td>
+        <td>{{ case.pname}}</td>
+        <td>{{ case.firid}}</td>
+        <td>{{ case.case_date}}</td>
+        <td>{{ case.open_date}}</td>
+        <td>{{ case.close_date}}</td>
+
+
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+</body>
+</html>

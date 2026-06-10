@@ -1,0 +1,58 @@
+<html>
+<head>
+    <script>
+
+        function add(a,b){
+            return a+b;
+        }
+
+        function diff(a,b){
+            return a-b;
+        }
+
+        function displayresult(callback,x,y){
+            console.log(x)
+            console.log(y)
+            var result = callback(parseInt(x),parseInt(y))
+            console.log(result)
+            document.getElementById('result').innerText=result
+        }
+
+        function calc (){
+
+            var op = document.getElementById('operator').value
+            var a = document.getElementById('num1').value
+            var b = document.getElementById('num2').value
+
+            if (op=="+"){
+                var logic = add
+            }
+
+            else if (op=='-'){
+
+                var logic = diff
+            }
+                
+            displayresult (logic,a,b);
+        }
+    </script>
+
+</head>
+
+<body>
+    <input type="text" id="num1">
+
+    <input type="text" id="num2">
+
+    <select id="operator">
+        <option value="+">add</option>
+        <option value="-">sub</option>
+    </select>
+
+    <button onclick="calc()">calculate</button>
+
+    <div id="result"></div>
+
+</body>
+
+</html>

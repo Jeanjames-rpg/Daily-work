@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <script>
+           function mult(){
+           
+            var a = document.getElementById('num1').value
+            var b = document.getElementById('times').value
+
+            var txt = "<table border='3'>"
+            for( var i = 1; i<=parseInt(b) ; i++){
+                txt += "<tr>" 
+                txt += '<td>' + a + "<td>"
+                txt += '<td>'+ i +"<td>"
+                txt += "<td>"+ i * parseInt(a) +"<td>"
+                txt += '<tr>'
+            }
+            txt += "</table"
+            document.getElementById('result').innerHTML=txt
+            }
+
+            function clrdata(){
+                document.getElementById('result').innerHTML=''
+            }
+       
+
+        </script>        
+    </head>
+
+<body>
+        <input type="text" id="num1">
+
+        <input type="text" id="times">
+
+        <button onclick="mult()">show</button>
+
+    <button onclick="clrdata()">clear</button>
+        <div id="result"></div>
+
+</body>
+</html>

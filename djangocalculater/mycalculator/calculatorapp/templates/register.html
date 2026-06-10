@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CONTACT REGISTERATION </title>
+    <H1 style="text-align: center;">CONTACT DETAILS</H1>
+
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <label>Name</label>
+        <input type="text" name="name" required><br></br>
+
+        <label>EMAIL</label>
+        <input type="email" name="email" required><br></br>
+
+        <label>PHONE NUMBER</label>
+        <input type="number" name="phone" required><br></br>
+
+        <label>PASSWORD</label>
+        <input type="password" name="password" required><br></br>
+
+        <label>CONFIRM PASSWORD</label>
+        <input type="password" name="confirm_password" required><br></br>
+
+        <label>LOCATION</label>
+        <input type="text" name="location" required><br></br> 
+
+        <button type="submit">SUBMIT</button><br></br>
+
+        <!-- <button type="button"><a href="update/<int:id>/">update</a></button> -->
+    </form>
+    {% if sucess %}
+    <h2>REGISTERATION SUCCESSFULL</h2>
+    {% endif %}
+
+    {% if error %}
+    <h2>Error:{{error}}</h2>
+    {% endif %}
+
+</body>
+
+
+
+</html>

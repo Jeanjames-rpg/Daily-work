@@ -1,0 +1,28 @@
+
+<html>
+<head>
+    <script>
+        //apply/call/bind
+        var o ={
+            a:23,
+            b:22
+        }
+
+        function add(){
+            return this.a + this.b
+        }
+
+        res = add.apply(o)
+        t0 = add.call(o)
+        tes = add.bind(o)
+        console.log(res)
+        console.log(tes)
+        console.log(t0)
+
+    </script>
+
+</head>
+
+
+
+</html>

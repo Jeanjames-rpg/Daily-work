@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+   <h1> Products detail page </h1>
+
+    {% if name == "kit-kat" %}
+        <img src="{% static 'image/kitkat.jpg' %}">
+
+    {% elif name == "Snickers" %}
+        <img src="{% static 'image/snickers.jpg' %}">
+
+    {% endif %}
+
+
+    <table border="1">
+
+        <tr>
+            <td>Name</td>
+            <td>{{name}}</td>
+
+        </tr>
+
+        <tr>
+            <td>Price</td>
+            <td>{{price}}</td>
+        </tr>
+
+        <tr>
+            <td>Flavour</td>
+            <td>{{flavour}}</td>
+        </tr>
+
+        <tr>
+            <td>Other Flavours</td>
+            <td>
+                <ul>
+                {% for i in otherflavours %}
+                <li>{{i}}</li>
+
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+
+    </table>
+<!-- {{name}}
+{{price}}
+{{flavour}} -->
+
+</body>
+
+</html>

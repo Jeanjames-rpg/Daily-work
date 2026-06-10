@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>vehicles</title>
+    <h1 style="text-align: center;">VEHICLE LIST</h1>
+
+    <style>
+        body{
+            background-color: darkkhaki;
+        }
+    </style>
+
+</head>
+<body>
+<table border="5">
+
+    <tr>
+        <th>vehicleid</th>
+        <th>station</th>
+        <th>type</th>
+        <th>vehicle_number</th>
+    </tr>
+
+    {% for v in vehicle %}
+    <tr>
+        <td>{{v.vehicleid}}</td>
+        <td>{{v.stationid}}</td>
+        <td>{{v.type}}</td>
+        <td>{{v.vehicle_number}}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

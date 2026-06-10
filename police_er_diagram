@@ -1,0 +1,76 @@
+// Police ER Diagram
+digraph {
+	P [label="Police_Station
+---------------------
+PK stationid
+name
+location
+phno
+noofficers
+cell count
+vehicles
+"]
+	O [label="Officer
+---------------------
+PK officerid
+pname
+prank
+salary
+FK stationid
+gender
+age
+ph
+emergency_contact
+"]
+	C [label="Cases
+---------------------
+PK caseid
+title
+description
+status
+FK officerid
+FK firid
+case_date 
+"]
+	CR [label="Criminal
+---------------------
+PK criminalid
+cr_name
+age
+crime_type
+location
+phnum
+idmark
+emergency_no
+"]
+	F [label="FIR
+---------------------
+PK firid
+firdate
+firdescription
+FK officerid
+FK stationid
+complainant_name
+complainant_phone
+"]
+	CC [label="Case_Criminal
+---------------------
+FK caseid
+FK criminalid
+"]
+	V [label="vehicle
+---------------------
+PK vehicleid
+FK stationid
+type
+vehicle_no         
+"]
+	P -> O [label="1:N"]
+	O -> C [label="1:N"]
+	C -> CC [label="1:M"]
+	CR -> CC [label="1:M"]
+	P -> F [label="1:N"]
+	O -> F [label="1:N"]
+	F -> C [label="1:N"]
+	P -> V [label="1:N"]
+}

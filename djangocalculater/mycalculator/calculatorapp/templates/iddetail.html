@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FIND ID</title>
+
+</head>
+<body>
+   
+        <label>ID</label>
+        <input type="number" id="userId" name="id" placeholder="Enter id" required><br></br>
+        
+        <button onclick="getData()">GET DATA</button>
+
+        <h3>Result</h3>
+        <div id="result"></div>
+
+        <script>
+            function getData() {
+                const id = document.getElementById("userId").value;
+
+                fetch(`http://127.0.0.1:8000/h/${id}/`)
+                .then(response => response.json())
+                .then(data => {
+                    
+                    document.getElementById("result").innerHTML = `
+                        Name: ${data.name} <br>
+                        Phone: ${data.phno}<br>
+                        Location: ${data.location}<br>
+                        Password: ${data.password}<br>
+                    
+                    `;
+
+                })
+            }
+
+        </script>
+  
+
+
+
+</body>
+
+
+</html>

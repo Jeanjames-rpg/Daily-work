@@ -1,0 +1,122 @@
+{
+    "station_Kakkanad Police Station": {
+        "vehicleid": 1,
+        "stationid": 1,
+        "name": "Kakkanad Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL07AA1234",
+        "noofficers": 8
+    },
+    "station_Aluva Police Station": {
+        "vehicleid": 5,
+        "stationid": 2,
+        "name": "Aluva Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL08AA1111",
+        "noofficers": 8
+    },
+    "station_Perumbavoor Police Station": {
+        "vehicleid": 12,
+        "stationid": 3,
+        "name": "Perumbavoor Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL09EE8888",
+        "noofficers": 7
+    },
+    "station_Ernakulam Town Police Station": {
+        "vehicleid": 13,
+        "stationid": 4,
+        "name": "Ernakulam Town Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL01AA9999",
+        "noofficers": 8
+    },
+    "station_Fort Kochi Police Station": {
+        "vehicleid": 17,
+        "stationid": 5,
+        "name": "Fort Kochi Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL02AA1234",
+        "noofficers": 7
+    },
+    "station_Mattancherry Police Station": {
+        "vehicleid": 24,
+        "stationid": 6,
+        "name": "Mattancherry Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL03EE8901",
+        "noofficers": 7
+    },
+    "station_Angamaly Police Station": {
+        "vehicleid": 25,
+        "stationid": 7,
+        "name": "Angamaly Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL04AA1122",
+        "noofficers": 6
+    },
+    "station_Kalady Police Station": {
+        "vehicleid": 29,
+        "stationid": 8,
+        "name": "Kalady Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL05AA5566",
+        "noofficers": 7
+    },
+    "station_Thripunithura Police Station": {
+        "vehicleid": 36,
+        "stationid": 9,
+        "name": "Thripunithura Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL06EE3030",
+        "noofficers": 6
+    },
+    "station_North Paravur Police Station": {
+        "vehicleid": 37,
+        "stationid": 10,
+        "name": "North Paravur Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL10AA4040",
+        "noofficers": 6
+    },
+    "station_Muvattupuzha Police Station": {
+        "vehicleid": 41,
+        "stationid": 11,
+        "name": "Muvattupuzha Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL11AA8080",
+        "noofficers": 7
+    },
+    "station_Kothamangalam Police Station": {
+        "vehicleid": 44,
+        "stationid": 12,
+        "name": "Kothamangalam Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL12AA1112",
+        "noofficers": 6
+    },
+    "station_Maradu Police Station": {
+        "vehicleid": 52,
+        "stationid": 13,
+        "name": "Maradu Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL13EE9990",
+        "noofficers": 6
+    },
+    "station_Edappally Police Station": {
+        "vehicleid": 53,
+        "stationid": 14,
+        "name": "Edappally Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL14AA1011",
+        "noofficers": 6
+    },
+    "station_Palarivattom Police Station": {
+        "vehicleid": 56,
+        "stationid": 15,
+        "name": "Palarivattom Police Station",
+        "type": "Jeep",
+        "vehicle_number": "KL15AA4044",
+        "noofficers": 7
+    }
+}

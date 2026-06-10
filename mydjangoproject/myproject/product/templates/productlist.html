@@ -1,0 +1,24 @@
+{% extends "mysite.html" %}
+
+{% block title %}
+
+        products list
+
+{% endblock %}
+
+{% block main %}
+        <!-- {{prodlist}} -->
+        {%for k,v in prodlist.items %}
+
+        <a href="product/{{v.id}}" >{{v.name}} </a> <br/>
+        {{v.price}} <br/>
+        {{v.flavour}} <br/>
+        {{v.otherflavours}}<br/>
+
+        <hr>
+        {% endfor %}
+
+
+{% endblock %}    
+
+

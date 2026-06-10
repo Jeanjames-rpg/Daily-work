@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fir</title>
+    <h1 style="text-align: center;">FIR LIST</h1>
+
+<style>
+    body{
+        background-color: darkkhaki;
+    }
+
+</style>
+</head>
+
+<body>
+<table border="5">
+
+    <tr>
+        <th>firid</th>
+        <th>firdate</th>
+        <th>firdiscription</th>
+        <th>officer</th>
+        <th>station</th>
+        <th>complainant_name</th>
+        <th>complainant_phone</th>
+    </tr>
+
+    {% for fr in fir %}
+    <tr>
+        <td>{{fr.firid}}</td>
+        <td>{{fr.firdate}}</td>
+        <td>{{fr.firdiscription}}</td>
+        <td>{{fr.pname}}</td>
+        <td>{{fr.name}}</td>
+        <td>{{fr.complainant_name}}</td>
+        <td>{{fr.complainant_phone}}</td>
+
+
+    </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>
