@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
+import Header from "../componenets/Header";
+import Main from "../componenets/Main";
+import Footer from "../componenets/Footer";
 
 
 function Dashboard (){
@@ -16,6 +19,12 @@ function Dashboard (){
     },[]);
 
     return (
+
+        <div>
+        <Header/>
+
+
+        <Main>
         <div>
             {user &&(
                 <>
@@ -40,6 +49,15 @@ function Dashboard (){
                     <button>My courses</button>
                 </Link>
             )}
+
+            <div>
+                <Link to='/'>Return to Home?</Link>
+            </div>
+            
+        </div>
+        </Main>
+
+        <Footer/>
 
         </div>
     );

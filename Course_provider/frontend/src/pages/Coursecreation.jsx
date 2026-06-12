@@ -1,5 +1,9 @@
+import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useState } from "react";
+import Footer from "../componenets/Footer";
+import Header from "../componenets/Header";
+import Main from "../componenets/Main";
 
 
 function Createcourse(){
@@ -29,6 +33,12 @@ function Createcourse(){
 
     return (
         <div>
+
+        <Header/>
+
+        <Main>
+
+        <div>
             <h1>Create Course</h1>
 
             <form onSubmit={handleSubmit}>
@@ -40,6 +50,13 @@ function Createcourse(){
                 <button type="submit">Create Course</button>
                 
             </form>
+
+            <Link to="/">Home page</Link>
+        </div>
+        </Main>
+        
+        <Footer/>
+
         </div>
     );
 }

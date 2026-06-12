@@ -1,6 +1,9 @@
 import { useState } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
+import Header from "../componenets/Header";
+import Footer from "../componenets/Footer";
+import Main from "../componenets/Main";
 
 function Register() {
     const[form, setForm] = useState({
@@ -27,6 +30,11 @@ function Register() {
     };
 
     return (
+    <div>
+
+        <Header/>
+
+        <Main>
         <form onSubmit={handleSubmit}>
 
             <input  placeholder="username" onChange={(e) => setForm({...form,username: e.target.value,})}  />
@@ -53,6 +61,10 @@ function Register() {
             </p>
 
         </form>
+        </Main>
+
+        <Footer/>
+    </div>
     );
 
 }

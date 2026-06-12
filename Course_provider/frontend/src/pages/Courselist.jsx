@@ -1,5 +1,9 @@
 import api  from "../services/api";
 import { useState,useEffect } from "react";
+import "../styles/Courselist.css";
+import Header from "../componenets/Header";
+import Footer from "../componenets/Footer";
+import Main from "../componenets/Main";
 
 
 function CourseList() {
@@ -20,10 +24,18 @@ function CourseList() {
 
     return(
         <div>
+
+        <Header/>
+
+
+        <Main>
+        <div className="course-container">
             <h1>Available Courses</h1>
 
+            <div className="course-grid">
             {courses.map((course) => (
-                <div key={course.id}>
+                
+                <div className="course-card" key={course.id}>
                     
                     <h2>{course.title}</h2>
 
@@ -35,10 +47,15 @@ function CourseList() {
 
                 </div>
             ))}
-
+            </div>
 
         </div>
 
+        </Main>
+        
+        <Footer/>
+
+        </div>
     );
 
 }

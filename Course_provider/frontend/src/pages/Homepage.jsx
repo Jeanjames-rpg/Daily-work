@@ -1,4 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
+import Header from "../componenets/Header";
+import Main from "../componenets/Main";
+import Footer from "../componenets/Footer";
 
 
 
@@ -7,7 +10,7 @@ function Home(){
     return (
         
     <div>
-        <h1>Well to our course provider page</h1>
+        {/* <h1>Well to our course provider page</h1>
 
         <p>Our courses</p>
 
@@ -26,11 +29,25 @@ function Home(){
 
         <Link to='/create'>Create a Course?</Link>
 
-        <Link to='/my-courses'>Mentor mycourses</Link>
+        <Link to='/my-courses'>Mentor mycourses</Link> */}
+
+
+
+        <>
+            <Header/>
+        
+            <Main>
+                <h1>Welcome to course provider</h1>
+
+                <p>Learn from experts</p>
+            </Main>
+        
+            <Footer/>
+        </>
 
 
     </div>
-    )
+    );
 }
 
 export default Home;

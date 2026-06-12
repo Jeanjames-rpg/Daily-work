@@ -2,6 +2,9 @@ import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Header from "../componenets/Header";
+import Footer from "../componenets/Footer";
+import Main from "../componenets/Main";
 
 
 function Login() {
@@ -41,6 +44,11 @@ function Login() {
 
 
         return(
+         <div>
+            
+            <Header/>
+
+            <Main>
             <form onSubmit={handleLogin} >
 
                 <input placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
@@ -61,7 +69,11 @@ function Login() {
                 </p>
 
              </form>
+             
+             </Main>
 
+             <Footer/>
+         </div>
         );
 
 }

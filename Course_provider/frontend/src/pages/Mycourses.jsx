@@ -1,5 +1,9 @@
+import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useEffect, useState } from "react";
+import Header from "../componenets/Header";
+import Footer from "../componenets/Footer";
+import Main from "../componenets/Main";
 
 
 function Mycourses(){
@@ -17,6 +21,11 @@ function Mycourses(){
 
     return(
         <div>
+         
+        <Header/>
+
+        <Main>
+        <div>
             <h1>My courses</h1>
 
             {courses.map((course)=>(
@@ -30,10 +39,15 @@ function Mycourses(){
                 </div>
             ))}
 
-
+            <diV>
+                <Link to='/'>Return to home?</Link>
+            </diV>
 
         </div>
+        </Main>
         
+        <Footer/>
+        </div>
 
 
     );
