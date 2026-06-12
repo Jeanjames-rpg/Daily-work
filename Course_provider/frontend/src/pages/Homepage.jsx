@@ -34,15 +34,15 @@ function Home(){
 
 
         <>
-            <Header/>
+            
         
-            <Main>
+            
                 <h1>Welcome to course provider</h1>
 
                 <p>Learn from experts</p>
-            </Main>
+            
         
-            <Footer/>
+        
         </>
 
 

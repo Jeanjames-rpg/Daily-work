@@ -33,10 +33,7 @@ function Createcourse(){
 
     return (
         <div>
-
-        <Header/>
-
-        <Main>
+        
 
         <div>
             <h1>Create Course</h1>
@@ -53,9 +50,8 @@ function Createcourse(){
 
             <Link to="/">Home page</Link>
         </div>
-        </Main>
         
-        <Footer/>
+        
 
         </div>
     );

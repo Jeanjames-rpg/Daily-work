@@ -46,9 +46,7 @@ function Login() {
         return(
          <div>
             
-            <Header/>
-
-            <Main>
+            
             <form onSubmit={handleLogin} >
 
                 <input placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
@@ -70,9 +68,8 @@ function Login() {
 
              </form>
              
-             </Main>
+             
 
-             <Footer/>
          </div>
         );
 

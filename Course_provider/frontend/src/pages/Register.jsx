@@ -32,9 +32,7 @@ function Register() {
     return (
     <div>
 
-        <Header/>
-
-        <Main>
+        
         <form onSubmit={handleSubmit}>
 
             <input  placeholder="username" onChange={(e) => setForm({...form,username: e.target.value,})}  />
@@ -61,9 +59,9 @@ function Register() {
             </p>
 
         </form>
-        </Main>
+        
 
-        <Footer/>
+        
     </div>
     );
 

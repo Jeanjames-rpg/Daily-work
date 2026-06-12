@@ -4,6 +4,7 @@ import "../styles/Courselist.css";
 import Header from "../componenets/Header";
 import Footer from "../componenets/Footer";
 import Main from "../componenets/Main";
+import { Link } from "react-router-dom";
 
 
 function CourseList() {
@@ -25,10 +26,10 @@ function CourseList() {
     return(
         <div>
 
-        <Header/>
+        
 
 
-        <Main>
+        
         <div className="course-container">
             <h1>Available Courses</h1>
 
@@ -45,15 +46,19 @@ function CourseList() {
                         Mentor : {course.mentor_name}
                     </p>
 
+                    <Link to={`/courses/${course.id}`}>
+                        <button>View Details</button>
+                    </Link>
+
                 </div>
             ))}
             </div>
 
         </div>
 
-        </Main>
         
-        <Footer/>
+        
+        
 
         </div>
     );

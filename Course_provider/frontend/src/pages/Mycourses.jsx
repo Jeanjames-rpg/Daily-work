@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "../componenets/Header";
 import Footer from "../componenets/Footer";
 import Main from "../componenets/Main";
+import CourseCard from "../componenets/CourseCard";
 
 
 function Mycourses(){
@@ -21,22 +22,24 @@ function Mycourses(){
 
     return(
         <div>
-         
-        <Header/>
 
-        <Main>
         <div>
             <h1>My courses</h1>
 
             {courses.map((course)=>(
-                <div key={course.id}>
-                    <h2>{course.title}</h2>
+                // <div key={course.id}>
+                //     <h2>{course.title}</h2>
 
-                    <p>{course.description}</p>
+                //     <p>{course.description}</p>
 
-                    <p>Mentor:{course.mentor_name}</p>
+                //     <p>Mentor:{course.mentor_name}</p>
 
-                </div>
+                // </div>
+
+                <CourseCard key={course.id} course={course}/>
+
+
+
             ))}
 
             <diV>
@@ -44,9 +47,7 @@ function Mycourses(){
             </diV>
 
         </div>
-        </Main>
         
-        <Footer/>
         </div>
 
 

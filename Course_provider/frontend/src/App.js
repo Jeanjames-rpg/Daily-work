@@ -1,6 +1,10 @@
 
 import './App.css';
+import Footer from './componenets/Footer';
+import Header from './componenets/Header';
+import Main from './componenets/Main';
 import Createcourse from './pages/Coursecreation';
+import CourseDetail from './pages/CourseDetail';
 import CourseList from './pages/Courselist';
 import Dashboard from './pages/Dashboard';
 import Homepage from './pages/Homepage';
@@ -25,6 +29,10 @@ import { BrowserRouter, Routes,Route } from 'react-router-dom';
 function App(){
   return(
     <BrowserRouter>
+
+    <Header/>
+
+    <Main>
       <Routes>
         <Route path='/' element={<Homepage/>}/>
         <Route path="/login" element={<Login/>} />
@@ -33,9 +41,11 @@ function App(){
         <Route path='/courses' element={<CourseList/>}/>
         <Route path='/create' element={<Createcourse/>} />
         <Route path='/my-courses' element={<Mycourses/>} />
-
+        <Route path='/courses/:id' element={<CourseDetail/>}/>
       </Routes>
+    </Main>
     
+    <Footer/>
     </BrowserRouter>
   );
 

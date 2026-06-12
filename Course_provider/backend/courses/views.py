@@ -46,3 +46,9 @@ class MyCoursesView(generics.ListAPIView):
         return Courses.objects.filter(
             mentor=self.request.user
         )
+    
+class CousedetailView(generics.RetrieveAPIView):
+
+    queryset = Courses.objects.all()
+
+    serializer_class =CourseSerialzer

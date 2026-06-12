@@ -21,10 +21,7 @@ function Dashboard (){
     return (
 
         <div>
-        <Header/>
 
-
-        <Main>
         <div>
             {user &&(
                 <>
@@ -55,9 +52,6 @@ function Dashboard (){
             </div>
             
         </div>
-        </Main>
-
-        <Footer/>
 
         </div>
     );
