@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import CourseCard from "../componenets/CourseCard";
 
 function CourseDetail() {
 
@@ -30,12 +31,14 @@ function CourseDetail() {
 
     return (
     <div>
-        <h1>{course.title}</h1>
+        {/* <h1>{course.title}</h1>
         <p>{course.description}</p>
 
         <p>
             Mentor: {course.mentor_name}
-        </p>
+        </p> */}
+
+        <CourseCard key={course.id} course={course} />
 
         <button>Enroll</button>
     </div>

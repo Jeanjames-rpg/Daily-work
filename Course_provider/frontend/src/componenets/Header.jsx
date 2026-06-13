@@ -14,6 +14,8 @@ function Header() {
 
                 <Link to='/register'>Register</Link>
 
+                <Link to='/courses'>Courses</Link>
+
         
             </nav>
 

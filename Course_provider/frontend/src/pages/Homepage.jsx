@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Header from "../componenets/Header";
 import Main from "../componenets/Main";
 import Footer from "../componenets/Footer";
+import CourseList from "./Courselist";
 
 
 
@@ -41,8 +42,10 @@ function Home(){
 
                 <p>Learn from experts</p>
             
-        
-        
+                <p>OUR COURSES</p>
+                
+                <CourseList/>
+            
         </>
 
 
