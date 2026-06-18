@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
+import styles from "../styles/CourseDetail.module.css";
 
 function CourseDetail() {
 
@@ -30,17 +31,33 @@ function CourseDetail() {
 
 
     return (
-    <div>
-        {/* <h1>{course.title}</h1>
-        <p>{course.description}</p>
+    <div className={styles.container}>
+        <h1 className={styles.title}>{course.title}</h1>
+        <p className={styles.description}>{course.description}</p>
 
-        <p>
+        <p className={styles.mentor}>
             Mentor: {course.mentor_name}
-        </p> */}
+        </p>
 
-        <CourseCard key={course.id} course={course} />
+        <h2 className={styles.chaptersTitle}>Chapters</h2>
 
-        <button>Enroll</button>
+        {course.chapters?.map((chapter) => (
+           <div className={styles.chapterCard}>     
+            
+            <h3 className={styles.chapterTitle}>
+
+                {chapter.order}.
+
+                {chapter.title}
+
+            </h3>
+
+          </div>
+        ))}
+
+        {/* <CourseCard key={course.id} course={course} /> */}
+
+        <button className={styles.enrollbtn}>Enroll</button>
     </div>
 
 );

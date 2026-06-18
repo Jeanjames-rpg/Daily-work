@@ -1,0 +1,66 @@
+.container {
+    min-height: 100vh;
+    padding: 40px;
+    background-color:  #f5f7fa;   
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #1f2937;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.card{
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.courseTitle{
+    margin-bottom: 10px;
+    color: #2563eb;
+}
+
+.description{
+    margin-bottom: 10px;
+    color: #4b5563;
+}
+
+.mentor {
+    margin-bottom: 15px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: #1d4ed8;
+}
+
+.link {
+    text-decoration: none;
+}

@@ -1,0 +1,52 @@
+.container {
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-color: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.card {
+    background: whitesmoke;
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 25px;
+    color: #1f2937;
+}
+
+.role {
+    margin-bottom: 25px;
+    color: #6b7280;
+}
+
+.link {
+    text-decoration: none;
+    color:  #2563eb;
+    font-weight: 500;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.button:hover {
+    background-color: #1d4ed8;
+}

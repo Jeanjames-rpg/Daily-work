@@ -3,6 +3,7 @@ import './App.css';
 import Footer from './componenets/Footer';
 import Header from './componenets/Header';
 import Main from './componenets/Main';
+import AddChapter from './pages/Addchapter';
 import Createcourse from './pages/Coursecreation';
 import CourseDetail from './pages/CourseDetail';
 import CourseList from './pages/Courselist';
@@ -42,6 +43,7 @@ function App(){
         <Route path='/create' element={<Createcourse/>} />
         <Route path='/my-courses' element={<Mycourses/>} />
         <Route path='/courses/:id' element={<CourseDetail/>}/>
+        <Route path='/courses/:id/add-chapter'  element={<AddChapter/>}/>
       </Routes>
     </Main>
     

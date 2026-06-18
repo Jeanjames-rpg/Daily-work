@@ -1,0 +1,61 @@
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);  
+}
+
+.title{
+    color: #222;
+    margin-bottom: 10px;
+
+}
+
+.description {
+    color: #555;
+    line-height: 1.6;
+}
+
+.mentor {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+}
+
+.chaptersTitle {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+}
+
+.chapterCard {
+    padding: 15px;
+    margin-bottom: 12px;
+    background-color: #f8f9fa;
+    border-left: 5px solid #4f46e5;
+    border-radius: 8px;
+}
+
+.chapterTitle {
+    margin: 0;
+    font-size: 18px;
+}
+
+.enrollbtn {
+    margin-top: 20px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4f46e5;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.enrollbtn:hover {
+    background-color: #3730a3 ;
+}

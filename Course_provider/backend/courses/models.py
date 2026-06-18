@@ -22,3 +22,21 @@ class Courses(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Chapter(models.Model):
+
+    course = models.ForeignKey(
+        Courses,
+        on_delete=models.CASCADE,
+        related_name="chapters"
+    )
+
+    title = models.CharField(max_length=200)
+
+    video = models.FileField(upload_to="videos/")
+
+    order = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.title

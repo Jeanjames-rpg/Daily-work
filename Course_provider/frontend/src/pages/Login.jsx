@@ -2,9 +2,7 @@ import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Header from "../componenets/Header";
-import Footer from "../componenets/Footer";
-import Main from "../componenets/Main";
+import styles from "../styles/Register_login.module.css"
 
 
 function Login() {
@@ -44,24 +42,24 @@ function Login() {
 
 
         return(
-         <div>
+         <div className={styles.container}>
             
             
-            <form onSubmit={handleLogin} >
+            <form onSubmit={handleLogin} className={styles.form} >
 
-                <input placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
+                <input placeholder="Username" className={styles.input} onChange={(e) => setUsername(e.target.value)}/>
 
-                <input type="password"  placeholder="Password" onChange={(e) => setPassword(e.target.value)} />   
+                <input type="password"  placeholder="Password" className={styles.input} onChange={(e) => setPassword(e.target.value)} />   
 
-                <button type="submit">
+                <button  className={styles.button} type="submit">
                     Login
                 </button>
 
-                <p>
+                <p className={styles.links}>
                     Return to our Homepage <Link to= "/">Home</Link>
                 </p>
 
-                <p>
+                <p className={styles.links}>
                     Dont have an account?
                     <Link to='/register'>Register</Link>
                 </p>

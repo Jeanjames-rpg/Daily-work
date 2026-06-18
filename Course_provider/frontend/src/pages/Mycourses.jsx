@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useEffect, useState } from "react";
-import Header from "../componenets/Header";
-import Footer from "../componenets/Footer";
-import Main from "../componenets/Main";
 import CourseCard from "../componenets/CourseCard";
 
 
@@ -21,7 +18,7 @@ function Mycourses(){
 
 
     return(
-        <div>
+        
 
         <div>
             <h1>My courses</h1>
@@ -35,20 +32,21 @@ function Mycourses(){
                 //     <p>Mentor:{course.mentor_name}</p>
 
                 // </div>
+                <div>
+                <CourseCard key={course.id} course={course} />
 
-                <CourseCard key={course.id} course={course}/>
+                <Link to={`/courses/${course.id}/add-chapter`}>
+                <button>Add chapter</button>
+                </Link>
 
-
+                </div>
 
             ))}
 
-            <diV>
-                <Link to='/'>Return to home?</Link>
-            </diV>
 
         </div>
         
-        </div>
+        
 
 
     );

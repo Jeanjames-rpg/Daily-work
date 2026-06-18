@@ -1,0 +1,28 @@
+.container{
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+}
+
+.title {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.sectiontitle {
+    text-align: center;
+    font-size: 2rem;
+    margin: 40px 0 20px;
+    color: #1f2937;
+}

@@ -6,6 +6,7 @@ from .models import Courses
 from .serializers import CourseSerialzer
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import PermissionDenied
+from .serializers import ChapterSerializer
 
 # Create your views here.
 
@@ -52,3 +53,20 @@ class CousedetailView(generics.RetrieveAPIView):
     queryset = Courses.objects.all()
 
     serializer_class =CourseSerialzer
+
+class ChapterCreateview(generics.CreateAPIView):
+
+    serializer_class = ChapterSerializer
+
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        
+        course = serializer.validated_data["course"]
+
+        if course.mentor != self.request.user:
+
+            raise PermissionDenied(
+                "YOU DONOT OWN THIS COURSE."
+            )
+        serializer.save()

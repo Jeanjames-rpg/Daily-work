@@ -1,10 +1,7 @@
 import api  from "../services/api";
 import { useState,useEffect } from "react";
-import "../styles/Courselist.css";
-import Header from "../componenets/Header";
-import Footer from "../componenets/Footer";
-import Main from "../componenets/Main";
 import { Link } from "react-router-dom";
+import styles from "../styles/Courselist.module.css"
 
 
 function CourseList() {
@@ -24,30 +21,27 @@ function CourseList() {
     }, []);
 
     return(
-        <div>
-
         
+        <div className={styles.container}>
+            <h1 className={styles.title}>Available Courses</h1>
 
-
-        
-        <div className="course-container">
-            <h1>Available Courses</h1>
-
-            <div className="course-grid">
+            <div className={styles.grid}>
             {courses.map((course) => (
                 
-                <div className="course-card" key={course.id}>
+                <div className={styles.card} key={course.id}>
                     
-                    <h2>{course.title}</h2>
+                    <h2 className={styles.courseTitle}>{course.title}</h2>
 
-                    <p>{course.description}</p>
+                    <p className={styles.description}>{course.description}</p>
 
-                    <p>
+                    <p className={styles.mentor}>
                         Mentor : {course.mentor_name}
                     </p>
 
-                    <Link to={`/courses/${course.id}`}>
-                        <button>View Details</button>
+                    <Link 
+                        className={styles.link}
+                        to={`/courses/${course.id}`}>
+                        <button className={styles.button}>View Details</button>
                     </Link>
 
                 </div>
@@ -56,11 +50,6 @@ function CourseList() {
 
         </div>
 
-        
-        
-        
-
-        </div>
     );
 
 }
