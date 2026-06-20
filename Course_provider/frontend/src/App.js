@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Homepage from './pages/Homepage';
 import Login from './pages/Login';
 import Mycourses from './pages/Mycourses';
+import MyEnrollments from './pages/MyEnrollments';
 import Register from './pages/Register';
 import { BrowserRouter, Routes,Route } from 'react-router-dom';
 
@@ -44,6 +45,7 @@ function App(){
         <Route path='/my-courses' element={<Mycourses/>} />
         <Route path='/courses/:id' element={<CourseDetail/>}/>
         <Route path='/courses/:id/add-chapter'  element={<AddChapter/>}/>
+        <Route path='/my-enrollments' element={<MyEnrollments/>} />
       </Routes>
     </Main>
     

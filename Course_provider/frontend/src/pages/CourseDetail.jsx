@@ -29,6 +29,21 @@ function CourseDetail() {
         return <h2>Loading...</h2>;
     }
 
+    const enroll = async()=> {
+        try{
+            await api.post("courses/enroll/",
+                {
+                    course: course.id
+                }
+            );
+
+            alert("Enrollment Successful");
+        }
+        catch(error){
+            console.log(error.response.data);
+        }
+    };
+
 
     return (
     <div className={styles.container}>
@@ -57,7 +72,7 @@ function CourseDetail() {
 
         {/* <CourseCard key={course.id} course={course} /> */}
 
-        <button className={styles.enrollbtn}>Enroll</button>
+        <button className={styles.enrollbtn} onClick={enroll}>Enroll</button>
     </div>
 
 );

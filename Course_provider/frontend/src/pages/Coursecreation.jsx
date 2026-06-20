@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useState } from "react";
-import Footer from "../componenets/Footer";
-import Header from "../componenets/Header";
-import Main from "../componenets/Main";
-
+import styles from "../styles/Coursecreation.module.css"
 
 function Createcourse(){
     const [title, setTitle] = useState("");
@@ -32,23 +29,23 @@ function Createcourse(){
     };
 
     return (
-        <div>
+        <div className={styles.container}>
         
 
-        <div>
-            <h1>Create Course</h1>
+        <div className={styles.card}>
+            <h1 className={styles.title}>Create Course</h1>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={styles.form}>
 
-                <input type="text" placeholder="Course Title" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <input className={styles.input} type="text" placeholder="Course Title" value={title} onChange={(e) => setTitle(e.target.value)}/>
 
-                <textarea placeholder="Description" value={description} onChange={(e)=> setDescription(e.target.value)}/>
+                <textarea className={styles.textarea} placeholder="Description" value={description} onChange={(e)=> setDescription(e.target.value)}/>
 
-                <button type="submit">Create Course</button>
+                <button type="submit" className={styles.button}>Create Course</button>
                 
             </form>
 
-            <Link to="/">Home page</Link>
+            <Link to="/" className={styles.link}>Home page</Link>
         </div>
         
         

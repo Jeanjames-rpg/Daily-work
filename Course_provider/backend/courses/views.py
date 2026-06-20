@@ -7,6 +7,12 @@ from .serializers import CourseSerialzer
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import PermissionDenied
 from .serializers import ChapterSerializer
+from .serializers import EnrollmentSerializer
+from .models import Enrollment
+from .serializers import EnrollmentListSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 # Create your views here.
 
@@ -70,3 +76,51 @@ class ChapterCreateview(generics.CreateAPIView):
                 "YOU DONOT OWN THIS COURSE."
             )
         serializer.save()
+
+class EnrollView(
+    generics.CreateAPIView
+):
+    
+    serializer_class = EnrollmentSerializer
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def perform_create(self, serializer):
+        
+        if self.request.user.role != "student":
+
+            raise PermissionDenied(
+                "Only students can enroll."
+            )
+        serializer.save(
+            student=self.request.user
+        )
+
+class MyEnrollmentsVIew(generics.ListAPIView):
+
+    serializer_class = EnrollmentListSerializer
+
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Enrollment.objects.filter(
+            student= self.request.user
+        )
+    
+class EnrollmentStatusView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, course_id):
+
+        enrolled = Enrollment.objects.filter(
+            student= request.user,
+
+            course_id=course_id
+        ).exists()
+
+        return Response({
+            "enrolled":enrolled
+        })

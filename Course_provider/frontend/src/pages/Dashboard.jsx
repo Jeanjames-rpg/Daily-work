@@ -45,6 +45,12 @@ function Dashboard (){
                 </Link>
             )}
 
+            {user?.role === 'student' &&(
+                <Link to="/my-enrollments">
+                    <button className={styles.button}>My Enrolments</button>
+                </Link>
+            )}
+
             <div>
                 <Link className={styles.links} to='/'>Return to Home?</Link>
             </div>
