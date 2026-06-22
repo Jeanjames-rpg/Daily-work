@@ -28,6 +28,13 @@ class CourseSerialzer(serializers.ModelSerializer):
     )
 
 
+    student_count = serializers.SerializerMethodField()
+
+    def get_student_count(self,obj):
+
+        return obj.enrollments.count()
+
+
     class Meta:
         model = Courses
         fields = '__all__'
@@ -60,5 +67,24 @@ class EnrollmentListSerializer(serializers.ModelSerializer):
             "id",
             "course",
             "course_title",
+            "enrolled_at"
+        ]
+
+class CourseStudentsSerializer(serializers.ModelSerializer):
+
+    student_name = serializers.CharField(
+        source = "student.username",
+
+        read_only = True
+    )
+
+    class Meta:
+
+        model = Enrollment
+
+        fields = [
+            "id",
+            "student",
+            "student_name",
             "enrolled_at"
         ]

@@ -10,6 +10,8 @@ function CourseDetail() {
 
     const [course, setCourse] = useState(null);
 
+    const [enrolled, setEnrolled] = useState(false);
+
     useEffect(()=> {
 
         api
@@ -21,6 +23,17 @@ function CourseDetail() {
         .catch((err) => {
             console.log(err);
         });
+
+        api
+        .get(`courses/${id}/enrollment-status/`)
+        .then((res)=>{
+            setEnrolled(res.data.enrolled);
+        })
+        .catch((error)=> {
+            console.log(error);
+        });
+
+
     },[id]);
 
     console.log(course)
@@ -72,7 +85,16 @@ function CourseDetail() {
 
         {/* <CourseCard key={course.id} course={course} /> */}
 
-        <button className={styles.enrollbtn} onClick={enroll}>Enroll</button>
+        {/* <button className={styles.enrollbtn} onClick={enroll}>Enroll</button> */}
+
+        {!enrolled ?(
+            <button className={styles.enrollbtn} onClick={enroll}>
+                Enroll
+            </button>
+        ):(
+            <p>"Enrolled!"</p>
+        ) }            
+
     </div>
 
 );

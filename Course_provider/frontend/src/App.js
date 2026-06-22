@@ -7,6 +7,7 @@ import AddChapter from './pages/Addchapter';
 import Createcourse from './pages/Coursecreation';
 import CourseDetail from './pages/CourseDetail';
 import CourseList from './pages/Courselist';
+import CourseStudents from './pages/CourseStudents';
 import Dashboard from './pages/Dashboard';
 import Homepage from './pages/Homepage';
 import Login from './pages/Login';
@@ -46,6 +47,7 @@ function App(){
         <Route path='/courses/:id' element={<CourseDetail/>}/>
         <Route path='/courses/:id/add-chapter'  element={<AddChapter/>}/>
         <Route path='/my-enrollments' element={<MyEnrollments/>} />
+        <Route path='/courses/:id/students'  element={<CourseStudents/>} />
       </Routes>
     </Main>
     

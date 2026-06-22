@@ -12,7 +12,7 @@ from .models import Enrollment
 from .serializers import EnrollmentListSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from .serializers import CourseStudentsSerializer
 
 # Create your views here.
 
@@ -54,11 +54,13 @@ class MyCoursesView(generics.ListAPIView):
             mentor=self.request.user
         )
     
-class CousedetailView(generics.RetrieveAPIView):
+class CoursedetailView(generics.RetrieveAPIView):
 
     queryset = Courses.objects.all()
 
     serializer_class =CourseSerialzer
+
+    permission_classes = [AllowAny]
 
 class ChapterCreateview(generics.CreateAPIView):
 
@@ -124,3 +126,26 @@ class EnrollmentStatusView(APIView):
         return Response({
             "enrolled":enrolled
         })
+    
+class CourseStudentsview(generics.ListAPIView):
+
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = CourseStudentsSerializer
+
+
+    def get_queryset(self):
+        
+        course_id = self.kwargs['course_id']
+
+        course = Courses.objects.get(id=course_id)
+
+        if course.mentor != self.request.user:
+
+            raise PermissionDenied(
+                "You dont own this course."
+            )
+        
+        return Enrollment.objects.filter(
+            course=course
+        )

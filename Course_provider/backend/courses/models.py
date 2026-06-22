@@ -49,7 +49,8 @@ class Enrollment(models.Model):
 
     course = models.ForeignKey(
         Courses,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='enrollments'
     )
 
     enrolled_at = models.DateTimeField(
