@@ -1,11 +1,20 @@
-import "../styles/Header.css";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import styles from "../styles/Header.module.css"
 
 function Header() {
-    return (
-        <header className="header">
 
-            <div className="logo">Course Provider Web</div>
+    const navigate = useNavigate();
+
+    const logout= ()=>{
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        navigate("/login");
+    }
+
+    return (
+        <header className={styles.header}>
+
+            <div className={styles.logo}>Course Provider Web</div>
             
             <nav>
                 <Link to='/'>Home</Link>
@@ -16,9 +25,10 @@ function Header() {
 
                 <Link to='/courses'>Courses</Link>
 
+                <button onClick={logout} className={styles.button}>Log Out</button>
         
             </nav>
-
+            
         </header>
     );
 }

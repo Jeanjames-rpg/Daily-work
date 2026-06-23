@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
+import styles from "../styles/Addchapter.module.css"
+
 
 function AddChapter() {
     const {id} = useParams();
@@ -39,21 +41,25 @@ function AddChapter() {
     };
 
     return (
-        <div>
-            <h1>Add Chapter</h1>
+        <div className={styles.container}>
 
-            <form onSubmit={handleSubmit}>
+        <div className={styles.card}>
+            <h1 className={styles.title}>Add Chapter</h1>
 
-                <input type="text" placeholder="Chapter title" onChange={(e)=> setTitle(e.target.value)} />
+            <form onSubmit={handleSubmit}  className={styles.form}>
 
-                <input type="number" placeholder="oder"  onChange={(e)=> setOrder(e.target.value)} />
+                <input className={styles.input} type="text" placeholder="Chapter title" onChange={(e)=> setTitle(e.target.value)} />
 
-                <input type="file" accept="video/*" onChange={(e)=> setVideo(e.target.files[0])} />
+                <input className={styles.input} type="number" placeholder="oder"  onChange={(e)=> setOrder(e.target.value)} />
 
-                <button type="submit">Add Chapter</button>
+                <input className={styles.file} type="file" accept="video/*" onChange={(e)=> setVideo(e.target.files[0])} />
+
+                <button className={styles.button} type="submit">Add Chapter</button>
 
             </form>
 
+
+        </div>
 
         </div>
     );

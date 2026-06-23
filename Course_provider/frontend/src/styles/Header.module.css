@@ -30,3 +30,22 @@
 .header a:hover{
     color: blue;
 }
+
+.button{
+    padding: 8px;
+
+    border-radius: 12px;
+
+    border: none;
+
+    background: #2563eb;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.button:hover {
+    background: blue;
+
+}

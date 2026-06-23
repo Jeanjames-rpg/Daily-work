@@ -31,6 +31,7 @@ function CourseStudents (){
 
                 <div key={student.id}>
                     <h3>{student.student_name}</h3>
+                    <h3>{student.enrolled_at}</h3>
 
                 </div>
 

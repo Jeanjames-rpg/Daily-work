@@ -127,7 +127,7 @@ class EnrollmentStatusView(APIView):
             "enrolled":enrolled
         })
     
-class CourseStudentsview(generics.ListAPIView):
+class CourseStudentsView(generics.ListAPIView):
 
     permission_classes = [IsAuthenticated]
 

@@ -15,6 +15,8 @@ import Mycourses from './pages/Mycourses';
 import MyEnrollments from './pages/MyEnrollments';
 import Register from './pages/Register';
 import { BrowserRouter, Routes,Route } from 'react-router-dom';
+import StudentDashboard from './pages/StudentDashboard';
+import MentorDashboard from './pages/MentorDashboard';
 
 // function App() {
 //   return (
@@ -48,6 +50,8 @@ function App(){
         <Route path='/courses/:id/add-chapter'  element={<AddChapter/>}/>
         <Route path='/my-enrollments' element={<MyEnrollments/>} />
         <Route path='/courses/:id/students'  element={<CourseStudents/>} />
+        <Route path='/student-dashboard' element={<StudentDashboard/>} />
+        <Route path='/mentor-dashboard' element={<MentorDashboard/>}/>
       </Routes>
     </Main>
     

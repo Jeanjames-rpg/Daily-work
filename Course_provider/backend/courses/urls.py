@@ -9,7 +9,7 @@ from .views import(
     EnrollView,
     MyEnrollmentsVIew,
     EnrollmentStatusView,
-    CourseStudentsview,
+    CourseStudentsView,
 )
 
 urlpatterns = [
@@ -22,5 +22,5 @@ urlpatterns = [
     path("enroll/",EnrollView.as_view()),
     path("my-enrollments/",MyEnrollmentsVIew.as_view()),
     path("<int:course_id>/enrollment-status/",EnrollmentStatusView.as_view()),
-    path("<int:course_id>/students/",CourseStudentsview.as_view()),
+    path("<int:course_id>/students/",CourseStudentsView.as_view()),
 ]
