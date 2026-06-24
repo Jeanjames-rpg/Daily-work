@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import styles from "../styles/Header.module.css"
+import logo from "../assets/logo2.PNG"
 
 function Header() {
 
@@ -14,7 +15,9 @@ function Header() {
     return (
         <header className={styles.header}>
 
-            <div className={styles.logo}>Course Provider Web</div>
+            <img src={logo} alt="Logo" className={styles.logo} />
+
+            
             
             <nav>
                 <Link to='/'>Home</Link>

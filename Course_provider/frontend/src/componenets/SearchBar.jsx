@@ -1,6 +1,6 @@
 import styles from "../styles/SearchBar.module.css"
 
-function SearchBar({value,onchange}){
+function SearchBar({value,onChange}){
 
     return(
         <input  
@@ -8,7 +8,7 @@ function SearchBar({value,onchange}){
         type="text"
         placeholder="Search Courses.."
         value={value}
-        onChange={onchange}
+        onChange={onChange}
         
         />
 

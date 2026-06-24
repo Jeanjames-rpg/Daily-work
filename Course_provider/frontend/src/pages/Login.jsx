@@ -3,7 +3,7 @@ import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styles from "../styles/Register_login.module.css"
-
+import logo from "../assets/logo2.PNG"
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -43,7 +43,7 @@ function Login() {
 
         return(
          <div className={styles.container}>
-            
+            <img src={logo} alt="Logo" className={styles.logo} />
             
             <form onSubmit={handleLogin} className={styles.form} >
 

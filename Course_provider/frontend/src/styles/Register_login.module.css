@@ -4,6 +4,7 @@
     align-items: center;
     min-height: 100vh;
     background: #f4f6f8;
+    flex-direction: column;
 }
 
 .form {
@@ -72,4 +73,11 @@ link a {
 
 link a:hover {
     text-decoration: underline;
+}
+
+.logo{
+    width: 500px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 20px;
 }

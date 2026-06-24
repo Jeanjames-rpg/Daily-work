@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
 import styles from "../styles/Register_login.module.css"
+import logo from "../assets/logo2.PNG"
 
 function Register() {
     const[form, setForm] = useState({
@@ -41,7 +42,8 @@ function Register() {
     return (
     <div className={styles.container}>
 
-        
+        <img src={logo} alt="Logo" className={styles.logo} />
+
         <form onSubmit={handleSubmit} className={styles.form}>
 
             <input className={styles.input} placeholder="username" onChange={(e) => setForm({...form,username: e.target.value,})}  />

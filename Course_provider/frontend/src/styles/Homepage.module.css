@@ -26,3 +26,15 @@
     margin: 40px 0 20px;
     color: #1f2937;
 }
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+}
+
+.grid2{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+}
