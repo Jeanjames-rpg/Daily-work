@@ -20,13 +20,13 @@ function Header() {
             
             
             <nav>
-                <Link to='/'>Home</Link>
+                <Link to='/'><button className={styles.button}>Home</button></Link>
 
-                <Link to="/login">Login</Link>
+                <Link to="/login"><button className={styles.button}>Login</button></Link>
 
-                <Link to='/register'>Register</Link>
+                <Link to='/register'><button className={styles.button}>Register</button></Link>
 
-                <Link to='/courses'>Courses</Link>
+                <Link to='/courses'><button className={styles.button}>Courses</button></Link>
 
                 <button onClick={logout} className={styles.button}>Log Out</button>
         
