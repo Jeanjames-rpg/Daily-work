@@ -50,7 +50,7 @@ function Home(){
                 </div>
 
             
-                <h3 className={styles.sectiontitle}>Trending Courses</h3>
+                <h3 className={styles.sectiontitle}>🔥 Trending Courses</h3>
         
                     <div className={styles.grid2}>
                         {trendingCourses.map((course)=>(

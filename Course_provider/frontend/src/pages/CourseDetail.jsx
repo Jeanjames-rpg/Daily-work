@@ -69,8 +69,8 @@ function CourseDetail() {
 
         <h2 className={styles.chaptersTitle}>Chapters</h2>
 
-        {course.chapters?.map((chapter) => (
-           <div className={styles.chapterCard}>     
+        {course.chapters?.map((chapter,index) => (
+           <div className={styles.chapterCard} style={{ animationDelay: `${index * 0.1}s`}}>     
             
             <h3 className={styles.chapterTitle}>
 
@@ -79,6 +79,31 @@ function CourseDetail() {
                 {chapter.title}
 
             </h3>
+
+            {/* <video 
+            width="600"
+            controls
+            >
+                <source src={chapter.video} type="video/mp4"/>
+
+                Your browser does not support video.
+
+            </video> */}
+
+            {enrolled ? (
+                <video>
+                    <source src={chapter.video} type="video/mp4"/>
+
+                    Your Browser Does Not Support Video
+
+                </video>
+            ) : (
+                <div className={styles.locked}>
+                    🔒 This Video is locked. Please enroll to watch.
+                </div>   
+            )
+            
+            }
 
           </div>
         ))}

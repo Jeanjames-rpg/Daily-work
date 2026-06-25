@@ -24,6 +24,8 @@ function Login() {
 
             alert ('Login Success');
 
+            window.location.href = "/dashboard";
+
             const user = await api.get("me/")
             console.log(user.data);
 

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import styles from "../styles/Header.module.css"
 import logo from "../assets/logo2.PNG"
+import NavBar from "./NavBar";
 
 function Header() {
 
@@ -19,7 +20,7 @@ function Header() {
 
             
             
-            <nav>
+            {/* <nav>
                 <Link to='/'><button className={styles.button}>Home</button></Link>
 
                 <Link to="/login"><button className={styles.button}>Login</button></Link>
@@ -30,7 +31,9 @@ function Header() {
 
                 <button onClick={logout} className={styles.button}>Log Out</button>
         
-            </nav>
+            </nav> */}
+
+            <NavBar/>
             
         </header>
     );

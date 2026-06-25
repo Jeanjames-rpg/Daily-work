@@ -1,0 +1,50 @@
+
+
+
+
+
+.links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.links a {
+    text-decoration: none;
+}
+
+.links button {
+    background: rgba(255, 255, 255, 0.2);;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 0.8rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.links button:hover {
+    background: white;
+    color: #ff6b35;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.25);
+}
+
+.links button:active{
+    transform: translateY(0);
+}
+
+.links button:last-child {
+    background: #c62828;
+    border-color: #c62828;
+}
+
+.links button:last-child:hover {
+    background:  #b71c1c;
+    color: white;
+}
