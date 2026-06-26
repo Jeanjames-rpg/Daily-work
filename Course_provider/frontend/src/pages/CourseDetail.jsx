@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
@@ -11,6 +11,8 @@ function CourseDetail() {
     const [course, setCourse] = useState(null);
 
     const [enrolled, setEnrolled] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(()=> {
 
@@ -53,7 +55,14 @@ function CourseDetail() {
             alert("Enrollment Successful");
         }
         catch(error){
-            console.log(error.response.data);
+            if (error.response?.status === 401){
+                alert("Please Register or Login first.");
+                navigate("/register");
+            } else {
+                console.log(error.response?.data);
+            }
+
+            // console.log(error.response.data);
         }
     };
 
@@ -91,7 +100,10 @@ function CourseDetail() {
             </video> */}
 
             {enrolled ? (
-                <video>
+                <video 
+                width="600"
+                controls
+                >
                     <source src={chapter.video} type="video/mp4"/>
 
                     Your Browser Does Not Support Video
