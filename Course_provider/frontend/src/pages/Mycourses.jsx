@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useEffect, useState } from "react";
 import CourseCard from "../componenets/CourseCard";
-
+import styles from "../styles/Mycourses.module.css"
 
 function Mycourses(){
 
@@ -24,20 +24,20 @@ function Mycourses(){
             <h1>My courses</h1>
 
             {courses.map((course)=>(
-                <div key={course.id}>
-                    <h2>{course.title}</h2>
+                <div key={course.id} className={styles.card}>
+                    <h2 className={styles.title}>{course.title}</h2>
 
-                    <p>{course.description}</p>
+                    <p className={styles.description}>{course.description}</p>
 
-                    <p>Mentor:{course.mentor_name}</p>
+                    <p className={styles.mentor}>Mentor:{course.mentor_name}</p>
 
-                    <p>Students enrolled:{course.student_count}</p>
+                    <p className={styles.student_count}>Students enrolled:{course.student_count}</p>
 
                     <Link to={`/courses/${course.id}/add-chapter`}>
-                    <button>Add chapter</button>
+                    <button className={styles.button}>Add chapter</button>
                     </Link>
 
-                    <Link to={`/courses/${course.id}/students`}><button>View students</button></Link>
+                    <Link to={`/courses/${course.id}/students`}><button className={styles.button}>View students</button></Link>
                 </div>
                 // <div>
                 // <CourseCard key={course.id} course={course} />
