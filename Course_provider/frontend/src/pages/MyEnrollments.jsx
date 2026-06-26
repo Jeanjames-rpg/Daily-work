@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import api from "../services/api";
 import { Link } from "react-router-dom";
+import CourseCard from "../componenets/CourseCard";
 
 function MyEnrollments() {
 
@@ -29,13 +30,17 @@ function MyEnrollments() {
             {
                 enrollments.map(
                     (item)=> (
-                        <div
-                          key={item.id}  
-                        >
-                            <h2>{item.course_title}</h2>
+                        // <div
+                        //   key={item.id}  
+                        // >
+                        //     <h2>{item.course_title}</h2>
                             
-                            <Link to={`/courses/${item.course}`}>continue learning</Link>
-                        </div>
+                        //     <Link to={`/courses/${item.course}`}>continue learning</Link>
+                        // </div>
+
+                        <CourseCard key={item.id} course={item.course}/>
+
+
                     )
                 )
             }

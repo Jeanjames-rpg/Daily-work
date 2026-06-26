@@ -54,10 +54,13 @@ class EnrollmentSerializer(
 
 class EnrollmentListSerializer(serializers.ModelSerializer):
 
-    course_title = serializers.CharField(
-        source="course.title",
-        read_only = True
-    )
+    # course_title = serializers.CharField(
+    #     source="course.title",
+    #     read_only = True
+    # )
+
+    course = CourseSerialzer(read_only=True)
+
 
     class Meta:
 
@@ -66,7 +69,7 @@ class EnrollmentListSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "course",
-            "course_title",
+            # "course_title",
             "enrolled_at"
         ]
 
