@@ -36,23 +36,32 @@ function NavBar() {
     return (
         <nav>
             
-            <div className={styles.links}>
-                <Link to="/" >
-                        <button>Home</button>
+             <div className="flex items-center gap-4">
+               
+                <Link to="/" 
+                className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                >
+                     Home
                 </Link>
 
-                <Link to='/courses'>
-                    <button>Courses</button>
+                <Link to='/courses'
+                className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                >
+                    Courses
                 </Link>
 
                 {!user && (
                     <>
-                        <Link to='/login'>
-                            <button>Login</button>
+                        <Link to='/login'
+                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        >
+                            Login
                         </Link>
 
-                        <Link to='/register'>
-                            <button>Register</button>
+                        <Link to='/register'
+                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                        >
+                            Register
                         </Link>
                     
                     </>
@@ -60,15 +69,21 @@ function NavBar() {
 
                 {user?.role === "student" &&(
                     <>
-                        <Link to='/dashboard'>
-                            <button>Dashboard</button>
+                        <Link to='/dashboard'
+                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        >
+                            Dashboard
                         </Link>
 
-                        <Link to='/my-enrollments'>
-                            <button>Enrolled</button>
+                        <Link to='/my-enrollments'
+                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        >
+                            Enrolled
                         </Link>
 
-                        <button onClick={logout}>
+                        <button onClick={logout}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                        >
                             Logout
                         </button>
                     </>
@@ -76,19 +91,27 @@ function NavBar() {
 
                 {user?.role === "mentor" && (
                     <>
-                        <Link to="/my-courses">
-                            <button>My courses</button>
+                        <Link to="/my-courses"
+                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        >
+                            My courses
                         </Link>
 
-                        <Link to="/dashboard">
-                            <button>Dashboard</button>
+                        <Link to="/dashboard"
+                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        >
+                            Dashboard
                         </Link>
 
-                        <Link to="/create">
-                            <button>Create Course</button>
+                        <Link to="/create"
+                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                        >
+                            Create Course
                         </Link>
 
-                        <button onClick={logout}>
+                        <button onClick={logout}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                        >
                             Logout
                         </button>
                     </>

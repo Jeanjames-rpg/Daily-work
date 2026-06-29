@@ -14,27 +14,22 @@ function Header() {
     }
 
     return (
-        <header className={styles.header}>
+        <header className="bg-white shadow-md">
 
-            <img src={logo} alt="Logo" className={styles.logo} />
-
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
             
+             <div className="flex items-center gap-3">
+              <img src={logo} alt="Logo" className={styles.logo} />
+
+                <h1 className="text-2xl font-bold text-indigo-600">
+                    Hive
+                </h1>
             
-            {/* <nav>
-                <Link to='/'><button className={styles.button}>Home</button></Link>
-
-                <Link to="/login"><button className={styles.button}>Login</button></Link>
-
-                <Link to='/register'><button className={styles.button}>Register</button></Link>
-
-                <Link to='/courses'><button className={styles.button}>Courses</button></Link>
-
-                <button onClick={logout} className={styles.button}>Log Out</button>
-        
-            </nav> */}
-
-            <NavBar/>
+             </div>
             
+
+             <NavBar/>
+            </div>
         </header>
     );
 }
