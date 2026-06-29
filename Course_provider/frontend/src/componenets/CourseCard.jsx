@@ -3,14 +3,26 @@ import styles from "../styles/CourseCard.module.css"
 
 function CourseCard({ course }) {
     return(
-        <div className={styles.card}>
-            <h2 className={styles.title}>{course.title}</h2>
-            <p className={styles.description}>{course.description}</p>
-            <p className={styles.mentor}>Mentor: {course.mentor_name}</p>
-            <p className={styles.count}>Enrollments: {course.student_count} </p>
+        <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-200 hover:-translate-y-1">
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+                {course.title}
+            </h2>
+            <p className="text-gray-600 mb-4 line-clamp-3">
+                {course.description}
+            </p>
+            
+            <div className="space-y-2 mb-6">
+             <p className="text-sm text-gray-700">
+                <span className="font-semibold">Mentor:</span> {course.mentor_name}
+             </p>
+             
+             <p className="text-sm text-gray-700">
+                <span className="font-semibold">Enrollments:</span> {course.student_count} 
+             </p>
+            </div>
 
             <Link to={`/courses/${course.id}`}>
-                <button className={styles.button}>View Details</button>
+                <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 font-medium">View Details</button>
             </Link>
         </div>
     );
