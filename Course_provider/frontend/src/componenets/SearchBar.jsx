@@ -4,7 +4,7 @@ function SearchBar({value,onChange}){
 
     return(
         <input  
-        className={styles.input}
+        className="block w-full p-3 ps-9 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
         type="text"
         placeholder="Search Courses.."
         value={value}

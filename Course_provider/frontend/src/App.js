@@ -33,6 +33,7 @@ import MentorDashboard from './pages/MentorDashboard';
 
 function App(){
   return(
+    <div className='min-h-screen bg-slate-100'>
     <BrowserRouter>
 
     <Header/>
@@ -57,11 +58,7 @@ function App(){
     
     <Footer/>
     </BrowserRouter>
-    // <div className='min-h-screen bg-orange-100 flex items-center justify-center'>
-    //   <h1 className='text-5xl font-bold text-orange-600' >
-    //     Tailwind is working!
-    //   </h1>
-    // </div>
+    </div>
   );
 
 
