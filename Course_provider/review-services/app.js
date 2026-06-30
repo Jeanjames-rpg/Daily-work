@@ -1,10 +1,16 @@
 const express = require("express");
 
+const dotenv = require("dotenv");
+
+const connectDB = require("./config/db");
+
 const reviewRoutes = require("./routes/reviewRoutes");
 
-const app = express();
+dotenv.config();
 
-const PORT = 5000;
+connectDB();
+
+const app = express();
 
 
 // Parse JSON request bodies
@@ -13,10 +19,7 @@ app.use(express.json());
 // Register routes
 app.use("/api/reviews", reviewRoutes);
 
-// app.get('/',(req, res) => {
-//     res.send("Review Service Running");
-// });
-
+const PORT =process.env.PORT || 5000;
 
 
 app.listen(PORT, () => {
