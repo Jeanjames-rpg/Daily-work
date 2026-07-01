@@ -39,7 +39,29 @@ const addReview = async (req, res) => {
 
 };
 
+
+const getCourseReviews = async (req,res) => {
+
+    try {
+        const reviews = await Review.find({
+
+            courseId: req.params.courseId
+        }).sort({
+            createdAt: -1
+        });
+
+        res.json(reviews);
+    }
+    catch(error){
+        res.status(500).json({
+            message:error.message
+        });
+    }
+
+};
+
 module.exports = {
     getReviews,
-    addReview
+    addReview,
+    getCourseReviews
 };

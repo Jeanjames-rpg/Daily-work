@@ -4,11 +4,14 @@ const router = express.Router();
 
 const {
     getReviews,
-    addReview
+    addReview,
+    getCourseReviews
 } = require("../controllers/reviewController");
 
 router.get("/",getReviews);
 
 router.post("/",addReview);
+
+router.get("/course/:courseId",getCourseReviews)
 
 module.exports = router;
