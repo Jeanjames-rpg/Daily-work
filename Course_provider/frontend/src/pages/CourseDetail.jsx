@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
 import styles from "../styles/CourseDetail.module.css";
+import reviewApi from "../services/reviewApi";
+
 
 function CourseDetail() {
 
@@ -13,6 +15,8 @@ function CourseDetail() {
     const [enrolled, setEnrolled] = useState(false);
 
     const navigate = useNavigate();
+
+    const [reviews, setReviews] = useState([]);
 
     useEffect(()=> {
 
@@ -35,6 +39,12 @@ function CourseDetail() {
             console.log(error);
         });
 
+        reviewApi
+        .get(`reviews/course/${id}`)
+
+        .then((res)=>{
+            setReviews(res.data);
+        });
 
     },[id]);
 
@@ -131,6 +141,19 @@ function CourseDetail() {
         ):(
             <p>"Enrolled!"</p>
         ) }            
+
+
+        <h2>Reviews </h2>
+
+        {reviews.map((review)=>(
+            <div key={review._id}>
+
+                <h4>{review.studentName}</h4>
+
+                <p>⭐ {review.review}</p>
+
+            </div>  
+        ))}
 
     </div>
 

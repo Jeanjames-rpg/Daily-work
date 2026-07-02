@@ -6,12 +6,19 @@ const connectDB = require("./config/db");
 
 const reviewRoutes = require("./routes/reviewRoutes");
 
+const cors = require("cors");
+
 dotenv.config();
 
 connectDB();
 
 const app = express();
 
+app.use(
+    cors({
+    origin: "http://localhost:3000"
+    })
+);
 
 // Parse JSON request bodies
 app.use(express.json());

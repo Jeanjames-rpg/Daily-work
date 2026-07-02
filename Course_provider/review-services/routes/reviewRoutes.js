@@ -1,4 +1,5 @@
 const express = require("express");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const {
 
 router.get("/",getReviews);
 
-router.post("/",addReview);
+router.post("/",authMiddleware,addReview);
 
 router.get("/course/:courseId",getCourseReviews)
 

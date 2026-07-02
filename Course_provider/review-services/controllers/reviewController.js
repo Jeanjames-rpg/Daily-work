@@ -15,9 +15,9 @@ const addReview = async (req, res) => {
 
         courseId: req.body.courseId,
 
-        studentId: req.body.studentId,
+        studentId: req.user.user_id,
 
-        studentName: req.body.studentName,
+        studentName: req.user.username,
 
         rating: req.body.rating,
 
