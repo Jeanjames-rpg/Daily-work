@@ -3,11 +3,14 @@ import CourseList from "./Courselist";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
+import { useNavigate } from "react-router-dom";
 
 
 function Home(){
 
     const[courses, setCourses] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(()=>{
         api
@@ -43,11 +46,11 @@ function Home(){
                 </p>
 
                 <div className="mt-10 flex justify-center gap-4">
-                    <button className="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold shadow-lg hover:scale-105 transition">
+                    <button onClick={()=> navigate("/courses")} className="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold shadow-lg hover:scale-105 transition">
                         Browse Courses
                     </button>
 
-                    <button className="border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-blue-600 transition">
+                    <button onClick={()=> navigate('/register')} className="border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-blue-600 transition">
                         Become a Mentor
                     </button>
                 </div>
@@ -126,7 +129,7 @@ function Home(){
                         Join thousands of students already learning on our platform.
                     </p>
 
-                    <button className="mt-8 bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:scale-105 transition">
+                    <button onClick={()=> navigate("/register")} className="mt-8 bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:scale-105 transition">
                         Get Started
                     </button>
 
