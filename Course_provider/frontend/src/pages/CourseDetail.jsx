@@ -4,6 +4,7 @@ import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
 import styles from "../styles/CourseDetail.module.css";
 import reviewApi from "../services/reviewApi";
+import ReviewSection from "../componenets/ReviewSection";
 
 
 function CourseDetail() {
@@ -16,7 +17,7 @@ function CourseDetail() {
 
     const navigate = useNavigate();
 
-    const [reviews, setReviews] = useState([]);
+   
 
     useEffect(()=> {
 
@@ -39,12 +40,6 @@ function CourseDetail() {
             console.log(error);
         });
 
-        reviewApi
-        .get(`reviews/course/${id}`)
-
-        .then((res)=>{
-            setReviews(res.data);
-        });
 
     },[id]);
 
@@ -127,6 +122,7 @@ function CourseDetail() {
             
             }
 
+
           </div>
         ))}
 
@@ -143,18 +139,11 @@ function CourseDetail() {
         ) }            
 
 
-        <h2>Reviews </h2>
+        <hr/>
 
-        {reviews.map((review)=>(
-            <div key={review._id}>
+       {/* Reviews */}
 
-                <h4>{review.studentName}</h4>
-
-                <p>⭐ {review.review}</p>
-
-            </div>  
-        ))}
-
+        <ReviewSection courseId={id} enrolled={enrolled}/>
     </div>
 
 );

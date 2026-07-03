@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import UserSerializer
 
+
 # Create your views here.
 
 class RegisterView(generics.CreateAPIView):
@@ -21,3 +22,5 @@ class MeView(APIView):
         serializer = UserSerializer(request.user)
 
         return Response(serializer.data)
+    
+
