@@ -14,6 +14,8 @@ connectDB();
 
 const app = express();
 
+// console.log("JWT_SECRET length:", process.env.JWT_SECRET.length);
+
 app.use(
     cors({
     origin: "http://localhost:3000"

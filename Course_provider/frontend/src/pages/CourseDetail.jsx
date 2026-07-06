@@ -58,6 +58,7 @@ function CourseDetail() {
             );
 
             alert("Enrollment Successful");
+            setEnrolled(true);
         }
         catch(error){
             if (error.response?.status === 401){
