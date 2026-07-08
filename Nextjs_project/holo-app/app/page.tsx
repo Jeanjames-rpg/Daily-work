@@ -1,6 +1,8 @@
 // import Image from "next/image";
-
+"use client";
+import CreateNote from "@/components/temp";
 import Navbar from "@/components/Navbar";
+
 import { Span } from "next/dist/trace";
 
 // export default function Home() {
@@ -68,9 +70,27 @@ import { Span } from "next/dist/trace";
 // }
 
 
+import { useState } from "react";
+
 export default function home() {
+  
+  const[notes, setNotes] = useState([])
+
+  const[title, setTitle] = useState("")
+
+  const[content, setContent] = useState("")
+
+  async function fetchNotes(){
+    const res = await fetch("/api/notes");
+
+    const data =  await res.json();
+
+    setNotes(data);
+  }
+
   return(<>
     <Navbar/>
+    <CreateNote/>
     <h1>HELLO <span>Next.js!</span></h1>
     </>
   )
