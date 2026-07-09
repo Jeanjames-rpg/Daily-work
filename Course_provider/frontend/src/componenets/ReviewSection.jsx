@@ -63,7 +63,7 @@ function ReviewSection({ courseId ,enrolled}) {
     return (
         <div className="mt-10 bg-white shadow-lg rounded-xl p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                Student Reviews
+                Ratings
             </h2>
 
        {enrolled&&(<form onSubmit={handleSubmit} className="space-y-4 mb-6">

@@ -75,6 +75,7 @@ function CourseDetail() {
 
     return (
     <div className={styles.container}>
+        <img src={course.image} alt={course.title}/>
         <h1 className={styles.title}>{course.title}</h1>
         <p className={styles.description}>{course.description}</p>
 

@@ -14,14 +14,14 @@ function Header() {
     }
 
     return (
-        <header className="bg-white shadow-md">
+         <header className="bg-gradient-to-br from-orange-500 via-amber-400 to-yellow-300">
 
             <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
             
              <div className="flex items-center gap-3">
               <img src={logo} alt="Logo" className={styles.logo} />
 
-                <h1 className="text-2xl font-bold text-indigo-600">
+                <h1 className="text-2xl font-bold text-white">
                     Hive
                 </h1>
             

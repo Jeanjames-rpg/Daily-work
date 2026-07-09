@@ -13,6 +13,7 @@ function Register() {
         role:"student",
     });
 
+    
 
     const handleSubmit = async (e) => {
         
@@ -32,6 +33,8 @@ function Register() {
             });
 
             alert("Registered Successfully");
+
+
         } catch (err) {
             console.log(err)
             console.log("Status:", err.response.status);

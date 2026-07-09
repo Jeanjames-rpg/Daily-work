@@ -6,17 +6,30 @@ import styles from "../styles/Coursecreation.module.css"
 function Createcourse(){
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [image, setImage] = useState(null)
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
 
+        //Formdata
+        const formData =  new FormData();
+
+        formData.append("title",title);
+        formData.append("description",description);
+        if (image){
+            formData.append("image",image);
+        }
+
+
         try {
             const response = await api.post(
-                "courses/create/",
-                {
-                    title,
-                    description
+                "courses/create/",formData,
+                 {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 }
+              
             );
 
             console.log(response.data);
@@ -36,6 +49,8 @@ function Createcourse(){
             <h1 className={styles.title}>Create Course</h1>
 
             <form onSubmit={handleSubmit} className={styles.form}>
+
+                <input type="file" accept="image/*" onChange={(e)=>setImage(e.target.files[0])}/>
 
                 <input className={styles.input} type="text" placeholder="Course Title" value={title} onChange={(e) => setTitle(e.target.value)}/>
 

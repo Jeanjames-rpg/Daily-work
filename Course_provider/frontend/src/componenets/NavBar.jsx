@@ -39,13 +39,13 @@ function NavBar() {
              <div className="flex items-center gap-4">
                
                 <Link to="/" 
-                className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                className="text-white hover:text-indigo-600 font-medium transition-colors"
                 >
                      Home
                 </Link>
 
                 <Link to='/courses'
-                className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                className="text-white hover:text-indigo-600 font-medium transition-colors"
                 >
                     Courses
                 </Link>
@@ -53,7 +53,7 @@ function NavBar() {
                 {!user && (
                     <>
                         <Link to='/login'
-                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        className="text-white hover:text-indigo-600 font-medium transition-colors"
                         >
                             Login
                         </Link>
@@ -70,13 +70,13 @@ function NavBar() {
                 {user?.role === "student" &&(
                     <>
                         <Link to='/dashboard'
-                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        className="text-white hover:text-indigo-600 font-medium transition-colors"
                         >
                             Dashboard
                         </Link>
 
                         <Link to='/my-enrollments'
-                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        className="text-white hover:text-indigo-600 font-medium transition-colors"
                         >
                             Enrolled
                         </Link>
