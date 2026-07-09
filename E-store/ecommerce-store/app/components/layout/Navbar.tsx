@@ -4,24 +4,24 @@ export default function Navbar(){
 
     return(
 
-        <nav className="bg-green shadow-sm border-b">
+        <nav className="bg-linear-to-r from-lime-300 to-green-400 shadow-sm border-b">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="flex items-center">
+                <div className="flex items-center justify-between h-16">
                    
                     <h1 className="text-2xl font-bold text-indigo-600">
                         E-store
                     </h1>
 
                     <div className="hidden md:flex items-center gap-8">
-                        <a href="/" className="hover:text-emerald-600">
+                        <a href="/" className="hover:text-emerald-600 text-white">
                             Home
                         </a>
 
-                        <a href="/products" className="hover:text-emerald-600">
+                        <a href="/products" className="hover:text-emerald-600 text-white">
                             Products
                         </a>
 
-                        <a href="/cart" className="hover:text-emerald-600">
+                        <a href="/cart" className="hover:text-emerald-600 text-white">
                             Cart
                         </a>
 
@@ -32,7 +32,7 @@ export default function Navbar(){
                             Login
                         </button>
 
-                        <button className="px-4 py-2 rounded-lg bg-indigo-600 text-shadow-indigo-400 hover:bg-indigo-700">
+                        <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
                             Register
                         </button>
 

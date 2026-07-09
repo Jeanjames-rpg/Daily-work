@@ -1,3 +1,4 @@
+import "./globals.css";
 import { Metadata } from "next";
 import React from "react";
 import Navbar from "./components/layout/Navbar";
