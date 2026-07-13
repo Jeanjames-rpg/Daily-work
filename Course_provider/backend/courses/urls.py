@@ -11,7 +11,9 @@ from .views import(
     EnrollmentStatusView,
     CourseStudentsView,
     CourseUpdateView,
-    CourseDeleteView
+    CourseDeleteView,
+    ChapterDetailView,
+    ChapterUpdateView
 )
 
 urlpatterns = [
@@ -26,5 +28,8 @@ urlpatterns = [
     path("<int:course_id>/enrollment-status/",EnrollmentStatusView.as_view()),
     path("<int:course_id>/students/",CourseStudentsView.as_view()),
     path("update/<int:pk>/",CourseUpdateView.as_view()),
-    path("delete/<int:pk>/",CourseDeleteView.as_view())
+    path("delete/<int:pk>/",CourseDeleteView.as_view()),
+    path("chapters/<int:pk>/",ChapterDetailView.as_view()),
+    path("chapters/update/<int:pk>/",ChapterUpdateView.as_view())
+
 ]

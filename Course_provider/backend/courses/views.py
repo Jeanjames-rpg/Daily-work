@@ -13,6 +13,7 @@ from .serializers import EnrollmentListSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import CourseStudentsSerializer
+from .models import Chapter
 
 # Create your views here.
 
@@ -183,3 +184,28 @@ class CourseDeleteView(generics.DestroyAPIView):
                 "You dont own this course."
             )
         instance.delete()
+
+class ChapterDetailView(generics.RetrieveAPIView):
+
+    queryset = Chapter.objects.all()
+
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = ChapterSerializer
+
+
+class ChapterUpdateView(generics.UpdateAPIView):
+    
+    queryset = Chapter.objects.all()
+
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = ChapterSerializer
+
+    def perform_update(self, serializer):
+        
+        if serializer.instance.mentor != self.request.user:
+
+            raise PermissionDenied("You dont own this course!")
+        
+        serializer.save()

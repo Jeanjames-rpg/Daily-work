@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import styles from "../styles/Addchapter.module.css"
+import ChapterForm from "../componenets/ChapterForm";
 
 
 function AddChapter() {
@@ -41,27 +42,36 @@ function AddChapter() {
     };
 
     return (
-        <div className={styles.container}>
+        // <div className={styles.container}>
 
-        <div className={styles.card}>
-            <h1 className={styles.title}>Add Chapter</h1>
+        // <div className={styles.card}>
+        //     <h1 className={styles.title}>Add Chapter</h1>
 
-            <form onSubmit={handleSubmit}  className={styles.form}>
+        //     <form onSubmit={handleSubmit}  className={styles.form}>
 
-                <input className={styles.input} type="text" placeholder="Chapter title" onChange={(e)=> setTitle(e.target.value)} />
+        //         <input className={styles.input} type="text" placeholder="Chapter title" onChange={(e)=> setTitle(e.target.value)} />
 
-                <input className={styles.input} type="number" placeholder="oder"  onChange={(e)=> setOrder(e.target.value)} />
+        //         <input className={styles.input} type="number" placeholder="oder"  onChange={(e)=> setOrder(e.target.value)} />
 
-                <input className={styles.file} type="file" accept="video/*" onChange={(e)=> setVideo(e.target.files[0])} />
+        //         <input className={styles.file} type="file" accept="video/*" onChange={(e)=> setVideo(e.target.files[0])} />
 
-                <button className={styles.button} type="submit">Add Chapter</button>
+        //         <button className={styles.button} type="submit">Add Chapter</button>
 
-            </form>
+        //     </form>
 
 
-        </div>
+        // </div>
 
-        </div>
+        // </div>
+        <ChapterForm
+            title={title}
+            setTitle={setTitle}
+            order={order}
+            setOrder={setOrder}
+            video={video}
+            setVideo={setVideo}
+            buttontext="Add Chapter"
+        />
     );
 }
 
