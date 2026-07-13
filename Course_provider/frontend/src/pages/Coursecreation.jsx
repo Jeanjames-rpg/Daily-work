@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useState } from "react";
 import styles from "../styles/Coursecreation.module.css"
+import CourseForm from "../componenets/CourseForm";
 
 function Createcourse(){
     const [title, setTitle] = useState("");
@@ -46,7 +47,7 @@ function Createcourse(){
         
 
         <div className={styles.card}>
-            <h1 className={styles.title}>Create Course</h1>
+            {/* <h1 className={styles.title}>Create Course</h1>
 
             <form onSubmit={handleSubmit} className={styles.form}>
 
@@ -58,7 +59,18 @@ function Createcourse(){
 
                 <button type="submit" className={styles.button}>Create Course</button>
                 
-            </form>
+            </form> */}
+
+            <CourseForm
+                title={title}
+                setTitle={setTitle}
+                description={description}
+                setDescription={setDescription}
+                image={image}
+                setImage={setImage}
+                onSubmit={handleSubmit}
+                buttonText="Create Course"
+            />
 
             <Link to="/" className={styles.link}>Home page</Link>
         </div>

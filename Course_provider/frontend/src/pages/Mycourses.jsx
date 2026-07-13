@@ -21,7 +21,7 @@ function Mycourses(){
         
 
         <div>
-            <h1>My courses</h1>
+            <h1 className="text-center font-bold mb-8  text-3xl">My courses</h1>
 
             {courses.map((course)=>(
                 <div key={course.id} className={styles.card}>
@@ -35,6 +35,16 @@ function Mycourses(){
 
                     <Link to={`/courses/${course.id}/add-chapter`}>
                     <button className={styles.button}>Add chapter</button>
+                    </Link>
+                    
+                    <Link to={`/courses/update/${course.id}`}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+                    >
+                        Update Course
+                    </Link>
+
+                    <Link>
+                        Delete Course
                     </Link>
 
                     <Link to={`/courses/${course.id}/students`}><button className={styles.button}>View students</button></Link>

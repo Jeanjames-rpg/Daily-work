@@ -34,7 +34,7 @@ function CourseList() {
     return(
         
         <div className={styles.container}>
-            <h1 className={styles.title}>Available Courses</h1>
+            <h1 className="text-black text-3xl text-center mb-7 font-bold">Available Courses</h1>
 
             {/* <input type="text" placeholder="search" value={Search} onChange={(e)=> setSearch(e.target.value)} /> */}
             <SearchBar value={Search} onChange={(e)=> setSearch(e.target.value)} />
