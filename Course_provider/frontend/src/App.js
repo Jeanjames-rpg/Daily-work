@@ -18,6 +18,7 @@ import { BrowserRouter, Routes,Route } from 'react-router-dom';
 import StudentDashboard from './pages/StudentDashboard';
 import MentorDashboard from './pages/MentorDashboard';
 import CourseUpdate from './pages/CourseUpdate';
+import ChapterUpdate from './pages/ChapterUpdate';
 
 // function App() {
 //   return (
@@ -50,6 +51,7 @@ function App(){
         <Route path='/my-courses' element={<Mycourses/>} />
         <Route path='/courses/:id' element={<CourseDetail/>}/>
         <Route path='/courses/:id/add-chapter'  element={<AddChapter/>}/>
+        <Route path='/courses/chapter/update/:id' element={<ChapterUpdate/>}/>
         <Route path='/my-enrollments' element={<MyEnrollments/>} />
         <Route path='/courses/:id/students'  element={<CourseStudents/>} />
         <Route path='/student-dashboard' element={<StudentDashboard/>} />

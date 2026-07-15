@@ -24,17 +24,24 @@ function Login() {
 
             alert ('Login Success');
 
-            window.location.href = "/dashboard";
+            // window.location.href = "/dashboard";
 
             const user = await api.get("me/")
             console.log(user.data);
 
-            if (user.data.role === 'mentor'){
-                navigate("/dashboard");
-            }
-            else{
-                navigate("/dashboard");
-            }
+            localStorage.setItem(
+                "user",JSON.stringify(user.data)
+            );
+
+
+            window.location.href = '/dashboard';
+
+            // if (user.data.role === 'mentor'){
+            //     navigate("/dashboard");
+            // }
+            // else{
+            //     navigate("/dashboard");
+            // }
 
 
          } catch (error) {

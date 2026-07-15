@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
@@ -17,6 +17,12 @@ function CourseDetail() {
 
     const navigate = useNavigate();
 
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const isOwner =
+                     user && 
+                     user?.role === 'mentor' && 
+                     user?.id === course?.mentor_id;
    
 
     useEffect(()=> {
@@ -44,6 +50,7 @@ function CourseDetail() {
     },[id]);
 
     console.log(course)
+    console.log(user)
 
     if (!course) {
         return <h2>Loading...</h2>;
@@ -96,17 +103,25 @@ function CourseDetail() {
 
             </h3>
 
-            {/* <video 
-            width="600"
-            controls
-            >
-                <source src={chapter.video} type="video/mp4"/>
 
-                Your browser does not support video.
+            {/* {user?.role === 'mentor' && (
+                <Link to={`/courses/chapter/update/${chapter.id}`}>
+                    Update Chapter
+                </Link>
+            )} */}
+            
 
-            </video> */}
+            {user?.role === 'mentor' &&
+             user?.id === course.mentor_id &&(
+                <Link to={`/courses/chapter/update/${chapter.id}`}
+                 className="inline-block mt-3 px-5 py-2 rounded-lg mb-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-md hover:from-indigo-600 hover:to-purple-700 hover:shadow-lg transition-all duration-300"
+                >
+                    ✏️ Update Chapter
+                </Link>
+             )
+            }
 
-            {enrolled ? (
+            {enrolled || isOwner ? (
                 <video 
                 width="600"
                 controls

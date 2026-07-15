@@ -27,6 +27,7 @@ function NavBar() {
     const logout = () => {
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
+        localStorage.removeItem("user");
 
         navigate("/login");
 

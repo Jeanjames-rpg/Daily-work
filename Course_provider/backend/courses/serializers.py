@@ -34,6 +34,11 @@ class CourseSerialzer(serializers.ModelSerializer):
 
         return obj.enrollments.count()
 
+    mentor_id = serializers.IntegerField(
+        source='mentor.id',
+        read_only = True
+    )
+
 
     class Meta:
         model = Courses
