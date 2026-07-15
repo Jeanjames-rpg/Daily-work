@@ -70,6 +70,14 @@ function Mycourses(){
                         Delete Course
                     </button>
 
+                    <Link to={`/courses/${course.id}`}
+                        className="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white transition duration-300"
+                    >
+                        View Details
+
+                    </Link>
+
+
                     </div>
 
                 </div>
