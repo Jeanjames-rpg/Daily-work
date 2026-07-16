@@ -174,7 +174,6 @@ class CourseDeleteView(generics.DestroyAPIView):
 
     permission_classes = [IsAuthenticated]
 
-    serializer_class = CourseSerialzer
 
     def perform_destroy(self, instance):
         
@@ -209,3 +208,18 @@ class ChapterUpdateView(generics.UpdateAPIView):
             raise PermissionDenied("You dont own this course!")
         
         serializer.save()
+
+
+class ChapterDeleteView(generics.DestroyAPIView):
+
+    queryset = Chapter.objects.all()
+
+    permission_classes = [IsAuthenticated]
+
+    def perform_destroy(self, instance):
+        
+        if instance.course.mentor != self.request.user:
+
+            raise PermissionDenied(" You Dont Own This Course!")
+        
+        instance.delete()

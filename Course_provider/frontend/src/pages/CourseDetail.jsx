@@ -78,6 +78,63 @@ function CourseDetail() {
             // console.log(error.response.data);
         }
     };
+    
+    const deleteCourse = async ()=> {
+
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this course?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            await api.delete(
+                `courses/delete/${course.id}`
+            );
+
+            alert('Course deleted successfully.');
+
+            navigate("/my-courses");
+        }
+        catch (error){
+            console.log(error);
+
+            alert("Unable to delete course.");
+        }
+    };
+
+    const deleteChapter = async (chapterId) => {
+
+        const confirmDelete = window.confirm(
+            "Want to delete this chapter?"
+        );
+
+        if (!confirmDelete) return;
+
+        console.log("Dleteing chapter:",chapterId)
+
+        try {
+            await api.delete(`courses/chapters/delete/${chapterId}/`);
+
+            alert ("Chapter deleted!!");
+
+            setCourse({
+                ...course,
+                chapters: course.chapters.filter(
+                    (chapter) => chapter.id !== chapterId
+                )
+            });
+
+            // navigate("/my-courses");
+
+        }
+        catch (error){
+            console.error("Delete failed:",error);
+
+            alert( "Unable to delete chapter!");
+        }
+
+    };
 
 
     return (
@@ -103,12 +160,6 @@ function CourseDetail() {
 
             </h3>
 
-
-            {/* {user?.role === 'mentor' && (
-                <Link to={`/courses/chapter/update/${chapter.id}`}>
-                    Update Chapter
-                </Link>
-            )} */}
             
 
             {user?.role === 'mentor' &&
@@ -120,6 +171,8 @@ function CourseDetail() {
                 </Link>
              )
             }
+
+            {isOwner && <button onClick={() => deleteChapter(chapter.id)} className=" ml-px px-4 py-2 rounded-lg bg-gradient-to-l from-rose-400 to-red-600 hover:from-rose-500 hover:to-red-700 transition text-white">🗑️ Delete chapter</button>}
 
             {enrolled || isOwner ? (
                 <video 
@@ -155,6 +208,13 @@ function CourseDetail() {
             <p>"Enrolled!"</p>
         ) }            
 
+        {isOwner&&(
+            <button onClick={deleteCourse}
+                className="ml-px px-4 py-2 rounded-lg bg-gradient-to-l from-rose-400 to-red-600 hover:from-rose-500 hover:to-red-700 transition text-white"
+            >
+               🗑️ Delete Course
+            </button>
+        )}
 
         <hr/>
 

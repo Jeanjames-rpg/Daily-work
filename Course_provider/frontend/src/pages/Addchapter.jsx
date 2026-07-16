@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import styles from "../styles/Addchapter.module.css"
 import ChapterForm from "../componenets/ChapterForm";
@@ -7,6 +7,8 @@ import ChapterForm from "../componenets/ChapterForm";
 
 function AddChapter() {
     const {id} = useParams();
+
+    const navigate = useNavigate();
 
     const[title, setTitle] = useState("");
 
@@ -30,10 +32,12 @@ function AddChapter() {
         try {
             await api.post(
                 "courses/chapters/create/",
-                formData
+                formData,
             );
 
             alert("Chapter Added");
+
+            navigate(`/courses/${id}`)
 
         }
         catch(error){
@@ -71,6 +75,7 @@ function AddChapter() {
             video={video}
             setVideo={setVideo}
             buttontext="Add Chapter"
+            onSubmit={handleSubmit}
         />
     );
 }
