@@ -12,3 +12,13 @@ class User(AbstractUser):
         max_length=20,
         choices=ROLE_CHOICES
     )
+
+    profile_picture = models.ImageField(
+        upload_to="profiles/",
+        blank=True,
+        null=True
+    )
+
+    bio = models.TextField(
+        blank=True
+    )

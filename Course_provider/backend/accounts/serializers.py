@@ -53,3 +53,16 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
 
         return token
+    
+class UserUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = User
+
+        fields = [
+            "username",
+            "email",
+            "bio",
+            "profile_picture"
+        ]

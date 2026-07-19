@@ -19,6 +19,8 @@ import StudentDashboard from './pages/StudentDashboard';
 import MentorDashboard from './pages/MentorDashboard';
 import CourseUpdate from './pages/CourseUpdate';
 import ChapterUpdate from './pages/ChapterUpdate';
+import UpdateProfile from './pages/UpdateProfile';
+
 
 // function App() {
 //   return (
@@ -57,6 +59,7 @@ function App(){
         <Route path='/student-dashboard' element={<StudentDashboard/>} />
         <Route path='/mentor-dashboard' element={<MentorDashboard/>}/>
         <Route path='/courses/update/:id' element={<CourseUpdate/>} />
+        <Route path='/user/update' element={<UpdateProfile/>}/>
       </Routes>
     </Main>
     

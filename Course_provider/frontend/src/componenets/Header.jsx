@@ -1,17 +1,11 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link,  } from "react-router-dom"
 import styles from "../styles/Header.module.css"
 import logo from "../assets/logo2.PNG"
 import NavBar from "./NavBar";
 
 function Header() {
 
-    const navigate = useNavigate();
-
-    const logout= ()=>{
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        navigate("/login");
-    }
+   
 
     return (
          <header className="bg-gradient-to-br from-orange-500 via-amber-400 to-yellow-300">

@@ -92,6 +92,13 @@ function Dashboard (){
                                     {user.role}
                                 </span>
                             </p>
+
+                            <Link to='/user/update'
+                             className="mt-3 inline-block rounded-lg bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 px-4 py-2 font-medium text-white shadow-md transition hover:-translate-y-1 hover:shadow-lg"
+                            >
+                                Edit Profile
+                            </Link>
+                          
                         </div>
 
                     </div>

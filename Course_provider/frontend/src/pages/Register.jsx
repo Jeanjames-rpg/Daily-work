@@ -43,19 +43,22 @@ function Register() {
     };
 
     return (
-    <div className={styles.container}>
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4 ">
 
-        <img src={logo} alt="Logo" className={styles.logo} />
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+         <div className="flex justify-center mb-6">
+             <img src={logo} alt="Logo" className="h-32 w-32 object-contain mx-auto mb-6" />
+        </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-            <input className={styles.input} placeholder="username" onChange={(e) => setForm({...form,username: e.target.value,})}  />
+            <input className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="username" onChange={(e) => setForm({...form,username: e.target.value,})}  />
 
-            <input className={styles.input} placeholder="email" onChange={(e) => setForm({...form,email: e.target.value,})}  />
+            <input className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="email" onChange={(e) => setForm({...form,email: e.target.value,})}  />
 
-            <input className={styles.input} placeholder="password" onChange={(e) => setForm({...form,password: e.target.value,})} />
+            <input className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="password" onChange={(e) => setForm({...form,password: e.target.value,})} />
 
-            <input className={styles.input} placeholder="confirm password"  onChange={(e)=> setForm({...form,confirmpassword: e.target.value,})} />
+            <input className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="confirm password"  onChange={(e)=> setForm({...form,confirmpassword: e.target.value,})} />
 
             <select 
                 className={styles.select}
@@ -78,7 +81,7 @@ function Register() {
 
         </form>
         
-
+     </div>
         
     </div>
     );
