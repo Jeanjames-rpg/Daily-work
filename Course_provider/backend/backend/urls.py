@@ -23,12 +23,14 @@ from rest_framework_simplejwt.views import(
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.token_views import MyTokenObtainPairView
+from accounts.token_views import CookieTokenObtainPairView
+from accounts.token_views import CookieTokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('accounts.urls')),
-    path('api/login/',MyTokenObtainPairView.as_view()),
-    path('api/token/refresh/',TokenRefreshView.as_view()),
+    path('api/login/',CookieTokenObtainPairView.as_view()),
+    path('api/token/refresh/',CookieTokenRefreshView.as_view()),
     path('api/courses/',include('courses.urls'))
 ]
 

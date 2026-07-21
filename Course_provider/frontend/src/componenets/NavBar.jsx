@@ -14,28 +14,55 @@ function NavBar() {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        const token = localStorage.getItem("access");
+        // const token = localStorage.getItem("access");
 
-        if (token) {
-            api.get("me/")
-            .then((res)=>{
-                setUser(res.data);
-            })
-            .catch((err)=>{
-                console.log(err);
-            });
-        }
+        // if (token) {
+        //     api.get("me/")
+        //     .then((res)=>{
+        //         setUser(res.data);
+        //     })
+        //     .catch((err)=>{
+        //         console.log(err);
+        //     });
+        // }
+
+        api.get("me/")
+        .then((res)=>{
+            setUser(res.data)
+        })
+        .catch((error)=>{
+            console.log(error)
+            alert(error)
+            setUser(null)
+        })
+
+
     },[]);
 
-    const logout = () => {
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        localStorage.removeItem("user");
+    // const logout = () => {
+    //     localStorage.removeItem("access");
+    //     localStorage.removeItem("refresh");
+    //     localStorage.removeItem("user");
 
-        navigate("/login");
+    //     navigate("/login");
 
-        window.location.reload();
-    };
+    //     window.location.reload();
+    // };
+
+    const logout = async() => {
+        try{
+            await api.post("logout/");
+
+            setUser(null);
+
+            navigate("/login")
+
+        }
+        catch(error){
+            console.log(error)
+            alert(error)
+        }
+    }
 
     const closeMenu = () => {
         setMenuOpen(false);

@@ -18,9 +18,9 @@ function Login() {
 
             const response = await api.post( "login/",{username,password,});
 
-            localStorage.setItem("access",response.data.access);
+            // localStorage.setItem("access",response.data.access);
 
-            localStorage.setItem("refresh",response.data.refresh);
+            // localStorage.setItem("refresh",response.data.refresh);
 
             alert ('Login Success');
 
@@ -45,6 +45,13 @@ function Login() {
 
 
          } catch (error) {
+
+            if (error.response?.status === 401){
+                alert("Invalid username or password");
+            } else {
+                alert("Something went wrong");
+            }
+
             console.log(error);
          }
         };
@@ -59,9 +66,9 @@ function Login() {
             </div>
             <form onSubmit={handleLogin} className="space-y-5" >
 
-                <input placeholder="Username" className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={(e) => setUsername(e.target.value)}/>
+                <input value={username} placeholder="Username" className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" onChange={(e) => setUsername(e.target.value)} required/>
 
-                <input type="password"  placeholder="Password" className='w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500' onChange={(e) => setPassword(e.target.value)} />   
+                <input value={password} type="password"  placeholder="Password" className='w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500' onChange={(e) => setPassword(e.target.value)} required />   
 
                 <button  className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold" type="submit">
                     Login
