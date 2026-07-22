@@ -17,10 +17,13 @@ function CourseDetail() {
 
     const navigate = useNavigate();
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const [user, setUser] = useState(null);
+
+    // const user = JSON.parse(localStorage.getItem("user"));
+ 
 
     const isOwner =
-                     user && 
+                    //  user && 
                      user?.role === 'mentor' && 
                      user?.id === course?.mentor_id;
    
@@ -49,10 +52,22 @@ function CourseDetail() {
 
     },[id]);
 
+    useEffect(() => {
+
+        api.get("me/")
+        .then((res)=>{
+            setUser(res.data);
+        })
+        .catch(() => {
+            setUser(null);
+        });
+
+    },[]);
+
     console.log(course)
     console.log(user)
 
-    if (!course) {
+    if (!course ) {
         return <h2>Loading...</h2>;
     }
 
@@ -139,7 +154,13 @@ function CourseDetail() {
 
     return (
     <div className={styles.container}>
-        <img src={course.image} alt={course.title}/>
+        <div className="w-full h-56 overflow-hidden rounded-xl bg-gray-100">
+    <img
+        src={course.image}
+        alt={course.title}
+        className="w-full h-[450px] object-contain transition-transform duration-300 hover:scale-105"
+    />
+    </div>
         <h1 className={styles.title}>{course.title}</h1>
         <p className={styles.description}>{course.description}</p>
 

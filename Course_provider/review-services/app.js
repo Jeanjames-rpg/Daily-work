@@ -8,17 +8,23 @@ const reviewRoutes = require("./routes/reviewRoutes");
 
 const cors = require("cors");
 
+const cookieParser = require("cookie-parser");
+
+
 dotenv.config();
 
 connectDB();
 
 const app = express();
 
+app.use(cookieParser());
+
 // console.log("JWT_SECRET length:", process.env.JWT_SECRET.length);
 
 app.use(
     cors({
-    origin: "http://localhost:3000"
+    origin: "http://localhost:3000",
+    credentials:true,
     })
 );
 

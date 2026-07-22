@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "../styles/NavBar.module.css"
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -12,6 +12,8 @@ function NavBar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const navigate = useNavigate();
+
+    const location = useLocation();
 
     useEffect(()=>{
         // const token = localStorage.getItem("access");
@@ -26,18 +28,26 @@ function NavBar() {
         //     });
         // }
 
+        if (location.pathname ==='/login' || location.pathname === '/register'){
+            setUser(null);
+            return;
+        }
+
         api.get("me/")
         .then((res)=>{
             setUser(res.data)
         })
         .catch((error)=>{
-            console.log(error)
-            alert(error)
-            setUser(null)
+            if (error.response?.status === 401) {
+                setUser(null);
+                return;
+            }
+
+            console.log(error);
         })
 
 
-    },[]);
+    },[location.pathname]);
 
     // const logout = () => {
     //     localStorage.removeItem("access");
@@ -53,16 +63,16 @@ function NavBar() {
         try{
             await api.post("logout/");
 
-            setUser(null);
-
-            navigate("/login")
-
         }
         catch(error){
-            console.log(error)
-            alert(error)
+            console.log(error);
         }
-    }
+        finally{
+            setUser(null);
+            localStorage.removeItem("user");
+            navigate("/login");
+        }
+    };
 
     const closeMenu = () => {
         setMenuOpen(false);

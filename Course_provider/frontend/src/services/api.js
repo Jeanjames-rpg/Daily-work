@@ -71,32 +71,76 @@ const api = axios.create({
 //     }
 // );
 
+// api.interceptors.response.use(
+//     (response) => response,
+
+//     async (error) => {
+//         const originalRequest = error.config;
+
+//         if (
+//             error.response?.status === 401 &&
+//             !originalRequest._retry &&
+//             !originalRequest.url.includes("token/refresh")
+//         ){
+//             originalRequest._retry = true;
+
+//             try {
+//                 await api.post("token/refresh/");
+
+//                 return api(originalRequest);
+//             } catch (refreshError) {
+
+//                 window.location.href = "/login";
+//                 return Promise.reject(refreshError);
+
+//             }
+//         }
+
+//         return Promise.reject(error);
+//     }
+// );
+ 
+
 api.interceptors.response.use(
     (response) => response,
 
     async (error) => {
-        const orginalRequest = error.config;
+        const originalRequest = error.config;
+
+        if (!originalRequest) {
+            return Promise.reject(error);
+        }
+
+        const url = originalRequest.url;
+
+        // checking for if its an authentication endpoint and if it is ignore the error
 
         if (
-            error.response?.status === 401 &&
-            !orginalRequest._retry
-        ){
-            orginalRequest._retry = true;
+            url.includes("login") || url.includes("logout") || url.includes("token/refresh")
+        ) {
+            return Promise.reject(error);
+        }
+
+        if (
+            error.response?.status === 401 && 
+            !originalRequest._retry
+        ) {
+            originalRequest._retry = true;
 
             try {
                 await api.post("token/refresh/");
 
-                return api(orginalRequest);
+                return api(originalRequest);
             } catch (refreshError) {
+                
+                window.location.href = '/login';
 
-                window.location.href = "/login";
                 return Promise.reject(refreshError);
-
             }
         }
 
         return Promise.reject(error);
     }
 );
- 
+
 export default api;

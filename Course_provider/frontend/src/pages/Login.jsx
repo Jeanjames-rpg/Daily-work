@@ -26,12 +26,12 @@ function Login() {
 
             // window.location.href = "/dashboard";
 
-            const user = await api.get("me/")
-            console.log(user.data);
+            // const user = await api.get("me/")
+            // console.log(user.data);
 
-            localStorage.setItem(
-                "user",JSON.stringify(user.data)
-            );
+            // localStorage.setItem(
+            //     "user",JSON.stringify(user.data)
+            // );
 
 
             window.location.href = '/dashboard';
