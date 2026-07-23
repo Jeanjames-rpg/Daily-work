@@ -13,7 +13,11 @@ const authMiddleware = (req, res, next) => {
 
     // const token = authHeader.split(" ")[1];
 
-    const token = req.cookies.token;
+    console.log("Cookies:",req.cookies);
+
+    const token = req.cookies.access;
+
+    console.log("Token:",token);
 
     if (!token) {
         return res.status(401).json({
@@ -28,12 +32,17 @@ const authMiddleware = (req, res, next) => {
             process.env.JWT_SECRET
         );
 
+        console.log("Decoded:",decoded);
+
         req.user = decoded;
 
         next();
     }
 
     catch(error) {
+
+        console.log(error);
+
         return res.status(401).json({
             message: error.message
         });

@@ -114,9 +114,17 @@ class MyEnrollmentsVIew(generics.ListAPIView):
     
 class EnrollmentStatusView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, course_id):
+
+
+        if not request.user.is_authenticated:
+
+            return Response({
+                "enrolled": False
+            })
+
 
         enrolled = Enrollment.objects.filter(
             student= request.user,

@@ -3,12 +3,14 @@ from .serializers import MyTokenObtainPairSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenRefreshView
 
-class MyTokenObtainPairView(TokenObtainPairView):
+# class MyTokenObtainPairView(TokenObtainPairView):
 
-    serializer_class = MyTokenObtainPairSerializer
+#     serializer_class = MyTokenObtainPairSerializer
 
 
 class CookieTokenObtainPairView(TokenObtainPairView):
+
+    serializer_class = MyTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
 

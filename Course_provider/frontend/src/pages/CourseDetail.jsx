@@ -221,13 +221,17 @@ function CourseDetail() {
 
         {/* <button className={styles.enrollbtn} onClick={enroll}>Enroll</button> */}
 
-        {!enrolled ?(
-            <button className={styles.enrollbtn} onClick={enroll}>
-                Enroll
-            </button>
-        ):(
-            <p>"Enrolled!"</p>
-        ) }            
+           
+
+        { !isOwner &&(
+            enrolled ?(
+                <p>✅ Enrolled</p>
+            ):(
+                <button className={styles.enrollbtn} onClick={enroll}>
+                    Enroll
+                 </button>
+            )
+        )}        
 
         {isOwner&&(
             <button onClick={deleteCourse}
