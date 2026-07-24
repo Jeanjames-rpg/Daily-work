@@ -68,7 +68,13 @@ function CourseDetail() {
     console.log(user)
 
     if (!course ) {
-        return <h2>Loading...</h2>;
+        return (
+            <div className="min-h-screen items-center justify-center">
+                <h2 className="text-2xl font-semibold text-gray-600">
+                    Loading course...
+                </h2>
+            </div>
+        )
     }
 
     const enroll = async()=> {
@@ -153,101 +159,647 @@ function CourseDetail() {
 
 
     return (
-    <div className={styles.container}>
-        <div className="w-full h-56 overflow-hidden rounded-xl bg-gray-100">
-    <img
-        src={course.image}
-        alt={course.title}
-        className="w-full h-[450px] object-contain transition-transform duration-300 hover:scale-105"
-    />
-    </div>
-        <h1 className={styles.title}>{course.title}</h1>
-        <p className={styles.description}>{course.description}</p>
 
-        <p className={styles.mentor}>
-            Mentor: {course.mentor_name}
-        </p>
+        // <div className="min-h-screen bg-gray-50 py-10">
 
-        <h2 className={styles.chaptersTitle}>Chapters</h2>
+        //     <div className="max-w-6xl mx-auto px-5">
 
-        {course.chapters?.map((chapter,index) => (
-           <div className={styles.chapterCard} style={{ animationDelay: `${index * 0.1}s`}}>     
-            
-            <h3 className={styles.chapterTitle}>
+        //         <div className="relative h-[350px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
 
-                {chapter.order}.
+        //             <img
+        //                 src={course.image}
+        //                 alt={course.title}
+        //                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+        //             />
 
-                {chapter.title}
+        //             <div
+        //                 className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+        //             />
 
-            </h3>
+        //             <div className="absolute bottom-8 left-8 text-white">
 
-            
+        //                 <h1 className="text-4xl md:text-6xl font-bold">
+        //                     {course.title}
+        //                 </h1>
 
-            {user?.role === 'mentor' &&
-             user?.id === course.mentor_id &&(
-                <Link to={`/courses/chapter/update/${chapter.id}`}
-                 className="inline-block mt-3 px-5 py-2 rounded-lg mb-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-md hover:from-indigo-600 hover:to-purple-700 hover:shadow-lg transition-all duration-300"
-                >
-                    ✏️ Update Chapter
-                </Link>
-             )
-            }
-
-            {isOwner && <button onClick={() => deleteChapter(chapter.id)} className=" ml-px px-4 py-2 rounded-lg bg-gradient-to-l from-rose-400 to-red-600 hover:from-rose-500 hover:to-red-700 transition text-white">🗑️ Delete chapter</button>}
-
-            {enrolled || isOwner ? (
-                <video 
-                width="600"
-                controls
-                >
-                    <source src={chapter.video} type="video/mp4"/>
-
-                    Your Browser Does Not Support Video
-
-                </video>
-            ) : (
-                <div className={styles.locked}>
-                    🔒 This Video is locked. Please enroll to watch.
-                </div>   
-            )
-            
-            }
+        //                 <p className="mt-3 text-lg">
+        //                     Created by {course.mentor_name}
+        //                 </p>
 
 
-          </div>
-        ))}
+        //             </div>
 
-        {/* <CourseCard key={course.id} course={course} /> */}
+        //         </div>
 
-        {/* <button className={styles.enrollbtn} onClick={enroll}>Enroll</button> */}
 
-           
+        //         <div className="mt-8 bg-white rounded-2xl shadow p-8">
 
-        { !isOwner &&(
-            enrolled ?(
-                <p>✅ Enrolled</p>
-            ):(
-                <button className={styles.enrollbtn} onClick={enroll}>
-                    Enroll
-                 </button>
-            )
-        )}        
+        //             <h2 className="text-2xl font-bold mb-4">
+        //                 About this course
+        //             </h2>
 
-        {isOwner&&(
-            <button onClick={deleteCourse}
-                className="ml-px px-4 py-2 rounded-lg bg-gradient-to-l from-rose-400 to-red-600 hover:from-rose-500 hover:to-red-700 transition text-white"
-            >
-               🗑️ Delete Course
-            </button>
-        )}
+        //             <p className="text-gray-700 leading-relaxed">
+        //                 {course.description}
+        //             </p>
 
-        <hr/>
 
-       {/* Reviews */}
 
-        <ReviewSection courseId={id} enrolled={enrolled}/>
-    </div>
+        //         </div>
 
-);
-}
-export default CourseDetail;
+
+                
+
+        //         <div className="mt-10">
+
+        //             <h2 className="text-3xl font-bold mb-6">
+        //                 Chapters
+        //             </h2>
+
+        //             <div className="space-y-6">
+
+        //                 {course.chapters?.map((chapter)=>(
+
+        //                     <div
+        //                         key={chapter.id}
+        //                         className="bg-white rounded-2xl shadow p-6"
+        //                     >
+
+        //                         <h3 
+        //                          className="text-xl font-semibold mb-5"
+        //                         >
+        //                             {chapter.order}.{chapter.title}
+        //                         </h3>
+
+        //                         {
+        //                             enrolled || isOwner ? (
+        //                                 <video controls className="w-full rounded-xl">
+
+        //                                     <source
+        //                                         src={chapter.video}
+        //                                         type="video/mp4"
+        //                                     />
+
+        //                                 </video>
+        //                             ) : (
+        //                                 <div 
+        //                                     className="h-40 bg-gray-100 rounded-xl flex items-center justify-center text-gray-500"
+        //                                 >
+        //                                     🔒 Enroll to watch
+        //                                 </div>   
+        //                             )
+        //                         }
+
+        //                     </div>   
+        //                 ))}
+
+        //             </div>
+
+        //         </div>
+
+
+        //         <div className="mt-10">
+
+        //             {!isOwner && (
+        //                 enrolled ? (
+        //                     <span className="px-6 py-3 rounded-xl bg-green-100 text-green-700 font-semibold">
+        //                        ✅ Enrolled 
+        //                     </span>
+
+        //                 ) : (
+                            
+        //                     <button 
+        //                         onClick={enroll}
+        //                         className="px-8 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
+        //                     >
+        //                         Enroll Now
+        //                     </button>
+        //                 )
+        //             )}
+
+
+        //         </div>
+
+
+        //         <div className="mt-12">
+
+        //             <ReviewSection
+        //                 courseId={id}
+        //                 enrolled={enrolled}
+        //             />
+
+        //         </div>
+
+
+
+        //     </div>
+
+        // </div>
+         <div className="
+            min-h-screen
+            bg-gray-50
+            py-10
+        ">
+
+
+            <div className="
+                max-w-6xl
+                mx-auto
+                px-5
+            ">
+
+
+
+
+
+                {/* HERO SECTION */}
+
+
+                <div className="
+                    relative
+                    h-[350px]
+                    md:h-[500px]
+                    rounded-3xl
+                    overflow-hidden
+                    shadow-2xl
+                ">
+
+
+                    <img
+
+                        src={course.image}
+
+                        alt={course.title}
+
+                        className="
+                            w-full
+                            h-full
+                            object-cover
+                            transition
+                            duration-500
+                            hover:scale-105
+                        "
+
+                    />
+
+
+
+                    <div className="
+                        absolute
+                        inset-0
+                        bg-gradient-to-t
+                        from-black/80
+                        via-black/30
+                        to-transparent
+                    " />
+
+
+
+
+                    <div className="
+                        absolute
+                        bottom-8
+                        left-8
+                        right-8
+                        text-white
+                    ">
+
+
+                        <h1 className="
+                            text-4xl
+                            md:text-6xl
+                            font-bold
+                            drop-shadow-xl
+                        ">
+
+                            {course.title}
+
+                        </h1>
+
+
+
+                        <p className="
+                            mt-4
+                            text-lg
+                            text-gray-200
+                        ">
+
+                            Created by {course.mentor_name}
+
+                        </p>
+
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+                {/* DESCRIPTION */}
+
+
+
+                <div className="
+                    mt-8
+                    bg-white
+                    rounded-2xl
+                    shadow
+                    p-8
+                ">
+
+
+                    <h2 className="
+                        text-2xl
+                        font-bold
+                        mb-4
+                    ">
+
+                        About this course
+
+                    </h2>
+
+
+
+                    <p className="
+                        text-gray-700
+                        leading-relaxed
+                    ">
+
+                        {course.description}
+
+                    </p>
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+                {/* CHAPTERS */}
+
+
+
+                <div className="mt-10">
+
+
+                    <h2 className="
+                        text-3xl
+                        font-bold
+                        mb-6
+                    ">
+
+                        Course Chapters
+
+                    </h2>
+
+
+
+
+
+                    <div className="
+                        space-y-6
+                    ">
+
+
+                    {
+                        course.chapters?.map((chapter)=>(
+
+
+                            <div
+
+                                key={chapter.id}
+
+                                className="
+                                    bg-white
+                                    rounded-2xl
+                                    shadow
+                                    p-6
+                                    hover:shadow-xl
+                                    transition
+                                "
+
+                            >
+
+
+
+
+                                <h3 className="
+                                    text-xl
+                                    font-bold
+                                    mb-5
+                                ">
+
+                                    {chapter.order}. {chapter.title}
+
+                                </h3>
+
+
+
+
+
+
+
+
+                                {
+                                    isOwner && (
+
+                                    <div className="
+                                        flex
+                                        gap-3
+                                        mb-5
+                                    ">
+
+
+                                        <Link
+
+                                            to={`/courses/chapter/update/${chapter.id}`}
+
+                                            className="
+                                                px-4
+                                                py-2
+                                                rounded-lg
+                                                bg-indigo-600
+                                                text-white
+                                                hover:bg-indigo-700
+                                            "
+
+                                        >
+
+                                            ✏️ Update
+
+                                        </Link>
+
+
+
+
+
+                                        <button
+
+                                            onClick={()=>
+                                                deleteChapter(chapter.id)
+                                            }
+
+                                            className="
+                                                px-4
+                                                py-2
+                                                rounded-lg
+                                                bg-red-600
+                                                text-white
+                                                hover:bg-red-700
+                                            "
+
+                                        >
+
+                                            🗑 Delete
+
+                                        </button>
+
+
+
+                                    </div>
+
+                                    )
+                                }
+
+
+
+
+
+
+
+
+
+                                {
+                                    enrolled || isOwner
+
+                                    ?
+
+                                    (
+
+                                    <video
+
+                                        controls
+
+                                        className="
+                                            w-full
+                                            aspect-video
+                                            rounded-xl
+                                            bg-black
+                                            shadow
+                                        "
+
+                                    >
+
+                                        <source
+
+                                            src={chapter.video}
+
+                                            type="video/mp4"
+
+                                        />
+
+                                    </video>
+
+                                    )
+
+                                    :
+
+                                    (
+
+                                    <div className="
+                                        h-40
+                                        rounded-xl
+                                        bg-gray-100
+                                        flex
+                                        items-center
+                                        justify-center
+                                        text-gray-500
+                                        text-lg
+                                    ">
+
+                                        🔒 Enroll to watch this chapter
+
+                                    </div>
+
+                                    )
+
+                                }
+
+
+
+
+                            </div>
+
+
+                        ))
+                    }
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+                {/* ACTION BUTTONS */}
+
+
+
+                <div className="
+                    mt-10
+                    flex
+                    gap-4
+                    flex-wrap
+                ">
+
+
+
+
+                {
+                    !isOwner && (
+
+                        enrolled
+
+                        ?
+
+                        (
+
+                        <span className="
+                            px-6
+                            py-3
+                            rounded-xl
+                            bg-green-100
+                            text-green-700
+                            font-semibold
+                        ">
+
+                            ✅ Enrolled
+
+                        </span>
+
+                        )
+
+
+                        :
+
+                        (
+
+                        <button
+
+                            onClick={enroll}
+
+                            className="
+                                px-8
+                                py-3
+                                rounded-xl
+                                bg-indigo-600
+                                text-white
+                                font-semibold
+                                hover:bg-indigo-700
+                            "
+
+                        >
+
+                            Enroll Now
+
+                        </button>
+
+                        )
+
+                    )
+                }
+
+
+
+
+
+
+
+
+                {
+                    isOwner && (
+
+                    <button
+
+                        onClick={deleteCourse}
+
+                        className="
+                            px-8
+                            py-3
+                            rounded-xl
+                            bg-red-600
+                            text-white
+                            font-semibold
+                            hover:bg-red-700
+                        "
+
+                    >
+
+                        🗑 Delete Course
+
+                    </button>
+
+                    )
+                }
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+                {/* REVIEWS */}
+
+
+                <div className="mt-12">
+
+
+                    <ReviewSection
+
+                        courseId={id}
+
+                        enrolled={enrolled}
+
+                    />
+
+
+                </div>
+
+
+
+
+
+
+            </div>
+
+
+        </div>
+        
+    );
+} 
+    export default CourseDetail;
