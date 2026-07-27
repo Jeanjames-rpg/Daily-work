@@ -5,6 +5,7 @@ import CourseCard from "../componenets/CourseCard";
 import styles from "../styles/CourseDetail.module.css";
 import reviewApi from "../services/reviewApi";
 import ReviewSection from "../componenets/ReviewSection";
+import { createOrder } from "../services/paymentApi";
 
 
 function CourseDetail() {
@@ -157,6 +158,46 @@ function CourseDetail() {
 
     };
 
+
+
+    const handlePayment = async () => {
+        try {
+            const order = await createOrder(course.id);
+
+            const options = {
+
+                key: order.key,
+
+                amount: order.amount,
+
+                currency: order.currency,
+                
+                name: "Hive",
+
+                description: order.description,
+
+                order_id: order.order_id,
+
+                handler: async function (response) {
+                    
+                    console.log(response);
+
+                    alert("Payment successfull");
+                },
+
+                theme: {
+                    color: "#4f46e5"
+                }
+            };
+            
+
+            const razorpay = new window.Razorpay(options);
+
+            razorpay.open();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
 
@@ -705,7 +746,9 @@ function CourseDetail() {
 
                         <button
 
-                            onClick={enroll}
+                            // onClick={enroll}
+
+                            onClick={handlePayment}
 
                             className="
                                 px-8
@@ -719,7 +762,7 @@ function CourseDetail() {
 
                         >
 
-                            Enroll Now
+                            Buy Now
 
                         </button>
 

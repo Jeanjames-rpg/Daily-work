@@ -13,6 +13,7 @@ router.get("/",getReviews);
 
 router.post("/",authMiddleware,addReview);
 
+
 router.get("/course/:courseId",getCourseReviews)
 
 module.exports = router;

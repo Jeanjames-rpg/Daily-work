@@ -94,5 +94,6 @@ class CourseStudentsSerializer(serializers.ModelSerializer):
             "id",
             "student",
             "student_name",
-            "enrolled_at"
+            "enrolled_at",
+            "price"
         ]
