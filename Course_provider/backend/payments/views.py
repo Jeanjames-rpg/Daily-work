@@ -8,6 +8,10 @@ from rest_framework.response import Response
 from courses.models import Courses
 from .models import Payment
 
+import hmac
+import hashlib
+from courses.models import Enrollment
+
 # Create your views here.
 client = razorpay.Client(
     auth = (
@@ -62,4 +66,50 @@ class CreateOrderView(APIView):
             "currency": "INR",
             "key": settings.RAZORPAY_KEY_ID,
             "course": course.title,
+        })
+
+
+class VerifyPaymentView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        payment_id = request.data.get("razorpay_payment_id")
+        order_id = request.data.get("razorpay_order_id")
+        signature = request.data.get("razorpay_signature")
+
+        generated_signature = hmac.new(
+            settings.RAZORPAY_KEY_SECRET.encode(),
+            f"{order_id}|{payment_id}".encode(),
+            hashlib.sha256
+        ).hexdigest()
+
+        if generated_signature != signature:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid Signature"
+                },
+                status=400
+            )
+
+        payment = Payment.objects.get(
+            razorpay_order_id = order_id
+        )
+
+        payment.razorpay_payment_id = payment_id
+        payment.razorpay_signature = signature
+        payment.status = "Paid"
+        payment.save()
+
+        Enrollment.objects.get_or_create(
+            student = request.user,
+            course=payment.course
+        )
+
+        return Response({
+            "success": True,
+            "message": "Payment Verfied"
         })
