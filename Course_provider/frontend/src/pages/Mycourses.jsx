@@ -44,6 +44,10 @@ function Mycourses(){
                         {course.student_count}
                     </p>
 
+                    <p className="text-2xl font-bold text-green-600 mt-3">
+                        ₹{course.price}
+                    </p>
+
                     <div className="flex flex-wrap gap-3 pt-3">
                   
                     <Link to={`/courses/${course.id}/add-chapter`}

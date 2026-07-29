@@ -21,6 +21,10 @@ function CourseCard({ course }) {
              <p className="text-sm text-gray-700">
                 <span className="font-semibold">Enrollments:</span> {course.student_count} 
              </p>
+
+             <p className="text-2xl font-bold text-green-600 mt-3">
+                ₹{course.price}
+             </p>
             </div>
 
             <Link to={`/courses/${course.id}`}>
