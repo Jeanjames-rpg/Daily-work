@@ -8,6 +8,7 @@ function Createcourse(){
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState(null)
+    const [price, setPrice] = useState("")
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -17,6 +18,7 @@ function Createcourse(){
 
         formData.append("title",title);
         formData.append("description",description);
+        formData.append("price",price);
         if (image){
             formData.append("image",image);
         }
@@ -68,6 +70,8 @@ function Createcourse(){
                 setDescription={setDescription}
                 image={image}
                 setImage={setImage}
+                price={price}
+                setPrice={setPrice}
                 onSubmit={handleSubmit}
                 buttonText="Create Course"
             />

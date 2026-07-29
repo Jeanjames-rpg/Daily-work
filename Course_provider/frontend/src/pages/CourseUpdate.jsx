@@ -16,6 +16,8 @@ function CourseUpdate() {
 
     const [loading, setLoading] = useState(true);
 
+    const [price, setPrice] = useState("");
+
     useEffect(()=>{
         api.get(`courses/${id}/`)
             .then((res)=>{
@@ -23,6 +25,8 @@ function CourseUpdate() {
                 setTitle(res.data.title);
 
                 setDescription(res.data.description);
+
+                setPrice(res.data.price)
 
                 setImage(res.data.image);
 
@@ -46,6 +50,8 @@ function CourseUpdate() {
         formData.append("title",title);
 
         formData.append("description",description);
+
+        formData.append("price",price)
 
         if (image instanceof File) {
             formData.append("image",image);
@@ -99,6 +105,10 @@ function CourseUpdate() {
                  description={description}
 
                  setDescription={setDescription}
+
+                 price={price}
+
+                 setPrice={setPrice}
 
                  image={image}
 

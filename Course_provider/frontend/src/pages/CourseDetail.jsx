@@ -196,7 +196,7 @@ function CourseDetail() {
                 },
 
                 theme: {
-                    color: "#4f46e5"
+                    color: "#f97316"
                 }
             };
             
