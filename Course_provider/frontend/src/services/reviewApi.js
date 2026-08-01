@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const reviewApi = axios.create({
-    baseURL: "http://localhost:5000/api/",
+    baseURL: process.env.REACT_APP_REVIEW_API_URL,
     withCredentials:true,
 });
 
