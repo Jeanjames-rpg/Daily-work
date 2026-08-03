@@ -5,9 +5,20 @@ env/
 .venv/
 
 __pycache__/
+*.py[cod]
+*$py.class
 
 db.sqlite3
 db.sqlite3-journal
 
 
 .vscode/
+
+staticfiles/
+media/
+
+*.log
+
+*.egg-info//
+dist/
+build/
