@@ -211,7 +211,7 @@ class ChapterUpdateView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         
-        if serializer.instance.mentor != self.request.user:
+        if serializer.instance.course.mentor != self.request.user:
 
             raise PermissionDenied("You dont own this course!")
         

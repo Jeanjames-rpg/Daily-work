@@ -14,6 +14,8 @@ function AddChapter() {
 
     const[order, setOrder] = useState("");
 
+    const[description, setDescription] = useState("")
+
     const[video, setVideo] = useState(null);
 
     const handleSubmit = async (e)=> {
@@ -24,6 +26,8 @@ function AddChapter() {
         formData.append("course", id);
 
         formData.append("title", title);
+
+        formData.append("description", description);
 
         formData.append("order", order);
 
@@ -70,6 +74,8 @@ function AddChapter() {
         <ChapterForm
             title={title}
             setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
             order={order}
             setOrder={setOrder}
             video={video}

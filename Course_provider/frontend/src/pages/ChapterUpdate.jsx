@@ -12,6 +12,8 @@ function ChapterUpdate(){
 
     const [title, setTitle] = useState("");
 
+    const [description, setDescription] = useState("");
+
     const [order, setOrder] = useState("");
 
     const [video, setVideo] = useState("");
@@ -24,6 +26,8 @@ function ChapterUpdate(){
         .then(
             (res)=>{
                 setTitle(res.data.title);
+
+                setDescription(res.data.description);
 
                 setOrder(res.data.order);
 
@@ -46,6 +50,8 @@ function ChapterUpdate(){
 
         formData.append("title",title);
 
+        formData.append("description",description);
+
         formData.append("order",order);
 
         if (video instanceof File) {
@@ -53,13 +59,17 @@ function ChapterUpdate(){
         }
 
         try{
-            await api.put(`courses/chapters/update/${id}/`,formData);
+            await api.patch(`courses/chapters/update/${id}/`,formData);
 
             alert("Chapter successfully updated!!");
 
             navigate(-1);
         }catch (error){
             console.log(error);
+
+            console.log("Status:", error.response?.status);
+            console.log("Data:", error.response?.data);
+            console.log("Headers:", error.response?.headers);
 
             alert("Unable to update chapter.");
         }
@@ -83,6 +93,10 @@ function ChapterUpdate(){
             title={title}
 
             setTitle={setTitle}
+
+            description={description}
+
+            setDescription={setDescription}
 
             order={order}
 

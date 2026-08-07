@@ -556,6 +556,9 @@ function CourseDetail() {
 
                                 </h3>
 
+                               <p className="text-gray-600 leading-relaxed mb-5">
+                                {chapter.description}
+                               </p>
 
 
 

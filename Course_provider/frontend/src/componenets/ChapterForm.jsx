@@ -2,6 +2,8 @@
 function ChapterForm ({
     title,
     setTitle,
+    description,
+    setDescription,
     order,
     setOrder,
     video,
@@ -32,6 +34,21 @@ function ChapterForm ({
                         onChange={(e)=>setTitle(e.target.value)}
                         placeholder="Enter chapter title"
                         required
+                        className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    />
+                </div>
+
+                <div className="mb-6">
+                    <label className="block text-gray-700 font-semibold mb-2">
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        value={description}
+                        onChange={(e)=>setDescription(e.target.value)}
+                        placeholder="What will students learn in this chapter?"
+                        rows={4}
                         className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
                     />
                 </div>
