@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotFound
 
 from .models import Courses
 from .serializers import CourseSerialzer
@@ -38,11 +39,14 @@ class CourseCreateview(
 class CourseListView(
     generics.ListAPIView
 ):
-    queryset = Courses.objects.all()
+    # queryset = Courses.objects.all()
 
     serializer_class = CourseSerialzer
 
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return Courses.objects.filter(is_published=True)
 
 
 class MyCoursesView(generics.ListAPIView):
@@ -231,3 +235,25 @@ class ChapterDeleteView(generics.DestroyAPIView):
             raise PermissionDenied(" You Dont Own This Course!")
         
         instance.delete()
+
+class CoursePublishView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, course_id):
+
+        try:
+
+            course = Courses.objects.get(
+                id=course_id,
+                mentor=request.user
+            )
+        except Courses.DoesNotExist:
+            raise NotFound("Course not found.")
+
+        course.is_published = not course.is_published
+        course.save()
+
+        return Response({
+            "is_published" : course.is_published
+        })

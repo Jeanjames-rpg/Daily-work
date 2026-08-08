@@ -16,6 +16,28 @@ function Mycourses(){
         });
     },[]);
 
+    const togglePublish = async (course) => {
+        try {
+            const response = await api.patch(
+                `courses/${course.id}/publish/`
+            );
+
+            setCourses((prevCourses) => 
+                prevCourses.map((item) => 
+                    item.id === course.id ? {
+                        ...item,
+                        is_published: response.data.is_published
+                    }
+                    : item
+                )
+            );
+
+            
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     return(
         
@@ -28,6 +50,18 @@ function Mycourses(){
             {courses.map((course)=>(
                 <div key={course.id} className="bg-white rounded-xl shadow-lg p-6 space-y-4">
                    
+                {course.is_published ? (
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-semibold shadow-sm">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        Public
+                    </span>
+                ):(
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-sm font-semibold shadow-sm">
+                        <span className="w-2 h-2 rounded-full bg-slate-400"></span>
+                        Private
+                    </span>
+                )}
+
                     <img src={course.image} alt={course.title} className="h-48 w-full object-cover rounded-lg"/>
 
                     <h2 className="text-xl font-bold text-gray-800">{course.title}</h2>
@@ -80,6 +114,18 @@ function Mycourses(){
                         View Details
 
                     </Link>
+
+                    <button 
+                     onClick={() => togglePublish(course)}
+                     className={
+                        course.is_published
+                            ? "bg-gradient-to-l from-gray-500 to-gray-700 text-white px-4 py-2 rounded-lg hover:from-gray-600 hover:to-gray-800 transition"
+                            : "bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-500 hover:to-green-700 transition"
+                     }
+
+                     >
+                        {course.is_published ? "Make Private" : "Publish Course"}
+                    </button>
 
 
                     </div>

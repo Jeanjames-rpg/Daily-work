@@ -14,7 +14,8 @@ from .views import(
     CourseDeleteView,
     ChapterDetailView,
     ChapterUpdateView,
-    ChapterDeleteView
+    ChapterDeleteView,
+    CoursePublishView
 )
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     path("delete/<int:pk>/",CourseDeleteView.as_view()),
     path("chapters/<int:pk>/",ChapterDetailView.as_view()),
     path("chapters/update/<int:pk>/",ChapterUpdateView.as_view()),
-    path("chapters/delete/<int:pk>/",ChapterDeleteView.as_view())
+    path("chapters/delete/<int:pk>/",ChapterDeleteView.as_view()),
+    path("<int:course_id>/publish/",CoursePublishView.as_view())
 
 ]
