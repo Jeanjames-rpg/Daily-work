@@ -24,7 +24,7 @@ function MyEnrollments() {
     return (
         <div className="max-w-7xl mx-auto px-6 py-10">
             <h1 className="text-4xl font-bold text-gray-800 mb-8">
-                My Courses
+                Enrolled Courses
             </h1>
 
             {enrollments.length === 0 ? (

@@ -24,7 +24,7 @@ api.interceptors.response.use(
         // checking for if its an authentication endpoint and if it is ignore the error
 
         if (
-            url.includes("login") || url.includes("logout") || url.includes("token/refresh") || url.includes("me/")
+            url.includes("login") || url.includes("logout") || url.includes("token/refresh") 
         ) {
             return Promise.reject(error);
         }
@@ -41,7 +41,7 @@ api.interceptors.response.use(
                 return api(originalRequest);
             } catch (refreshError) {
                 
-                window.location.href = '/login';
+                // window.location.href = '/login';
 
                 return Promise.reject(refreshError);
             }
