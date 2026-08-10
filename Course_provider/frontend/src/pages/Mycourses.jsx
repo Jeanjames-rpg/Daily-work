@@ -38,6 +38,30 @@ function Mycourses(){
         }
     };
 
+    const DeleteCourse = async(course) => {
+
+
+        const Confirmdelete = window.confirm("Are you sure you want to delete the course!");
+
+        if (!Confirmdelete) return;
+
+        try{
+            
+            await api.delete(`courses/delete/${course.id}`);
+
+            setCourses((prevCourses) => 
+                prevCourses.filter((item) => item.id !== course.id)
+        );
+
+            alert("Course successfuly deleted")
+        }
+        catch (error){
+            console.log(error)
+
+            alert("Unable to delete course")
+        }
+    };
+
 
     return(
         
@@ -103,6 +127,7 @@ function Mycourses(){
                     </Link>
 
                     <button
+                    onClick={() => DeleteCourse(course)}
                     className="bg-gradient-to-l from-rose-400 to-red-600 text-white px-4 py-2 rounded-lg hover:from-rose-500 hover:to-red-700 transition"
                     >
                         Delete Course
