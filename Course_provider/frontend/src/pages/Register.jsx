@@ -1,8 +1,9 @@
 import { useState } from "react";
 import api from "../services/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/Register_login.module.css"
 import logo from "../assets/logo2.PNG"
+import AlertComponent from "../componenets/AlertComponent";
 
 function Register() {
     const[form, setForm] = useState({
@@ -13,6 +14,13 @@ function Register() {
         role:"student",
     });
 
+    const [alert, setAlert] =useState({
+        type:"info",
+        show: false,
+        message: "",
+    });
+
+    const navigate = useNavigate();
     
 
     const handleSubmit = async (e) => {
@@ -20,7 +28,12 @@ function Register() {
         e.preventDefault();
 
         if (form.password !== form.confirmpassword){
-            alert("Password dont match!");
+            // alert("Password dont match!");
+            setAlert({
+                type:"error",
+                show:true,
+                message:"Password dont match!"
+            });
             return;
         }
 
@@ -32,13 +45,32 @@ function Register() {
                 role: form.role,
             });
 
-            alert("Registered Successfully");
+            // alert("Registered Successfully");
+            setAlert({
+                type:"success",
+                show:true,
+                message:"Registered Successfully",
+            });
+
+            setTimeout(()=>{
+                navigate("/dashboard");
+            },1000);
 
 
         } catch (err) {
             console.log(err)
             console.log("Status:", err.response.status);
             console.log("Errors:", err.response.data);
+
+            const errors = err.response?.data;
+
+            setAlert({
+                type:"error",
+                show:true,
+                message: errors?.username?.[0] ||
+                         errors?.email?.[0] ||
+                         "Registeration failed" 
+            });
         }
     };
 
@@ -46,6 +78,15 @@ function Register() {
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4 ">
 
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+
+        {alert.show && (
+            <AlertComponent
+                type={alert.type}
+                message={alert.message}
+                onClose={() => setAlert({...alert,show: false})}
+            />
+        )}
+
          <div className="flex justify-center mb-6">
              <img src={logo} alt="Logo" className="h-32 w-32 object-contain mx-auto mb-6" />
         </div>
