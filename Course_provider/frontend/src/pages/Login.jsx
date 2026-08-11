@@ -4,10 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import logo from "../assets/logo2.PNG"
+import AlertComponent from "../componenets/AlertComponent";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const [alert, setAlert] = useState({
+        show: false,
+        type: "info",
+        message: "",
+    });
 
     const navigate = useNavigate();
 
@@ -22,7 +29,15 @@ function Login() {
 
             // localStorage.setItem("refresh",response.data.refresh);
 
-            alert ('Login Success');
+            // alert ('Login Success');
+
+            // <AlertComponent type="success" message="Login succesfull"/>
+
+            setAlert({
+                show: true,
+                type: "success",
+                message: "Login successfull",
+            });
 
             // window.location.href = "/dashboard";
 
@@ -34,7 +49,11 @@ function Login() {
             // );
 
 
-            window.location.href = '/dashboard';
+            // window.location.href = '/dashboard';
+
+            setTimeout(() => {
+                navigate("/dashboard");
+            },1000);
 
             // if (user.data.role === 'mentor'){
             //     navigate("/dashboard");
@@ -47,9 +66,17 @@ function Login() {
          } catch (error) {
 
             if (error.response?.status === 401){
-                alert("Invalid username or password");
+                setAlert({
+                    show: true,
+                    type: "error",
+                    message: "Invalid username or password",
+                });
             } else {
-                alert("Something went wrong");
+                setAlert({
+                    show: true,
+                    type: "error",
+                    message: "something went wrong",
+                });
             }
 
             console.log(error);
@@ -60,6 +87,16 @@ function Login() {
         return(
          <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
             <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+
+
+            {alert.show && (
+                <AlertComponent
+                    type={alert.type}
+                    message={alert.message}
+                    onClose={() => setAlert({...alert,show: false,})}
+                />
+            )}
+
 
             <div className="flex justify-center mb-6">
             <img src={logo} alt="Logo" className="h-32 w-32 object-contain mx-auto mb-6" />
