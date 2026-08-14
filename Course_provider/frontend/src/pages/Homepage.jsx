@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
 import { useNavigate } from "react-router-dom";
+import ScrollReveal from "../componenets/ScrollReveal";
 
 
 function Home(){
@@ -32,10 +33,10 @@ function Home(){
     return (
         
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-
+       <ScrollReveal>
         <section className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white">
-            <div>
-                <h1 className="text=5xl md:text-7xl font-extrabold leading-tight">
+            <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+                <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
                     Learn Skills That 
                     <span className="block text-yellow-300">Advance Your Carrer</span>
                 </h1>
@@ -58,8 +59,9 @@ function Home(){
             </div>
                 
         </section>    
+       </ScrollReveal>  
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
                 <div className="bg-white rounded-xl shadow p-6 text-center">
                     <h3 className="text-3xl font-bold text-blue-600">120+</h3>
                     <p className="text-gray-500">Courses</p>
@@ -82,6 +84,7 @@ function Home(){
             </div>
 
             {/* Courses section */}
+           <ScrollReveal>
             <section className="max-w-7xl mx-auto px-6 py-20">
 
                 {/* <h2 className="text=3xl font-bold text-center mb-8">OUR COURSES</h2> */}
@@ -101,24 +104,31 @@ function Home(){
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {courses.map((course)=>(
+                    <ScrollReveal>
                         <CourseCard course={course} key={course.id}/>
+                    </ScrollReveal>
                     ))}
 
                 </div>
             </section>        
-            
+           </ScrollReveal> 
 
             {/* Trending courses */}
+        <ScrollReveal>
             <section className="max-w-7xl mx-auto px-6 py-20">
                 <h3 className="text-3xl font-bold text-center mb-8">🔥 Trending Courses</h3>
         
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {trendingCourses.map((course)=>(
+                        <ScrollReveal>
                             <CourseCard course={course} key={course.id} />
+                        </ScrollReveal>
                         ))}
                     </div>
             </section>
+        </ScrollReveal>
 
+        <ScrollReveal>
             <section className="bg-blue-600 text-white rounded-3xl my-20">
                 <div className="max-w-5xl mx-auto px-10 py-20 text-center">
                     <h2 className="text-4xl font-bold">
@@ -136,7 +146,7 @@ function Home(){
                 </div>
 
             </section>
-
+        </ScrollReveal>
     </div>
     );
 }

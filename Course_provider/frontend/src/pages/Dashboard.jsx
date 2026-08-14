@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
 import styles from "../styles/Dashboard.module.css"
+import ScrollReveal from "../componenets/ScrollReveal";
 
 
 function Dashboard (){
@@ -62,7 +63,7 @@ function Dashboard (){
 
         <div className="min-h-screen bg-gray-100">
            
-           
+           <ScrollReveal>
             <div className="bg-white shadow-sm border-b">
                 <div className="mx-auto max-w-7xl px-6 py-8">
                     <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
@@ -71,11 +72,12 @@ function Dashboard (){
                     </p>
                 </div>
             </div>
-
+            </ScrollReveal>
 
             <div className="mx-auto max-w-7xl px-6 py-10">
 
                 {user && (
+                   <ScrollReveal>
                     <div className="mb-8 flex items-center gap-5 rounded-2xl bg-white p-6 shadow-md">
                         
                         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl font-bold text-white">
@@ -102,6 +104,7 @@ function Dashboard (){
                         </div>
 
                     </div>
+                   </ScrollReveal> 
                 )}
 
 
@@ -109,6 +112,7 @@ function Dashboard (){
                     Quick Actions
                 </h2>
 
+            <ScrollReveal>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <Link to="/courses"
                     className="rounded-xl bg-white p-6 shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl"
@@ -165,7 +169,7 @@ function Dashboard (){
                         </Link>
                     )}
                 </div>
-
+            </ScrollReveal> 
                 <div className="mt-10">
                     <Link 
                     to='/'
@@ -175,7 +179,7 @@ function Dashboard (){
                 </div>
 
             </div>
-
+        
         </div>
     );
 }
