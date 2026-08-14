@@ -5,6 +5,8 @@ import api from "../services/api";
 import CourseCard from "../componenets/CourseCard";
 import { useNavigate } from "react-router-dom";
 import ScrollReveal from "../componenets/ScrollReveal";
+import { delay, scale } from "framer-motion";
+import { motion } from "framer-motion";
 
 
 function Home(){
@@ -36,13 +38,26 @@ function Home(){
        <ScrollReveal>
         <section className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white">
             <div className="max-w-7xl mx-auto px-6 py-24 text-center">
-                <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
+                <motion.h1 
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7}}
+                    className="text-5xl md:text-7xl font-extrabold leading-tight"
+                    >
                     Learn Skills That 
                     <span className="block text-yellow-300">Advance Your Carrer</span>
-                </h1>
+                </motion.h1>
         
             
-                <p className="mt-6 text-lg md:text-xl text-blue-100 max-w-2xl mx-auto">
+                <p 
+                    initial={{ opacity: 0, y: 30}}
+                    animate={{ opacity: 1, y: 0}}
+                    transition={{
+                        duration: 0.7,
+                        delay: 0.2,
+                    }}
+                    className="mt-6 text-lg md:text-xl text-blue-100 max-w-2xl mx-auto"
+                    >
                     Learn from experienced mentors with hands-on projects and real-world examples.
                 </p>
 
@@ -62,25 +77,40 @@ function Home(){
        </ScrollReveal>  
 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
-                <div className="bg-white rounded-xl shadow p-6 text-center">
+                <motion.div 
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                className="bg-white rounded-xl shadow p-6 text-center">
                     <h3 className="text-3xl font-bold text-blue-600">120+</h3>
                     <p className="text-gray-500">Courses</p>
-                </div>
+                </motion.div>
 
-                <div className="bg-white rounded-xl shadow p-6 text-center">
+                <motion.div 
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="bg-white rounded-xl shadow p-6 text-center"
+                    >
                     <h3 className="text-3xl font-bold text-blue-600">15k+</h3>
                     <p className="text-gray-500">Students</p>
-                </div>
+                </motion.div>
 
-                <div className="bg-white rounded-xl shadow p-6 text-center">
+                <motion.div 
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="bg-white rounded-xl shadow p-6 text-center"
+                    >
                     <h3  className="text-3xl font-bold text-blue-600">200+</h3>
                     <p className="text-gray-500">Mentors</p>
-                </div>
+                </motion.div>
 
-                <div className="bg-white rounded-xl shadow p-6 text-center">
+                <motion.div 
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="bg-white rounded-xl shadow p-6 text-center"
+                    >
                     <h3 className="text-3xl font-bold text-blue-600">98%</h3>
                     <p className="text-gray-500">Success Rate</p>
-                </div>
+                </motion.div>
             </div>
 
             {/* Courses section */}
