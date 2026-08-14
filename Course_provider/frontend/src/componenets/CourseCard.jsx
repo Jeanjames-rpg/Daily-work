@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
-import styles from "../styles/CourseCard.module.css"
+import { motion } from "framer-motion";
 
 function CourseCard({ course }) {
     return(
-        <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-200 hover:-translate-y-1">
+        <motion.div 
+            // initial={{opacity: 0, y: 40,}}
+            // whileInView={{opacity: 1, y: 0,}}
+            // viewport={{once: true, amount: 0.2,}}
+            transition={{duration: 0.6, ease: "easeOut",}}
+            whileHover={{y: -8, scale: 1.02,}}
+
+            className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-200 "
+        >
             
             <img src={course.image} alt={course.title} className="w-full h-56 object-contain bg-white rounded-lg"/>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">
@@ -28,9 +36,20 @@ function CourseCard({ course }) {
             </div>
 
             <Link to={`/courses/${course.id}`}>
-                <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 font-medium">View Details</button>
+                <motion.button 
+                  whileHover={{
+                    scale: 1.02,
+                  }}
+
+                  whileTap={{
+                    scale: 0.97,
+                  }}
+                  className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 font-medium"
+                >
+                    View Details
+                </motion.button>
             </Link>
-        </div>
+        </motion.div>
     );
 }
 

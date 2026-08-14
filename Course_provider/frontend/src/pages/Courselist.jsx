@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styles from "../styles/Courselist.module.css"
 import SearchBar from "../componenets/SearchBar";
 import CourseCard from "../componenets/CourseCard";
+import ScrollReveal from "../componenets/ScrollReveal";
 
 
 function CourseList() {
@@ -40,7 +41,7 @@ function CourseList() {
             <SearchBar value={Search} onChange={(e)=> setSearch(e.target.value)} />
 
             <div className={styles.grid}>
-            {filteredCourses.map((course) => (
+            {filteredCourses.map((course,index) => (
                 
                 // <div className={styles.card} key={course.id}>
                     
@@ -59,8 +60,9 @@ function CourseList() {
                 //     </Link>
 
                 // </div>
-
-                <CourseCard course={course} key={course.id} />
+                <ScrollReveal key={course.id} >
+                 <CourseCard course={course} key={course.id} />
+                </ScrollReveal>
             ))}
             </div>
 

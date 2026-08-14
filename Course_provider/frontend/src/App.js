@@ -20,6 +20,9 @@ import MentorDashboard from './pages/MentorDashboard';
 import CourseUpdate from './pages/CourseUpdate';
 import ChapterUpdate from './pages/ChapterUpdate';
 import UpdateProfile from './pages/UpdateProfile';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+
 
 
 // function App() {
@@ -60,6 +63,8 @@ function App(){
         <Route path='/mentor-dashboard' element={<MentorDashboard/>}/>
         <Route path='/courses/update/:id' element={<CourseUpdate/>} />
         <Route path='/user/update' element={<UpdateProfile/>}/>
+        <Route path='/forgot-password' element={<ForgotPassword/>} />
+        <Route path='/reset-password/:user_id/:token/' element={<ResetPassword/>} />
       </Routes>
     </Main>
     

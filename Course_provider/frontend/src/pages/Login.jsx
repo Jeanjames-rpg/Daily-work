@@ -114,6 +114,14 @@ function Login() {
              </form>
              
             <div className="mt-6 text-center space-y-2">
+
+                <Link 
+                    to="/forgot-password"
+                    className="text-indigo-600 hover:underline"
+                >
+                    Forgot Password?
+                </Link>
+
              <p className='text-gray-600'>
                     Return to our {' '} <Link to= "/" className="text-indigo-600 hover:underline font-medium">Homepage</Link>
                 </p>
