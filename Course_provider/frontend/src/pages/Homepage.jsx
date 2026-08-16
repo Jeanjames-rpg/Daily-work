@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ScrollReveal from "../componenets/ScrollReveal";
 import { delay, scale } from "framer-motion";
 import { motion } from "framer-motion";
+import CountUp from "../componenets/CountUp";
 
 
 function Home(){
@@ -38,28 +39,32 @@ function Home(){
        <ScrollReveal>
         <section className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white">
             <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+                <p className="text-sm md:text-base uppercase tracking-[0.25em] text-cyan-200 font-semibold">
+                    Learn Without Limits
+                </p>
+                
                 <motion.h1 
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7}}
-                    className="text-5xl md:text-7xl font-extrabold leading-tight"
+                    className="mt-4 text-5xl md:text-7xl font-black tracking-tight leading-[1.05]"
                     >
                     Learn Skills That 
                     <span className="block text-yellow-300">Advance Your Carrer</span>
                 </motion.h1>
         
             
-                <p 
+                <motion.p 
                     initial={{ opacity: 0, y: 30}}
                     animate={{ opacity: 1, y: 0}}
                     transition={{
                         duration: 0.7,
                         delay: 0.2,
                     }}
-                    className="mt-6 text-lg md:text-xl text-blue-100 max-w-2xl mx-auto"
+                    className="mt-7 mx-auto max-w-2xl text-lg md:text-xl text-blue-100 leading-relaxed"
                     >
                     Learn from experienced mentors with hands-on projects and real-world examples.
-                </p>
+                </motion.p>
 
                 <div className="mt-10 flex justify-center gap-4">
                     <button onClick={()=> navigate("/courses")} className="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold shadow-lg hover:scale-105 transition">
@@ -81,7 +86,10 @@ function Home(){
                     whileHover={{ y: -6 }}
                     transition={{ type: "spring", stiffness: 300 }}
                 className="bg-white rounded-xl shadow p-6 text-center">
-                    <h3 className="text-3xl font-bold text-blue-600">120+</h3>
+                    {/* <h3 className="text-3xl font-bold text-blue-600">120+</h3> */}
+                    <h3 className="text-3xl font-bold text-blue-600">
+                        <CountUp end={120} suffix="+" />
+                    </h3>
                     <p className="text-gray-500">Courses</p>
                 </motion.div>
 
@@ -90,7 +98,9 @@ function Home(){
                     transition={{ type: "spring", stiffness: 300 }}
                     className="bg-white rounded-xl shadow p-6 text-center"
                     >
-                    <h3 className="text-3xl font-bold text-blue-600">15k+</h3>
+                    <h3 className="text-3xl font-bold text-blue-600">
+                        <CountUp end={15000} suffix="+"/>    
+                    </h3>
                     <p className="text-gray-500">Students</p>
                 </motion.div>
 
@@ -99,7 +109,9 @@ function Home(){
                     transition={{ type: "spring", stiffness: 300 }}
                     className="bg-white rounded-xl shadow p-6 text-center"
                     >
-                    <h3  className="text-3xl font-bold text-blue-600">200+</h3>
+                    <h3  className="text-3xl font-bold text-blue-600">
+                        <CountUp end={200} suffix="+"/>
+                    </h3>
                     <p className="text-gray-500">Mentors</p>
                 </motion.div>
 
@@ -108,7 +120,9 @@ function Home(){
                     transition={{ type: "spring", stiffness: 300 }}
                     className="bg-white rounded-xl shadow p-6 text-center"
                     >
-                    <h3 className="text-3xl font-bold text-blue-600">98%</h3>
+                    <h3 className="text-3xl font-bold text-blue-600">
+                        <CountUp end={98} suffix="%"/>
+                    </h3>
                     <p className="text-gray-500">Success Rate</p>
                 </motion.div>
             </div>

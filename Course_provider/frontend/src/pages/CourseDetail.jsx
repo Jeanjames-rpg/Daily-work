@@ -6,6 +6,7 @@ import styles from "../styles/CourseDetail.module.css";
 import reviewApi from "../services/reviewApi";
 import ReviewSection from "../componenets/ReviewSection";
 import { createOrder } from "../services/paymentApi";
+import ScrollReveal from "../componenets/ScrollReveal";
 
 
 function CourseDetail() {
@@ -364,7 +365,7 @@ function CourseDetail() {
 
                 {/* HERO SECTION */}
 
-
+               <ScrollReveal>
                 <div className="
                     relative
                     h-[350px]
@@ -444,7 +445,7 @@ function CourseDetail() {
 
 
                 </div>
-
+               </ScrollReveal>  
 
 
 
@@ -456,7 +457,7 @@ function CourseDetail() {
                 {/* DESCRIPTION */}
 
 
-
+              <ScrollReveal>  
                 <div className="
                     mt-8
                     bg-white
@@ -489,7 +490,7 @@ function CourseDetail() {
 
 
                 </div>
-
+              </ScrollReveal> 
 
 
 
@@ -527,7 +528,7 @@ function CourseDetail() {
                     {
                         course.chapters?.map((chapter)=>(
 
-
+                          <ScrollReveal>
                             <div
 
                                 key={chapter.id}
@@ -695,7 +696,7 @@ function CourseDetail() {
 
 
                             </div>
-
+                          </ScrollReveal>            
 
                         ))
                     }
@@ -833,7 +834,7 @@ function CourseDetail() {
 
 
                 <div className="mt-12">
-
+                 <ScrollReveal>
 
                     <ReviewSection
 
@@ -842,7 +843,7 @@ function CourseDetail() {
                         enrolled={enrolled}
 
                     />
-
+                 </ScrollReveal>
 
                 </div>
 

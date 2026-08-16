@@ -8,14 +8,14 @@ function Header() {
    
 
     return (
-         <header className="bg-gradient-to-br from-orange-500 via-amber-400 to-yellow-300">
+         <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
 
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             
              <div className="flex items-center gap-3">
-              <img src={logo} alt="Logo" className={styles.logo} />
+              <img src={logo} alt="Logo" className="h-16 w-auto object-contain" />
 
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-2xl font-bold text-indigo-300">
                     Hive
                 </h1>
             

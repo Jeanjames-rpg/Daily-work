@@ -10,14 +10,14 @@ function CourseCard({ course }) {
             transition={{duration: 0.6, ease: "easeOut",}}
             whileHover={{y: -8, scale: 1.02,}}
 
-            className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-200 "
+            className="h-full flex flex-col bg-white rounded-xl shadow-md hover:shadow-xl p-6 border border-gray-200 "
         >
             
             <img src={course.image} alt={course.title} className="w-full h-56 object-contain bg-white rounded-lg"/>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">
                 {course.title}
             </h2>
-            <p className="text-gray-600 mb-4 line-clamp-3">
+            <p className="text-gray-600 mt-2 h-[72px] line-clamp-3 overflow-hidden">
                 {course.description}
             </p>
             

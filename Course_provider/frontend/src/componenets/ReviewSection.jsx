@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import reviewApi from "../services/reviewApi";
+import ScrollReveal from "./ScrollReveal";
 
 function ReviewSection({ courseId ,enrolled}) {
     const [reviews, setReviews] = useState([]);
@@ -102,6 +103,7 @@ function ReviewSection({ courseId ,enrolled}) {
                     </p>
                 ):(
                 reviews.map((item)=>(
+                  <ScrollReveal>
                     <div key={item._id} className="border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md transition">
                         
                       <div className="flex justify-between items-center mb-2">  
@@ -127,6 +129,7 @@ function ReviewSection({ courseId ,enrolled}) {
                         
 
                     </div>
+                   </ScrollReveal> 
                 ))
             )}
             </div>

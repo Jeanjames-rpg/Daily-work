@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "../styles/NavBar.module.css"
 import { FaBars, FaTimes } from "react-icons/fa";
+import { AnimatePresence,motion } from "framer-motion";
 
 
 function NavBar() {
@@ -84,13 +85,13 @@ function NavBar() {
              <div className="hidden md:flex items-center gap-4">
                
                 <Link to="/" 
-                className="text-white hover:text-indigo-600 font-medium transition-colors"
+                className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                 >
                      Home
                 </Link>
 
                 <Link to='/courses'
-                className="text-white hover:text-indigo-600 font-medium transition-colors"
+                className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                 >
                     Courses
                 </Link>
@@ -98,7 +99,7 @@ function NavBar() {
                 {!user && (
                     <>
                         <Link to='/login'
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Login
                         </Link>
@@ -115,13 +116,13 @@ function NavBar() {
                 {user?.role === "student" &&(
                     <>
                         <Link to='/dashboard'
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Dashboard
                         </Link>
 
                         <Link to='/my-enrollments'
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Enrolled
                         </Link>
@@ -137,13 +138,13 @@ function NavBar() {
                 {user?.role === "mentor" && (
                     <>
                         <Link to="/my-courses"
-                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                         >
                             My courses
                         </Link>
 
                         <Link to="/dashboard"
-                        className="text-gray-700 hover:text-indigo-600 font-medium transition-colors"
+                        className="text-slate-700 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Dashboard
                         </Link>
@@ -167,26 +168,31 @@ function NavBar() {
 
             {/* Mobile Hamburger Button */}
             <button
-                className="md:hidden text-white text-2xl"
+                className="md:hidden text-slate-700 text-2xl"
                 onClick={()=> setMenuOpen(!menuOpen)}
             >
                 {menuOpen ? <FaTimes/> : <FaBars/>}
             </button>
 
-
+          <AnimatePresence>
             {menuOpen &&(
-                <div className="absolute right-0 mt-4 w-56 bg-gradient-to-br from-orange-500 via-amber-400 to-yellow-300 rounded-lg p-5 flex flex-col gap-4 md:hidden">
+                <motion.div 
+                    initial={{ opacity:0, y: -10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1}}
+                    exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-4 top-20 w-56 rounded-2xl bg-white p-5 shadow-2xl border border-slate-200 md:hidden space-y-1">
                
                 <Link to="/" 
                 onClick={closeMenu}
-                className="text-white hover:text-indigo-600 font-medium transition-colors"
+                className="block rounded-lg px-4 py-3 text-center text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                 >
                      Home
                 </Link>
 
                 <Link to='/courses'
                 onClick={closeMenu}
-                className="text-white hover:text-indigo-600 font-medium transition-colors"
+                className="block rounded-lg text-center px-4 py-3 text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                 >
                     Courses
                 </Link>
@@ -195,14 +201,14 @@ function NavBar() {
                     <>
                         <Link to='/login'
                         onClick={closeMenu}
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="block text-center rounded-lg px-4 py-3 text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Login
                         </Link>
 
                         <Link to='/register'
                         onClick={closeMenu}
-                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                        className="block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
                         >
                             Register
                         </Link>
@@ -214,20 +220,20 @@ function NavBar() {
                     <>
                         <Link to='/dashboard'
                         onClick={closeMenu}
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="block rounded-lg px-4 py-3 text-center text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Dashboard
                         </Link>
 
                         <Link to='/my-enrollments'
                         onClick={closeMenu}
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="block rounded-lg px-4 py-3 text-center text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Enrolled
                         </Link>
 
                         <button onClick={logout}
-                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                        className="block w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
                         >
                             Logout
                         </button>
@@ -238,36 +244,37 @@ function NavBar() {
                     <>
                         <Link to="/my-courses"
                         onClick={closeMenu}
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="block rounded-lg px-4 py-3 text-center text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                         >
                             My courses
                         </Link>
 
                         <Link to="/dashboard"
                         onClick={closeMenu}
-                        className="text-white hover:text-indigo-600 font-medium transition-colors"
+                        className="block rounded-lg px-4 py-3 text-center text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 font-medium transition-colors"
                         >
                             Dashboard
                         </Link>
 
                         <Link to="/create"
                         onClick={closeMenu}
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                        className="block w-full bg-green-500 text-center text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
                         >
                             Create Course
                         </Link>
 
                         <button onClick={logout}
-                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                        className="block w-full rounded-lg bg-red-500 text-white px-4 py-2  hover:bg-red-600 transition"
                         >
                             Logout
                         </button>
                     </>
                 )}
 
-            </div>
+            </motion.div>
+            
             )}
-
+            </AnimatePresence>
         </nav>
     );
 

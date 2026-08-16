@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
 import CourseCard from "../componenets/CourseCard";
+import ScrollReveal from "../componenets/ScrollReveal";
 
 function MyEnrollments() {
 
@@ -46,7 +47,9 @@ function MyEnrollments() {
                     {
                 enrollments.map(
                     (item)=> (
+                       <ScrollReveal> 
                         <CourseCard key={item.id} course={item.course}/>
+                       </ScrollReveal> 
                     )
                 )
             }

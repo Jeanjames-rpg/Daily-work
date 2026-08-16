@@ -5,7 +5,7 @@ function ScrollReveal({ children, delay = 0 }) {
     <motion.div
       initial={{
         opacity: 0,
-        y: 50,
+        y: 30,
       }}
       whileInView={{
         opacity: 1,
@@ -13,10 +13,10 @@ function ScrollReveal({ children, delay = 0 }) {
       }}
       viewport={{
         once: true,
-        amount: 0.2,
+        amount: 0.05,
       }}
       transition={{
-        duration: 0.8,
+        duration: 0.6,
         delay,
         ease: "easeOut",
       }}
