@@ -46,9 +46,9 @@ function MyEnrollments() {
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {
                 enrollments.map(
-                    (item)=> (
-                       <ScrollReveal> 
-                        <CourseCard key={item.id} course={item.course}/>
+                    (item, index)=> (
+                       <ScrollReveal key={item.id} delay={index * 0.1}> 
+                        <CourseCard  course={item.course}/>
                        </ScrollReveal> 
                     )
                 )

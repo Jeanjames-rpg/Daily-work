@@ -36,7 +36,7 @@ function Home(){
     return (
         
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-       <ScrollReveal>
+       
         <section className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white">
             <div className="max-w-7xl mx-auto px-6 py-24 text-center">
                 <p className="text-sm md:text-base uppercase tracking-[0.25em] text-cyan-200 font-semibold">
@@ -79,7 +79,7 @@ function Home(){
             </div>
                 
         </section>    
-       </ScrollReveal>  
+         
 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
                 <motion.div 
@@ -128,9 +128,9 @@ function Home(){
             </div>
 
             {/* Courses section */}
-           <ScrollReveal>
+           
             <section className="max-w-7xl mx-auto px-6 py-20">
-
+              <ScrollReveal>
                 {/* <h2 className="text=3xl font-bold text-center mb-8">OUR COURSES</h2> */}
                 <div className="text-center mb-12">
                     <p className="text-blue-600 font-semibold uppercase tracking-widest">
@@ -145,32 +145,32 @@ function Home(){
                         Start learning from industry professionals
                     </p>
                 </div>
-
+               </ScrollReveal>  
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {courses.map((course)=>(
-                    <ScrollReveal>
-                        <CourseCard course={course} key={course.id}/>
+                    {courses.map((course ,index)=>(
+                    <ScrollReveal key={course.id} delay={index * 0.1}>
+                        <CourseCard course={course}/>
                     </ScrollReveal>
                     ))}
 
                 </div>
             </section>        
-           </ScrollReveal> 
+           
 
             {/* Trending courses */}
-        <ScrollReveal>
+        
             <section className="max-w-7xl mx-auto px-6 py-20">
                 <h3 className="text-3xl font-bold text-center mb-8">🔥 Trending Courses</h3>
         
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {trendingCourses.map((course)=>(
-                        <ScrollReveal>
-                            <CourseCard course={course} key={course.id} />
+                        {trendingCourses.map((course ,index)=>(
+                        <ScrollReveal key={course.id} delay={index * 0.1}>
+                            <CourseCard course={course} />
                         </ScrollReveal>
                         ))}
                     </div>
             </section>
-        </ScrollReveal>
+        
 
         <ScrollReveal>
             <section className="bg-blue-600 text-white rounded-3xl my-20">
