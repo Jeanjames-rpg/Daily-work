@@ -70,6 +70,25 @@ function Mycourses(){
         <div className="min-h-screen bg-gray-100 py-10 px-4">
             <h1 className="text-center font-bold mb-8  text-3xl">My courses</h1>
 
+           {courses.length === 0 ? (
+                <div className="max-w-xl mx-auto text-center bg-white rounded-xl shadow-lg p-10">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-3">
+                        No courses yet
+                    </h2>
+
+                    <p>
+                        You haven't created any courses yet.
+                    </p>
+
+                    <Link
+                        to="/create"
+                        className="inline-block bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white px-6 py-3 rounded-lg transition duration-300"
+                    >
+                        Create Your First Course
+                    </Link>
+
+                </div>    
+           ) : ( 
             <div className="max-w-7xl mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 ">
 
             {courses.map((course, index)=>(
@@ -169,6 +188,8 @@ function Mycourses(){
             ))}
 
             </div>
+
+            )}
 
         </div>
         
