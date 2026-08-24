@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import AddToCartButton from "./AddToCartButton";
 
 type Product = {
     id: number;
@@ -30,9 +31,10 @@ export default function ProductCard({product}: {product:Product}) {
             </div>
           </Link>  
             <div className="px-4 pb-4">
-                <button className="mt-4 w-full rounded-lg bg-indigo-600 py-2 text-white hover:bg-indigo-700">
+                {/* <button className="mt-4 w-full rounded-lg bg-indigo-600 py-2 text-white hover:bg-indigo-700">
                     Add to Cart
-                </button>
+                </button> */}
+                <AddToCartButton product={product} />
             </div>
         </div>
     );

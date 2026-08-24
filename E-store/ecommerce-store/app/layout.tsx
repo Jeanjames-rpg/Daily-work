@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import React from "react";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import { CartProvider } from "./context/CartContext";
+import Providers from "./provider";
 
 
 
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-       <CartProvider> 
+       <Providers> 
         <Navbar/>
 
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
@@ -29,7 +29,7 @@ export default function RootLayout({
         </main>
 
         <Footer/>
-       </CartProvider> 
+       </Providers> 
       </body>
 
     </html>

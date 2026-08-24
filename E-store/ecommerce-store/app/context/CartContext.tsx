@@ -1,10 +1,12 @@
 "use client";
 
+import { Console } from "console";
 import {
     createContext,
     useContext,
     useState,
     ReactNode,
+    useEffect,
 } from "react";
 
 
@@ -34,9 +36,34 @@ const CartContext = createContext<CartContextType | undefined>(
 );
 
 export function CartProvider({children} : {children: ReactNode}) {
+    console.log(" 🔥 CART PROVIDER RENDERED ");
+
     const [cart, setCart] = useState<CartItem[]>([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        console.log("🔥🔥 CART AFTER UPDATE:", cart);
+    },[cart]);
+
+    useEffect(() => {
+        const savedCart = localStorage.getItem("cart");
+
+        if (savedCart) {
+            setCart(JSON.parse(savedCart));
+        }
+
+        setIsLoaded(true);
+    },[]);
+
+    useEffect(() => {
+        if (!isLoaded) return;
+
+        localStorage.setItem("cart",JSON.stringify(cart));
+    },[cart,isLoaded]);
 
     function addToCart(product: CartProduct) {
+        console.log("🔥🔥 ADD TO CART FUNCTION CALLED", product)
+        
         setCart((currentCart) => {
             const existingItem = currentCart.find(
                 (item) => item.id === product.id
@@ -52,6 +79,8 @@ export function CartProvider({children} : {children: ReactNode}) {
                       : item  
                 );
             }
+
+            console.log("🔥 CURRENT CART:", currentCart);
 
             return [
                 ...currentCart,

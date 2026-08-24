@@ -57,7 +57,7 @@ export default function CartPage() {
                         )}
 
                         <div className="flex-1">
-                            <h2 className="text-xl font-semibold">
+                            <h2 className="text-xl text-slate-700 font-semibold">
                                 {item.name}
                             </h2>
 
@@ -70,18 +70,18 @@ export default function CartPage() {
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={()=> decreaseQuantity(item.id)}
-                                className="h-9 w-9 rounded border"
+                                className="h-9 w-9 rounded border text-slate-600"
                             >
                                 -
                             </button>
 
-                            <span className="font-semibold">
+                            <span className="font-semibold text-slate-700">
                                 {item.quantity}
                             </span>
 
                             <button
                                 onClick={()=> increaseQuantity(item.id)}
-                                className="h-9 w-9 rounded border"
+                                className="h-9 w-9 rounded border text-slate-600"
                             >
                                 +
                             </button>
@@ -100,7 +100,7 @@ export default function CartPage() {
 
             <div className="mt-10 flex justify-end">
                 <div className="bg-white rounded-xl shadow p-6 w-full md:w-96">
-                    <h2 className="text-2xl font-bold">
+                    <h2 className="text-2xl font-bold text-slate-700">
                         Cart Total
                     </h2>
 

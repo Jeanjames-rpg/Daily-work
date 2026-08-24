@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 
 export default function Navbar(){
@@ -21,9 +22,13 @@ export default function Navbar(){
                             Products
                         </a>
 
-                        <a href="/cart" className="hover:text-emerald-600 text-white">
+                        {/* <a href="/cart" className="hover:text-emerald-600 text-white">
                             Cart
-                        </a>
+                        </a> */}
+
+                        <Link href="/cart" className="hover:text-emerald-600 text-white">
+                            Cart
+                        </Link>
 
                     </div>
                     
