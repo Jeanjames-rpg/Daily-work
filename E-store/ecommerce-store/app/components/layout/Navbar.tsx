@@ -1,7 +1,17 @@
+"use client";
+
+import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 
 
 export default function Navbar(){
+
+    const { cart } = useCart();
+
+    const cartCount = cart.reduce(
+        (total, item) => total + item.quantity,
+        0
+    );
 
     return(
 
@@ -28,6 +38,11 @@ export default function Navbar(){
 
                         <Link href="/cart" className="hover:text-emerald-600 text-white">
                             Cart
+                            {cartCount > 0 && (
+                                <span className="ml-1">
+                                    ({cartCount})
+                                </span>
+                            )}
                         </Link>
 
                     </div>
