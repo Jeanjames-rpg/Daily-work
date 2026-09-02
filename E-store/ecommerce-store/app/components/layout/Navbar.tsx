@@ -2,11 +2,14 @@
 
 import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 export default function Navbar(){
 
     const { cart } = useCart();
+
+    const router = useRouter();
 
     const cartCount = cart.reduce(
         (total, item) => total + item.quantity,
@@ -48,11 +51,17 @@ export default function Navbar(){
                     </div>
                     
                     <div className="flex items-center gap-4">
-                        <button className="px-4 py-2 rounded-lg border text-cyan-800 hover:bg-gray-100">
+                        <button 
+                            onClick={() => router.push("/login")}
+                            className="px-4 py-2 rounded-lg border text-cyan-800 hover:bg-gray-100"
+                        >
                             Login
                         </button>
 
-                        <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+                        <button 
+                            onClick={() => router.push("/register")}
+                            className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                        >
                             Register
                         </button>
 
