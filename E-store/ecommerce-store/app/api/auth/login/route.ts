@@ -1,6 +1,7 @@
+import { createSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { error } from "console";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 
@@ -40,6 +41,18 @@ export async function POST(request: Request) {
                 { status: 401}
             );
         }
+
+        const sessionToken = await createSession(user.id);
+
+        const cookieStore = await cookies();
+
+        cookieStore.set("session", sessionToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 60 * 60 * 24 * 7,
+            path: "/",
+        });
 
         return NextResponse.json(
             {

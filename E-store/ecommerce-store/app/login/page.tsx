@@ -50,10 +50,10 @@ export default function LoginPage() {
                 return;
             }
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(data.user)
-            );
+            // localStorage.setItem(
+            //     "user",
+            //     JSON.stringify(data.user)
+            // );
 
             router.push("/");
             router.refresh();
