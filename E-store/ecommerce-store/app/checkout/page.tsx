@@ -12,7 +12,7 @@ type User = {
 
 export default function CheckoutPage() {
     const router = useRouter();
-    const { cart, total } = useCart();
+    const { cart, total, clearCart } = useCart();
 
     const [user, setUser] = useState< User | null >(null);
     const [loading, setLoading] = useState(true);
@@ -66,6 +66,39 @@ export default function CheckoutPage() {
                 </button>
             </main>
         );
+    }
+
+    async function handlePlaceOrder() {
+        try {
+            const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    items: cart.map((item) => ({
+                        productId: item.id,
+                        quantity: item.quantity,
+                    })),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.error || "Failed to place order");
+                return;
+            }
+
+            clearCart();
+
+            alert(`Order placed successfully! Order Id: ${data.orderId}`);
+
+            router.push("/orders");
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong while placing the order.");
+        }
     }
 
     return (
@@ -141,6 +174,7 @@ export default function CheckoutPage() {
                     </div>
 
                     <button 
+                        onClick={handlePlaceOrder}
                         className="mt-6 w-full rounded-lg bg-green-600 py-3 font-semibold text-white hover:bg-green-700"
                     >
                         Place Order
