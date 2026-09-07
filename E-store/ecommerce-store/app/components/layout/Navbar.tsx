@@ -92,6 +92,12 @@ export default function Navbar(){
                     <div className="flex items-center gap-4">
                         {user ? (
                             <>
+                            <Link
+                                href="/orders"
+                                className="text-white hover:text-emerald-600"
+                            >
+                                My Orders
+                            </Link>
                              <span className="text-white font-medium">
                                 Hello, {user.name}
                              </span>

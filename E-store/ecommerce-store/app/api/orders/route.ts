@@ -153,3 +153,52 @@ export async function POST(request:Request) {
         );
     }
 }
+
+
+export async function GET() {
+    try {
+        const cookieStore = await cookies();
+        const session = cookieStore.get("session");
+
+        if (!session) {
+            return NextResponse.json(
+                {error: "You must be logged in."},
+                { status: 401}
+            );
+        }
+
+        const payload = await verifySession(session.value);
+
+        if (!payload) {
+            return NextResponse.json(
+                { error: "Invalid or expired session."},
+                {status: 401}
+            );
+        }
+
+        const orders = await prisma.order.findMany({
+            where: {
+                userId: payload.userId,
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+
+        return NextResponse.json({orders});
+    } catch (error) {
+        console.error("Fetching orders error:", error);
+
+        return NextResponse.json(
+            { error: "Failed to fetch orders."},
+            {status: 500}
+        );
+    }
+}

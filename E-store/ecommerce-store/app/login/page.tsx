@@ -27,7 +27,7 @@ export default function LoginPage() {
     }
 
     async function handleSubmit(
-        e: React.FormEvent<HTMLFormElement>
+        e: React.SyntheticEvent<HTMLFormElement>
     ) {
         e.preventDefault();
 
