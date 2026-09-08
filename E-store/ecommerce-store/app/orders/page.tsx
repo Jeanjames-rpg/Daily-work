@@ -21,6 +21,7 @@ type OrderItem = {
 type Order = {
     id: number;
     total: string;
+    status: string;
     createdAt: string;
     items: OrderItem[];
 };
@@ -108,9 +109,10 @@ export default function OrdersPage() {
 
             <div className="space-y-6">
                 {orders.map((order) => (
-                    <div
+                    <Link
                         key={order.id}
-                        className="rounded-2xl border bg-white p-6 shadow-sm"
+                        href={`/orders/${order.id}`}
+                        className="block rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition"
                     >
                         {/* Order header  */}
                         <div className="flex flex-col gap-2 border-b pb-5 md:flex-row md:items-center md:justify-between">
@@ -126,6 +128,12 @@ export default function OrdersPage() {
                                         year: "numeric",
                                     })}
                                 </p>
+
+                                <div className="mt-3">
+                                    <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700">
+                                        {order.status}
+                                    </span>
+                                </div>    
                             </div>
                             
                             <p className="text-xl font-bold text-indigo-600">
@@ -170,7 +178,7 @@ export default function OrdersPage() {
                             </p>
                         </div>    
 
-                    </div>    
+                    </Link>    
                 ))}
             </div>
 

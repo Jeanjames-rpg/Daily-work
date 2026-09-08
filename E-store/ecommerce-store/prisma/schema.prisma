@@ -36,9 +36,18 @@ model User {
 }
 
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model Order {
   id        Int         @id @default(autoincrement())
   total     Decimal     @db.Decimal(10, 2)
+  status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now())
 
   userId    Int         
