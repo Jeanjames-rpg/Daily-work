@@ -1,4 +1,6 @@
 import { jwtVerify, SignJWT } from "jose";
+import { cookies } from "next/headers";
+import { prisma } from "./prisma";
 
 
 const secret = process.env.AUTH_SECRET;
@@ -27,4 +29,31 @@ export async function verifySession(token: string) {
     } catch {
         return null;
     }
+}
+
+export async function getCurrentUser() {
+    const cookieStore = await cookies();
+    const session = cookieStore.get("session");
+
+    if (!session) {
+        return null;
+    }
+
+    const payload = await verifySession(session.value);
+
+    if (!payload) {
+        return null ;
+    }
+
+    const user = await prisma.user.findUnique({
+        where: { id: payload.userId, },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+        },
+    });
+
+    return user;
 }

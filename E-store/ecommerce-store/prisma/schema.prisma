@@ -25,11 +25,18 @@ model Product {
   OrderItems  OrderItem[]
 }
 
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  OWNER
+}
+
 model User {
   id        Int        @id @default(autoincrement())
   name      String
   email     String     @unique
   password  String
+  role      UserRole   @default(CUSTOMER)
   createdAt DateTime   @default(now())
 
   orders    Order[]
