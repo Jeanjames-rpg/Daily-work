@@ -25,6 +25,9 @@ export default function AdminProductsPage() {
     const [image, setImage] = useState("");
     const [stock, setStock] = useState("");
     const [category, setCategory] = useState("");
+    
+    const [editingProduct, setEditingProduct] = useState<Product | null >(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     async function fetchProducts() {
         try {
@@ -48,6 +51,51 @@ export default function AdminProductsPage() {
         fetchProducts();
     }, []);
 
+    function handleEdit(product: Product) {
+        setEditingProduct(product);
+
+        setTitle(product.title);
+        setDescription(product.description);
+        setPrice(product.price);
+        setImage(product.image);
+        setStock(String(product.stock));
+        setCategory(product.category);
+
+        setIsEditing(true);
+    }
+
+async function handleDelete(id: number) {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this product?"
+        );
+
+        if(!confirmed) {
+            return;
+        }
+
+        setMessage("");
+        setError("");
+
+        try {
+            const response = await fetch(`/api/admin/products/${id}`, {
+                method: "DELETE",
+            });
+            
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || "Failed to delete product.");
+                return;
+            }
+
+            setMessage("Product deleted successfully.");
+
+            fetchProducts();
+        } catch {
+            setError("Something went wrong.");
+        }
+    }
+    
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -55,8 +103,15 @@ export default function AdminProductsPage() {
         setError("");
 
         try {
-            const response = await fetch("/api/admin/products",{
-                method: "POST",
+
+            const url = isEditing
+                ? `/api/admin/products/${editingProduct?.id}`
+                : "/api/admin/products";
+            
+            const method = isEditing ? "PATCH" : "POST";
+
+            const response = await fetch(url,{
+                method,
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -77,7 +132,7 @@ export default function AdminProductsPage() {
                 return;
             }
 
-            setMessage("Product created successfully.");
+            setMessage(isEditing ? "Product updated successfully." : "Product created  successfully.");
 
             setTitle("");
             setDescription("");
@@ -85,6 +140,9 @@ export default function AdminProductsPage() {
             setImage("");
             setStock("");
             setCategory("");
+
+            setEditingProduct(null);
+            setIsEditing(false);
 
             fetchProducts();
         } catch {
@@ -114,7 +172,7 @@ export default function AdminProductsPage() {
 
             <section className="rounded-2xl border bg-white p-6 shadow-sm">
                 <h2 className="text-2xl font-semibold text-slate-700">
-                    Add Product
+                    {isEditing ? "Edit Product" : "Add Product"}
                 </h2>
 
                 {message && (
@@ -175,7 +233,7 @@ export default function AdminProductsPage() {
                         type="submit"
                         className="rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-700 md:col-span-2"
                     >
-                        Add Product
+                        {isEditing ? "Update Product" : "Add Product"}
                     </button>
                 </form>
             </section>
@@ -226,6 +284,22 @@ export default function AdminProductsPage() {
                                         </span>{" "}
                                         {product.category}
                                     </p>
+
+                                    <div className="mt-5 flex gap-3">
+                                        <button
+                                            onClick={() => handleEdit(product)}
+                                            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                                        >
+                                            Edit 
+                                        </button>
+
+                                        <button
+                                            onClick={() => handleDelete(product.id)}
+                                            className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>    
                                 </div>    
                             </div>    
                         ))}
