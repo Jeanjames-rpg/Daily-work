@@ -55,8 +55,9 @@ export default function LoginPage() {
             //     JSON.stringify(data.user)
             // );
 
-            router.push("/");
-            router.refresh();
+            // router.push("/");
+            // router.refresh();
+            window.location.href = '/';
         } catch {
             setError("Something went wrong. Please try again.");
         } finally {

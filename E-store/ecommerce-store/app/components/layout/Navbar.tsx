@@ -3,12 +3,13 @@
 import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 type User = {
     id: number;
     name: string;
     email: string;
+    role: "CUSTOMER" | "ADMIN" | "OWNER";
 };
 
 export default function Navbar(){
@@ -70,9 +71,9 @@ export default function Navbar(){
                             Home
                         </a> */}
 
-                        <a href="/products" className="hover:text-emerald-600 text-white">
+                        <Link href="/products" className="hover:text-emerald-600 text-white">
                             Products
-                        </a>
+                        </Link>
 
                         {/* <a href="/cart" className="hover:text-emerald-600 text-white">
                             Cart
@@ -92,6 +93,25 @@ export default function Navbar(){
                     <div className="flex items-center gap-4">
                         {user ? (
                             <>
+
+                            {(user.role === "ADMIN" || user.role === "OWNER") && (
+                                <Link 
+                                    href="/admin"
+                                    className="text-white hover:text-emerald-600"
+                                >
+                                    Admin
+                                </Link>
+                            )}
+
+                            {user.role === "OWNER" && (
+                                <Link
+                                    href="/owner/users"
+                                    className="text-white hover:text-emerald-600"
+                                >
+                                    Users
+                                </Link>
+                            )}
+
                             <Link
                                 href="/orders"
                                 className="text-white hover:text-emerald-600"
