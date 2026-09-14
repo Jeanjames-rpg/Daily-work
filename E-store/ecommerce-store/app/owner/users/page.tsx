@@ -16,6 +16,34 @@ export default function OwnerUsersPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    async function  updateRole(userId: number, role: string) {
+        setError("");
+
+        try {
+            const response = await fetch(`/api/owner/users/${userId}`,{
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    role,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || "Failed to update role.");
+                return;
+            }
+
+            fetchUsers();
+        } catch {
+            console.error("Update role error:", error);
+            setError("Something went wrong. Check the browser console.");
+        }
+    }
+    
     async function fetchUsers() {
         try {
             const response = await fetch("/api/owner/users");
@@ -94,9 +122,20 @@ export default function OwnerUsersPage() {
                                 </td>
 
                                 <td className="px-6 py-4">
-                                    <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-slate-600">
-                                        {user.role}
-                                    </span>
+                                    {user.role === "OWNER" ? (
+                                        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700">
+                                            OWNER
+                                        </span>
+                                    ) : (
+                                        <select
+                                            value={user.role}
+                                            onChange={(event) => updateRole(user.id, event.target.value)}
+                                            className="rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 text-slate-500"
+                                        >
+                                            <option value="CUSTOMER">CUSTOMER</option>
+                                            <option value="ADMIN">ADMIN</option>
+                                        </select>
+                                    )}
                                 </td>
 
                                 <td className="px-6 py-4 text-gray-600">
