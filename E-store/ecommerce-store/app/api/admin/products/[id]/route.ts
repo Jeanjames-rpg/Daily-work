@@ -49,11 +49,12 @@ export async function PATCH(request: Request,
             price,
             image,
             stock,
-            category,
+            // category,
+            categoryId,
         } = body;
 
         if (
-            !title || !description || price === undefined || !image || stock === undefined || !category
+            !title || !description || price === undefined || !image || stock === undefined || !categoryId
         ) {
             return NextResponse.json(
                 {error: "All fields are required."},
@@ -71,7 +72,8 @@ export async function PATCH(request: Request,
                 price: Number(price),
                 image,
                 stock: Number(stock),
-                category,
+                category: "",
+                categoryId: Number(categoryId),
             },
         });
 

@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 
@@ -31,9 +32,12 @@ export default async function AdminPage() {
 
             <div className="grid gap-6 md:grid-cols-3">
                 <div className="rounded-2xl border bg-white p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-slate-500">
+                    <Link 
+                        href="/admin/products"
+                        className="text-lg font-semibold text-slate-500"
+                    >
                         Products
-                    </h2>
+                    </Link>
 
                     <p className="mt-2 text-gray-500">
                         Manage your store products.
@@ -41,9 +45,12 @@ export default async function AdminPage() {
                 </div>
 
                <div className="rounded-2xl border bg-white p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-slate-500">
+                    <Link 
+                        href="/admin/orders"
+                        className="text-lg font-semibold text-slate-500"
+                    >
                         Orders
-                    </h2> 
+                    </Link> 
 
                     <p className="mt-2 text-gray-500">
                         View and manage customer orders

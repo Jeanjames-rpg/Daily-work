@@ -109,11 +109,7 @@ export default function CartPage() {
                         ₹{total}
                     </p>
 
-                    <button 
-                        className="mt-6 w-full rounded-lg bg-indigo-600 py-3 text-white font-semibold hover:bg-indigo-700"
-                    >
-
-                    </button>
+                 
                     <Link 
                         href="/checkout"
                         className="block w-full rounded-lg bg-indigo-600 py-3 text-center font-semibold text-white hover:bg-indigo-700"

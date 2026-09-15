@@ -16,6 +16,8 @@ export default function CheckoutPage() {
 
     const [user, setUser] = useState< User | null >(null);
     const [loading, setLoading] = useState(true);
+    const [placingOrder, setPlacingOrder] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         async function checkAuth() {
@@ -69,6 +71,9 @@ export default function CheckoutPage() {
     }
 
     async function handlePlaceOrder() {
+        setError("");
+        setPlacingOrder(true);
+
         try {
             const response = await fetch("/api/orders", {
                 method: "POST",
@@ -97,7 +102,9 @@ export default function CheckoutPage() {
             router.push("/orders");
         } catch (error) {
             console.error(error);
-            alert("Something went wrong while placing the order.");
+            setError("Something went wrong while placing the order.");
+        } finally {
+            setPlacingOrder(false);
         }
     }
 
@@ -172,12 +179,19 @@ export default function CheckoutPage() {
                         <span>Total</span>
                         <span>₹{total}</span>
                     </div>
+                    
+                    {error && (
+                        <div className="mt-4 rounded-lg bg-red-100 p-4 text-sm text-red-700">
+                            {error}
+                        </div>    
+                    )}
 
                     <button 
                         onClick={handlePlaceOrder}
-                        className="mt-6 w-full rounded-lg bg-green-600 py-3 font-semibold text-white hover:bg-green-700"
+                        disabled={placingOrder}
+                        className="mt-6 w-full rounded-lg bg-green-600 py-3 font-semibold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        Place Order
+                        {placingOrder ? "Placing Order..." : "Place Order"}
                     </button>
                 </div>
 

@@ -10,7 +10,12 @@ type Product = {
     price: string;
     image: string;
     stock: number;
-    category: string;
+    // category: string;
+    categoryId: number | null;
+    categoryRef: {
+        id: number;
+        name: string;
+    } | null ;
 };
 
 export default function AdminProductsPage() {
@@ -24,10 +29,16 @@ export default function AdminProductsPage() {
     const [price, setPrice] = useState("");
     const [image, setImage] = useState("");
     const [stock, setStock] = useState("");
-    const [category, setCategory] = useState("");
+    // const [category, setCategory] = useState("");
     
     const [editingProduct, setEditingProduct] = useState<Product | null >(null);
     const [isEditing, setIsEditing] = useState(false);
+
+    const [categories, setCategories] = useState<
+        { id: number; name: string }[]
+    >([]);
+
+    const [categoryId, setCategoryId] = useState("");
 
     async function fetchProducts() {
         try {
@@ -49,6 +60,24 @@ export default function AdminProductsPage() {
 
     useEffect(() => {
         fetchProducts();
+
+        async function fetchCategories() {
+            try {
+                const response = await fetch("/api/categories");
+                const data = await response.json();
+
+                if (!response.ok) {
+                    setError(data.error || "Failed to load categories.");
+                    return;
+                }
+
+                setCategories(data.categories);
+            } catch {
+                setError("Failed to load categories.");
+            }
+        }
+
+        fetchCategories();
     }, []);
 
     function handleEdit(product: Product) {
@@ -59,7 +88,10 @@ export default function AdminProductsPage() {
         setPrice(product.price);
         setImage(product.image);
         setStock(String(product.stock));
-        setCategory(product.category);
+        // setCategory(product.category);
+        setCategoryId(
+            product.categoryId ? String(product.categoryId) : ""
+        );
 
         setIsEditing(true);
     }
@@ -121,7 +153,7 @@ async function handleDelete(id: number) {
                     price: Number(price),
                     image,
                     stock: Number(stock),
-                    category,
+                    categoryId: Number(categoryId),
                 }),
             });
             
@@ -139,7 +171,7 @@ async function handleDelete(id: number) {
             setPrice("");
             setImage("");
             setStock("");
-            setCategory("");
+            setCategoryId("");
 
             setEditingProduct(null);
             setIsEditing(false);
@@ -196,11 +228,25 @@ async function handleDelete(id: number) {
                         required
                     />
 
-                    <input
+                    {/* <input
                         type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)}
                         className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                         required
-                    />
+                    /> */}
+                    <select 
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
+                        className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                        required
+                    >
+                        <option value="">Select Category</option>
+
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
 
                     <input
                         type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} min="0" step="0.01"
@@ -271,18 +317,34 @@ async function handleDelete(id: number) {
                                         ₹{Number(product.price).toFixed(2)}
                                     </p>
 
-                                    <p>
+                                    {/* <p>
                                         <span className="font-semibold">
                                             Stock:
                                         </span>{" "}
                                         {product.stock}
-                                    </p>
+                                    </p> */}
+
+                                    <div className="mt-2">
+                                        {product.stock === 0 ? (
+                                            <span className="font-medium text-red-600">
+                                                Out of Stock
+                                            </span>
+                                        ) : product.stock <= 5 ? (
+                                            <span className="font-medium text-orange-600">
+                                                Low Stock ({product.stock})
+                                            </span>
+                                        ) : (
+                                            <span className="font-medium text-green-600">
+                                                In Stock ({product.stock})
+                                            </span>
+                                        )}
+                                    </div>   
 
                                     <p>
                                         <span className="font-semibold">
                                             Category:
                                         </span>{" "}
-                                        {product.category}
+                                        {product.categoryRef?.name || "No category"}
                                     </p>
 
                                     <div className="mt-5 flex gap-3">

@@ -123,15 +123,40 @@ export async function POST(request:Request) {
                 },
             });
 
+            // for (const item of items) {
+            //     await tx.product.update({
+            //         where: {
+            //             id: item.productId,
+            //             stock: {
+            //                 gte: item.quantity,
+            //             },
+            //         },
+            //         data: {
+            //             stock: { decrement: item.quantity,},
+            //         },
+            //     });
+            // }
+
             for (const item of items) {
-                await tx.product.update({
+                const updatedProduct = await tx.product.updateMany({
                     where: {
                         id: item.productId,
+                        stock: {
+                            gte: item.quantity,
+                        },
                     },
                     data: {
-                        stock: { decrement: item.quantity,},
+                        stock: {
+                            decrement: item.quantity,
+                        },
                     },
                 });
+
+                if (updatedProduct.count === 0) {
+                    throw new Error(
+                        `Not enough stock for product ${item.productId}`
+                    );
+                }
             }
 
             return newOrder;

@@ -17,6 +17,7 @@ export async function GET() {
 
     const products = await prisma.product.findMany({
         orderBy: { createdAt: "desc",},
+        include: { categoryRef: true,},
     });
 
     return NextResponse.json({products});
@@ -35,9 +36,9 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const { title, description, price, image, stock, category,} = body;
+    const { title, description, price, image, stock, categoryId,} = body;
 
-    if (!title || !description || price === undefined || !image || stock === undefined || !category) {
+    if (!title || !description || price === undefined || !image || stock === undefined || !categoryId) {
         return NextResponse.json(
             {error: "All fields are required."},
             {status: 400}
@@ -51,7 +52,8 @@ export async function POST(request: Request) {
             price,
             image,
             stock: Number(stock),
-            category,
+            category: "",
+            categoryId: Number(categoryId),
         },
     });
 

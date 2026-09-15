@@ -14,6 +14,9 @@ export default async function ProductDetails({params}:Props) {
         where: {
             id: Number(id),
         },
+        include: {
+            categoryRef: true,
+        },
     });
 
     if (!product) {
@@ -32,7 +35,7 @@ export default async function ProductDetails({params}:Props) {
 
             <div>
                 <p className="text-sm font-medium text-indigo-600">
-                    {product.category}
+                    {product.categoryRef?.name || "No category"}
                 </p>
 
                 <h1 className="mt-2 text-4xl font-bold">
