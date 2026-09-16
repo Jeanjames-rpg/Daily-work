@@ -26,16 +26,40 @@ export default function CategoryFilter(
     { products, categories, } : Props
 ){
     const [selectedCategory, setSelectedCategory] = useState("all");
+    const [search, setSearch] = useState("");
 
-    const filteredProducts =
-         selectedCategory === "all"
-            ? products
-            : products.filter(
-                (product) => product.categoryId === Number(selectedCategory)
-            );
+    // const filteredProducts =
+    //      selectedCategory === "all"
+    //         ? products
+    //         : products.filter(
+    //             (product) => product.categoryId === Number(selectedCategory)
+    //         );
+
+    const normalizedSearch = search.toLowerCase().replace(/\s+/g, "");
+
+    const filteredProducts = products.filter((product) => {
+        const matchesCategory = selectedCategory === "all" || product.categoryId === Number(selectedCategory);
+
+        const normalizedProductName = product.name.toLowerCase().replace(/\s+/g, "");
+
+        const matchesSearch = normalizedProductName.includes(normalizedSearch);
+
+        return matchesCategory && matchesSearch;
+    });
     
     return (
         <div className="mb-10">
+
+            <div className="mb-8">
+                <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search products..."
+                    className="w-full rounded-xl border border-gray-200 bg-white px-5 py-3 text-slate-700 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                />
+            </div>
+
             <div  className="mb-4">
                 <h2 className="text-xl font-semibold text-white">
                     Browse by Category
