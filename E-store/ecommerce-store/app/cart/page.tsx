@@ -62,8 +62,12 @@ export default function CartPage() {
                                 {item.name}
                             </h2>
 
-                            <p className="text-indigo-600 font-bold mt-2">
-                                ₹{item.price}
+                            <p className="mt-2 text-sm text-gray-500">
+                                ₹{item.price} × {item.quantity}
+                            </p>
+
+                            <p className="mt-1 text-lg font-bold text-indigo-600">
+                                ₹{item.price * item.quantity}
                             </p>
 
                         </div>
@@ -82,7 +86,8 @@ export default function CartPage() {
 
                             <button
                                 onClick={()=> increaseQuantity(item.id)}
-                                className="h-9 w-9 rounded border text-slate-600"
+                                disabled={item.quantity >= item.stock}
+                                className="h-9 w-9 rounded border text-slate-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
                             >
                                 +
                             </button>

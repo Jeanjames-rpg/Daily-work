@@ -1,6 +1,5 @@
 "use client";
 
-import { Console } from "console";
 import {
     createContext,
     useContext,
@@ -15,6 +14,7 @@ type CartProduct = {
     name: string;
     price: number;
     image: string;
+    stock: number;
 };
 
 type CartItem = CartProduct & {
@@ -23,7 +23,7 @@ type CartItem = CartProduct & {
 
 type CartContextType = {
     cart: CartItem[];
-    addToCart: (product: CartProduct) => void;
+    addToCart: (product: CartProduct, quantity?: number) => void;
     removeFromCart: (id: number) => void;
     increaseQuantity: (id: number) => void;
     decreaseQuantity: (id: number) => void;
@@ -61,8 +61,8 @@ export function CartProvider({children} : {children: ReactNode}) {
         localStorage.setItem("cart",JSON.stringify(cart));
     },[cart,isLoaded]);
 
-    function addToCart(product: CartProduct) {
-        console.log("🔥🔥 ADD TO CART FUNCTION CALLED", product)
+    function addToCart(product: CartProduct, quantity = 1) {
+        // console.log("🔥🔥 ADD TO CART FUNCTION CALLED", product)
         
         setCart((currentCart) => {
             const existingItem = currentCart.find(
@@ -70,23 +70,29 @@ export function CartProvider({children} : {children: ReactNode}) {
             );
 
             if (existingItem) {
+
+                const newQuantity = Math.min(existingItem.quantity + quantity, product.stock);
+
                 return currentCart.map((item) => 
                     item.id === product.id
                         ?{
                             ...item,
-                            quantity: item.quantity + 1,
+                            quantity: newQuantity,
                         }
                       : item  
                 );
             }
 
-            console.log("🔥 CURRENT CART:", currentCart);
+            if (product.stock <= 0) {
+                return currentCart;
+            }
+            // console.log("🔥 CURRENT CART:", currentCart);
 
             return [
                 ...currentCart,
                 {
                     ...product,
-                    quantity: 1,
+                    quantity: Math.min(quantity, product.stock),
                 },
             ];
         });
@@ -100,14 +106,28 @@ export function CartProvider({children} : {children: ReactNode}) {
 
     function increaseQuantity(id: number) {
         setCart((currentCart) => 
-            currentCart.map((item) =>
-                item.id === id
-                    ?{
-                        ...item,
-                        quantity: item.quantity + 1,
-                    }
-                   : item 
-            )
+            // currentCart.map((item) =>
+            //     item.id === id
+            //         ?{
+            //             ...item,
+            //             quantity: item.quantity + 1,
+            //         }
+            //        : item 
+            // )
+            currentCart.map((item) => {
+                if (item.id !== id) {
+                    return item;
+                }
+
+                if (item.quantity >= item.stock) {
+                    return item;
+                }
+
+                return {
+                    ...item,
+                    quantity: item.quantity + 1,
+                };
+            })
         );
     }
 

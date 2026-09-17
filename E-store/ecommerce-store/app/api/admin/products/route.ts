@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { use } from "react";
+
 
 
 
@@ -52,7 +52,6 @@ export async function POST(request: Request) {
             price,
             image,
             stock: Number(stock),
-            category: "",
             categoryId: Number(categoryId),
         },
     });

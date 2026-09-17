@@ -10,6 +10,8 @@ type Product = {
     price: number;
     image: string;
     categoryId: number;
+    categoryName?: string;
+    stock:  number;
 };
 
 type Category = {
@@ -42,13 +44,18 @@ export default function CategoryFilter(
 
         const normalizedProductName = product.name.toLowerCase().replace(/\s+/g, "");
 
-        const matchesSearch = normalizedProductName.includes(normalizedSearch);
+        // const matchesSearch = normalizedProductName.includes(normalizedSearch);
+        const normalizedCategoryName = (product.categoryName || "").toLowerCase().replace(/\s+/g, "");
+
+        const matchesSearch = 
+            normalizedProductName.includes(normalizedSearch) ||
+            normalizedCategoryName.includes(normalizedSearch);
 
         return matchesCategory && matchesSearch;
     });
     
     return (
-        <div className="mb-10">
+        <div className="relative mb-10">
 
             <div className="mb-8">
                 <input
@@ -56,8 +63,19 @@ export default function CategoryFilter(
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search products..."
-                    className="w-full rounded-xl border border-gray-200 bg-white px-5 py-3 text-slate-700 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-5 py-3 pr-12 text-slate-700 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                 />
+
+                {search && (
+                    <button
+                        type="button"
+                        onClick={() => setSearch("")}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                        aria-label="Clear search"
+                    >
+                        ✕
+                    </button>
+                )}
             </div>
 
             <div  className="mb-4">
@@ -94,10 +112,37 @@ export default function CategoryFilter(
 
             </div>
 
+            <p className="mb-6 text-sm text-gray-200">
+                Showing {filteredProducts.length}{" "}
+                {filteredProducts.length === 1 ? "product" : "products"}
+            </p>
+
             {filteredProducts.length === 0 ? (
-                <p className="text-gray-500">
-                    No products available in this category.
-                </p>
+                // <p className="text-gray-500">
+                //     No products available in this category.
+                // </p>
+                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 py-16 text-center">
+                    <h3 className="text-lg font-semibold text-slate-700">
+                        No products found.
+                    </h3>
+                    
+                    <p className="mt-2 text-sm text-gray-500">
+                        Try a different search or category.
+                    </p>
+
+                    {(search || selectedCategory !== "all") && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setSearch("");
+                                setSelectedCategory("all");
+                            }}
+                            className="mt-5 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700"
+                        >
+                            Clear filters
+                        </button>
+                    )}
+                </div>    
             ):(
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                     {filteredProducts.map((product) => (

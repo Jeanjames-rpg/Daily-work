@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import ProductCard from "../components/products/Productcard";
 import CategoryFilter from "../components/products/CategoryFilter";
 
 
@@ -22,11 +21,18 @@ export default async function ProductsPage() {
     return (
         <section>
             <div className="mb-10">
-                <h1 className="text-4xl font-bold">
-                    All Products
+                <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
+                    Our Store
+                </p>
+
+                <h1 className="mt-2 text-4xl font-bold text-gray-300">
+                    Explore Products
                 </h1>
 
-                <p className="mt-2 text-gray-600">Browse our complete collection.</p>
+                <p className="mt-3 max-w-2xl text-gray-400">
+                    Discover products across different categories and find
+                    exactly what you are looking for.
+                </p>
             </div>
 
             {/* {products.length === 0 ? (
@@ -54,6 +60,8 @@ export default async function ProductsPage() {
                     price: Number(product.price),
                     image: product.image,
                     categoryId: product.categoryId,
+                    categoryName: product.categoryRef.name,
+                    stock: product.stock,
                 }))}
 
                 categories={categories}
