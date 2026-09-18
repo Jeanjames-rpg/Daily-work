@@ -1,12 +1,6 @@
 "use client";
 
-import {
-    createContext,
-    useContext,
-    useState,
-    ReactNode,
-    useEffect,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 
 type CartProduct = {
@@ -23,10 +17,10 @@ type CartItem = CartProduct & {
 
 type CartContextType = {
     cart: CartItem[];
-    addToCart: (product: CartProduct, quantity?: number) => void;
-    removeFromCart: (id: number) => void;
-    increaseQuantity: (id: number) => void;
-    decreaseQuantity: (id: number) => void;
+    addToCart: (product: CartProduct, quantity?: number) => Promise<void>;
+    removeFromCart: (id: number) => Promise<void>;
+    increaseQuantity: (id: number) => Promise<void>;
+    decreaseQuantity: (id: number) => Promise<void>;
     clearCart: () => void;
     total: number;
 };
@@ -35,115 +29,223 @@ const CartContext = createContext<CartContextType | undefined>(
     undefined
 );
 
-export function CartProvider({children} : {children: ReactNode}) {
-    console.log(" 🔥 CART PROVIDER RENDERED ");
-
+export function CartProvider({
+    children,
+}: {
+    children: ReactNode;
+}) {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        console.log("🔥🔥 CART AFTER UPDATE:", cart);
-    },[cart]);
+        async function loadCart() {
+            try {
+                const response = await fetch("/api/cart");
 
-    useEffect(() => {
-        const savedCart = localStorage.getItem("cart");
+                if (response.status === 401) {
+                    setCart([]);
+                    return;
+                }
 
-        if (savedCart) {
-            setCart(JSON.parse(savedCart));
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error(data.error);
+                    return;
+                }
+
+                const items: CartItem[] = data.items.map(
+                    (item: {
+                        quantity: number;
+                        product: {
+                            id: number;
+                            title: string;
+                            price: string;
+                            image: string;
+                            stock: string;
+                        };
+                    }) => ({
+                        id: item.product.id,
+                        name: item.product.title,
+                        price: Number(item.product.price),
+                        image: item.product.image,
+                        stock: item.product.stock,
+                        quantity: item.quantity,
+                    })
+                );
+
+                setCart(items);
+            } catch (error) {
+                console.error("Failed to load cart:", error);
+            } finally {
+                setIsLoaded(true);
+            }
         }
 
-        setIsLoaded(true);
-    },[]);
+        loadCart();
+    }, []);
 
-    useEffect(() => {
-        if (!isLoaded) return;
+    async function addToCart(product: CartProduct, quantity = 1) {
+        try {
+            const response = await fetch("/api/cart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    productId: product.id,
+                    quantity,
+                }),
+            });
 
-        localStorage.setItem("cart",JSON.stringify(cart));
-    },[cart,isLoaded]);
+            const data = await response.json();
 
-    function addToCart(product: CartProduct, quantity = 1) {
-        // console.log("🔥🔥 ADD TO CART FUNCTION CALLED", product)
-        
-        setCart((currentCart) => {
-            const existingItem = currentCart.find(
-                (item) => item.id === product.id
+            if (!response.ok) {
+                console.error(data.error);
+                return;
+            }
+
+            const items: CartItem[] = data.items.map(
+                (item: {
+                    quantity: number;
+                    product: {
+                        id: number;
+                        title: string;
+                        price: string;
+                        image: string;
+                        stock: number;
+                    };
+                }) => ({
+                    id: item.product.id,
+                    name: item.product.title,
+                    price: Number(item.product.price),
+                    image: item.product.image,
+                    stock: item.product.stock,
+                    quantity: item.quantity,
+                })
             );
 
-            if (existingItem) {
+            setCart(items);
+        } catch(error) {
+             console.error("Failed to add to cart:", error);
+        }
+    }
 
-                const newQuantity = Math.min(existingItem.quantity + quantity, product.stock);
-
-                return currentCart.map((item) => 
-                    item.id === product.id
-                        ?{
-                            ...item,
-                            quantity: newQuantity,
-                        }
-                      : item  
-                );
-            }
-
-            if (product.stock <= 0) {
-                return currentCart;
-            }
-            // console.log("🔥 CURRENT CART:", currentCart);
-
-            return [
-                ...currentCart,
-                {
-                    ...product,
-                    quantity: Math.min(quantity, product.stock),
+    async function removeFromCart(id: number) {
+        try {
+            const response = await fetch("/api/cart", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
                 },
-            ];
-        });
+                body: JSON.stringify({
+                    productId: id,
+                }), 
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error(data.error);
+                return;
+            }
+
+            const items: CartItem[] = data.items.map(
+                (item: {
+                    quantity: number;
+                    product: {
+                        id: number;
+                        title: string;
+                        price: string;
+                        image: string;
+                        stock: number;
+                    };
+                }) => ({
+                    id: item.product.id,
+                    name: item.product.title,
+                    price: Number(item.product.price),
+                    image: item.product.image,
+                    stock: item.product.stock,
+                    quantity: item.quantity,
+                })
+            );
+
+            setCart(items);
+        } catch(error) {
+            console.error("Failed to remove cart item:", error);
+        }
     }
 
-    function removeFromCart(id: number) {
-        setCart((currentCart) => 
-            currentCart.filter((item) => item.id !== id)
-        );
+
+    async function updateQuantity(id: number, quantity: number) {
+        try {
+            const response = await fetch("/api/cart", {
+               method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    productId: id,
+                    quantity,
+                }), 
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error(data.error);
+                return;
+            }
+
+            const items: CartItem[] = data.items.map(
+                (item: {
+                    quantity: number;
+                    product: {
+                        id: number;
+                        title: string;
+                        price: string;
+                        image: string;
+                        stock: number;
+                    };
+                }) => ({
+                    id: item.product.id,
+                    name: item.product.title,
+                    price: Number(item.product.price),
+                    image: item.product.image,
+                    stock: item.product.stock,
+                    quantity: item.quantity,
+                })
+            );
+
+            setCart(items);
+        } catch (error) {
+            console.error("Failed to update cart:", error);
+        }
     }
 
-    function increaseQuantity(id: number) {
-        setCart((currentCart) => 
-            // currentCart.map((item) =>
-            //     item.id === id
-            //         ?{
-            //             ...item,
-            //             quantity: item.quantity + 1,
-            //         }
-            //        : item 
-            // )
-            currentCart.map((item) => {
-                if (item.id !== id) {
-                    return item;
-                }
+    async function increaseQuantity(id: number) {
+        const item = cart.find((item) => item.id === id);
 
-                if (item.quantity >= item.stock) {
-                    return item;
-                }
+        if (!item || item.quantity >= item.stock ) {
+            return;
+        }
 
-                return {
-                    ...item,
-                    quantity: item.quantity + 1,
-                };
-            })
-        );
+        await updateQuantity(id, item.quantity + 1);
     }
 
-    function decreaseQuantity(id: number) {
-        setCart((currentCart) => 
-            currentCart
-            .map((item)=>
-              item.id === id
-                ? {
-                    ...item,
-                    quantity: item.quantity -1,
-                  }
-                : item  
-            )
-            .filter((item) => item.quantity > 0)
-        );
+    async function decreaseQuantity(id: number) {
+        const item = cart.find((item) => item.id === id );
+
+        if (!item) {
+            return;
+        }
+
+        if (item.quantity <= 1) {
+            await removeFromCart(id);
+            return;
+        }
+
+        await updateQuantity(id, item.quantity - 1);
     }
 
     function clearCart() {
@@ -151,9 +253,9 @@ export function CartProvider({children} : {children: ReactNode}) {
     }
 
     const total = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
+        (sum, item) => sum + item.price * item.quantity, 0
     );
+
 
     return (
         <CartContext.Provider
@@ -170,17 +272,18 @@ export function CartProvider({children} : {children: ReactNode}) {
             {children}
         </CartContext.Provider>
     );
+
 }
+
 
 export function useCart() {
     const context = useContext(CartContext);
 
     if (!context) {
         throw new Error(
-            "usecart must be used inside CartProvider"
+            "useCart must be used inside CartProvider"
         );
     }
 
     return context;
 }
-

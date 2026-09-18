@@ -64,7 +64,7 @@ export default function OrdersPage() {
     if (loading) {
         return (
             <main className="max-w-6xl mx-auto px-6 py-12">
-                <p className="text-gray-500">Loadin your orders...</p>
+                <p className="text-gray-500">Loading your orders...</p>
             </main>
         );
     }
@@ -78,7 +78,7 @@ export default function OrdersPage() {
 
 
                 <p className="mt-2 text-gray-500">
-                    View your previous purchaases
+                    View your previous purchases
                 </p>
             </div>
 
@@ -130,7 +130,21 @@ export default function OrdersPage() {
                                 </p>
 
                                 <div className="mt-3">
-                                    <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700">
+                                    <span 
+                                        className={`rounded-full px-3 py-1 text-sm font-medium ${
+                                            order.status === "PENDING"
+                                                ? "bg-yellow-100 text-yellow-700"
+                                                : order.status === "CONFIRMED"
+                                                ? "bg-blue-100 text-blue-700"
+                                                : order.status === "SHIPPED"
+                                                ? "bg-purple-100 text-purple-700"
+                                                : order.status === "DELIVERED"
+                                                ? "bg-green-100 text-green-700"
+                                                : order.status === "CANCELLED"
+                                                ? "bg-red-100 text-red-700"
+                                                : "bg-gray-100 text-gray-700"
+                                        }`}
+                                    >
                                         {order.status}
                                     </span>
                                 </div>    
@@ -148,22 +162,35 @@ export default function OrdersPage() {
                                     key={item.id}
                                     className="flex items-center justify-between gap-4"
                                 >
-                                    <div>
-                                        <h3 className="font-semibold text-slate-700">
-                                            {item.product.title}
-                                        </h3>
+                                    <div  className="flex items-center gap-4">
 
-                                        <p className="text-slate-800">
-                                            ₹{Number(item.price).toFixed(2)}
-                                            {" x "}
-                                            {item.quantity}
+                                        {item.product.image ? (
+                                            <img
+                                                src={item.product.image}
+                                                alt={item.product.title}
+                                                className="h-16 w-16 rounded-lg object-cover" 
+                                            />
+                                        ) : (
+                                            <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                                                No image
+                                            </div>
+                                        )}
+                                        <div>
+                                            <h3 className="font-semibold text-slate-700">
+                                                {item.product.title}
+                                            </h3>
+
+                                            <p className="text-slate-800">
+                                                ₹{Number(item.price).toFixed(2)}
+                                                {" x "}
+                                                {item.quantity}
+                                            </p>
+
+                                        </div>    
+                                    </div>
+                                        <p className="font-semibold text-slate-500">
+                                            ₹ {(Number(item.price) * item.quantity).toFixed(2)}
                                         </p>
-
-                                    </div>    
-
-                                    <p className="font-semibold text-slate-500">
-                                        ₹ {(Number(item.price) * item.quantity).toFixed(2)}
-                                    </p>
 
                                 </div>    
                             ))}
@@ -172,9 +199,16 @@ export default function OrdersPage() {
                         {/* Footer  */}
                         <div className="mt-6 border-t pt-5">
                             <p className="text-sm text-gray-500">
-                                {order.items.length}{" "}
-                                {order.items.length === 1 ? "item" : "items"}
-
+                                {order.items.reduce(
+                                    (total, item) => total + item.quantity,
+                                    0
+                                )}{" "}
+                                {order.items.reduce(
+                                    (total, item) => total + item.quantity,
+                                    0
+                                ) === 1
+                                    ? "item"
+                                    : "items"}
                             </p>
                         </div>    
 

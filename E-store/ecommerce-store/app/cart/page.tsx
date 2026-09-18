@@ -14,19 +14,31 @@ export default function CartPage() {
         total,
     } = useCart();
 
-    if (cart.length === 0) {
-        return (
-            <section className="text-center py-20">
-                <h1 className="text-4xl font-bold">
-                    Your cart is Empty
-                </h1>
+   
 
-                <p className="mt-4 text-gray-500">
-                    Add some products to your cart.
-                </p>
-            </section>
-        );
+    if (cart.length === 0) {
+    return (
+        <section className="py-20 text-center">
+
+            <h1 className="text-4xl font-bold text-slate-800">
+                Your Cart is Empty
+            </h1>
+
+            <p className="mt-4 text-gray-500">
+                Looks like you haven't added anything to your cart yet.
+            </p>
+
+            <Link
+                href="/products"
+                className="mt-8 inline-block rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white transition hover:bg-indigo-700"
+            >
+                Browse Products
+            </Link>
+
+        </section>
+     );
     }
+
 
     return (
         <section>
@@ -105,24 +117,41 @@ export default function CartPage() {
             </div>
 
             <div className="mt-10 flex justify-end">
-                <div className="bg-white rounded-xl shadow p-6 w-full md:w-96">
-                    <h2 className="text-2xl font-bold text-slate-700">
-                        Cart Total
+                <div className="w-full rounded-2xl bg-white p-6 shadow-md md:w-96">
+
+                    <h2 className="text-2xl font-bold text-slate-800">
+                        Order Summary
                     </h2>
 
-                    <p className="text-3xl font-bold text-indigo-600 mt-4">
-                        ₹{total}
-                    </p>
+                <div className="mt-6 flex items-center justify-between border-b pb-4">
+                    <span className="text-gray-500">
+                        Items
+                    </span>
 
-                 
-                    <Link 
-                        href="/checkout"
-                        className="block w-full rounded-lg bg-indigo-600 py-3 text-center font-semibold text-white hover:bg-indigo-700"
-                    >
-                        Proceed to Checkout
-                    </Link>
+                    <span className="font-medium text-slate-700">
+                        {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                    </span>
                 </div>
+
+            <div className="mt-4 flex items-center justify-between">
+                <span className="text-lg font-semibold text-slate-700">
+                    Total
+                </span>
+
+                <span className="text-2xl font-bold text-indigo-600">
+                    ₹{total}
+                </span>
             </div>
+
+            <Link
+                href="/checkout"
+                className="mt-6 block w-full rounded-lg bg-indigo-600 py-3 text-center font-semibold text-white transition hover:bg-indigo-700"
+            >
+                Proceed to Checkout
+            </Link>
+
+        </div>
+    </div>
         </section>
     )
 }
