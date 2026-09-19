@@ -281,6 +281,30 @@ export async function DELETE(request: Request) {
         }
 
         const body = await request.json();
+
+        
+        if (body.clearAll === true) {
+            const cart = await prisma.cart.findUnique({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            if (cart) {
+                await prisma.cartItem.deleteMany({
+                    where: {
+                        cartId: cart.id,
+                    },
+                });
+            }
+
+            return NextResponse.json({
+                message: "Cart cleared",
+                items: [],
+            });
+        }
+
+
         const productId = Number(body.productId);
 
         if (!productId) {
@@ -346,5 +370,7 @@ export async function DELETE(request: Request) {
             { error: "Failed to remove item from cart"},
             { status: 500 }
         );
+
+        
     }
 }

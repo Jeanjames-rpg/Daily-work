@@ -21,7 +21,7 @@ type CartContextType = {
     removeFromCart: (id: number) => Promise<void>;
     increaseQuantity: (id: number) => Promise<void>;
     decreaseQuantity: (id: number) => Promise<void>;
-    clearCart: () => void;
+    clearCart: () => Promise<void>;
     total: number;
 };
 
@@ -248,8 +248,28 @@ export function CartProvider({
         await updateQuantity(id, item.quantity - 1);
     }
 
-    function clearCart() {
-        setCart([]);
+       async function clearCart() {
+        try {
+            const response = await fetch("/api/cart", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    clearAll: true,
+                }),
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                console.error(data.error);
+                return;
+            }
+
+            setCart([]);
+        } catch (error) {
+            console.error("Failed to clear cart:", error);
+        }
     }
 
     const total = cart.reduce(

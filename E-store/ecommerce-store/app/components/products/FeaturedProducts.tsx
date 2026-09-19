@@ -34,6 +34,9 @@ export default async function FeaturedProducts(){
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      categoryRef: true,
+    },
     take: 4,
   });
   
@@ -63,6 +66,8 @@ export default async function FeaturedProducts(){
                     name: product.title,
                     price: Number(product.price),
                     image: product.image,
+                    stock: product.stock,
+                    categoryName: product.categoryRef.name,
                   }}
                   />
                 ))}
