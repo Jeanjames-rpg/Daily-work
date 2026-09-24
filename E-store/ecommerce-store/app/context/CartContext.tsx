@@ -12,6 +12,7 @@ type CartProduct = {
 };
 
 type CartItem = CartProduct & {
+    variantId: number;
     quantity: number;
 };
 
@@ -57,19 +58,25 @@ export function CartProvider({
                 const items: CartItem[] = data.items.map(
                     (item: {
                         quantity: number;
+                        variant: {
+                            id: number;
+                            price: string;
+                            stock: number;
+                        };
                         product: {
                             id: number;
                             title: string;
-                            price: string;
+                            // price: string;
                             image: string;
-                            stock: string;
+                            // stock: string;
                         };
                     }) => ({
                         id: item.product.id,
+                        variantId: item.variant.id,
                         name: item.product.title,
-                        price: Number(item.product.price),
+                        price: Number(item.variant.price),
                         image: item.product.image,
-                        stock: item.product.stock,
+                        stock: item.variant.stock,
                         quantity: item.quantity,
                     })
                 );
@@ -108,19 +115,25 @@ export function CartProvider({
             const items: CartItem[] = data.items.map(
                 (item: {
                     quantity: number;
+                    variant: {
+                        id: number;
+                        price: string;
+                        stock: number;
+                    }
                     product: {
                         id: number;
                         title: string;
-                        price: string;
+                        // price: string;
                         image: string;
-                        stock: number;
+                        // stock: number;
                     };
                 }) => ({
                     id: item.product.id,
+                    variantId: item.variant.id,
                     name: item.product.title,
-                    price: Number(item.product.price),
+                    price: Number(item.variant.price),
                     image: item.product.image,
-                    stock: item.product.stock,
+                    stock: item.variant.stock,
                     quantity: item.quantity,
                 })
             );
@@ -131,7 +144,7 @@ export function CartProvider({
         }
     }
 
-    async function removeFromCart(id: number) {
+    async function removeFromCart(variantId: number) {
         try {
             const response = await fetch("/api/cart", {
                 method: "DELETE",
@@ -139,7 +152,7 @@ export function CartProvider({
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    productId: id,
+                    variantId,
                 }), 
             });
 
@@ -153,19 +166,25 @@ export function CartProvider({
             const items: CartItem[] = data.items.map(
                 (item: {
                     quantity: number;
+                    variant: {
+                        id: number;
+                        price: string;
+                        stock: number;
+                    }
                     product: {
                         id: number;
                         title: string;
-                        price: string;
+                        // price: string;
                         image: string;
-                        stock: number;
+                        // stock: number;
                     };
                 }) => ({
                     id: item.product.id,
+                    variantId: item.variant.id,
                     name: item.product.title,
-                    price: Number(item.product.price),
+                    price: Number(item.variant.price),
                     image: item.product.image,
-                    stock: item.product.stock,
+                    stock: item.variant.stock,
                     quantity: item.quantity,
                 })
             );
@@ -177,7 +196,7 @@ export function CartProvider({
     }
 
 
-    async function updateQuantity(id: number, quantity: number) {
+    async function updateQuantity(variantId: number, quantity: number) {
         try {
             const response = await fetch("/api/cart", {
                method: "PATCH",
@@ -185,7 +204,7 @@ export function CartProvider({
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    productId: id,
+                    variantId,
                     quantity,
                 }), 
             });
@@ -200,19 +219,25 @@ export function CartProvider({
             const items: CartItem[] = data.items.map(
                 (item: {
                     quantity: number;
+                    variant: {
+                        id: number;
+                        price: string;
+                        stock: number;
+                    }
                     product: {
                         id: number;
                         title: string;
-                        price: string;
+                        // price: string;
                         image: string;
-                        stock: number;
+                        // stock: number;
                     };
                 }) => ({
                     id: item.product.id,
+                    variantId: item.variant.id,
                     name: item.product.title,
-                    price: Number(item.product.price),
+                    price: Number(item.variant.price),
                     image: item.product.image,
-                    stock: item.product.stock,
+                    stock: item.variant.stock,
                     quantity: item.quantity,
                 })
             );
@@ -223,29 +248,29 @@ export function CartProvider({
         }
     }
 
-    async function increaseQuantity(id: number) {
-        const item = cart.find((item) => item.id === id);
+    async function increaseQuantity(variantId: number) {
+        const item = cart.find((item) => item.variantId === variantId);
 
         if (!item || item.quantity >= item.stock ) {
             return;
         }
 
-        await updateQuantity(id, item.quantity + 1);
+        await updateQuantity(variantId, item.quantity + 1);
     }
 
-    async function decreaseQuantity(id: number) {
-        const item = cart.find((item) => item.id === id );
+    async function decreaseQuantity(variantId: number) {
+        const item = cart.find((item) => item.variantId === variantId );
 
         if (!item) {
             return;
         }
 
         if (item.quantity <= 1) {
-            await removeFromCart(id);
+            await removeFromCart(variantId);
             return;
         }
 
-        await updateQuantity(id, item.quantity - 1);
+        await updateQuantity(variantId, item.quantity - 1);
     }
 
        async function clearCart() {

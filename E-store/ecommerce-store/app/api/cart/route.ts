@@ -1,8 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { error } from "console";
 import { NextResponse } from "next/server";
-import { use } from "react";
+
 
 
 
@@ -25,6 +24,7 @@ export async function GET() {
                 items: {
                     include: {
                         product: true,
+                        variant: true,
                     },
                 },
             },
@@ -74,6 +74,9 @@ export async function POST(request: Request) {
             where: {
                 id: productId,
             },
+            include: {
+                variants: true,
+            },
         });
 
         if (!product) {
@@ -83,12 +86,28 @@ export async function POST(request: Request) {
             );
         }
 
-        if (product.stock < quantity) {
+        const variant = product.variants[0];
+
+        if (!variant) {
             return NextResponse.json(
-                { error: "Not enough stock."},
-                { status: 400}
+                { error: "Product variant not found."},
+                { status: 404 }
             );
         }
+
+        if (variant.stock < quantity) {
+            return NextResponse.json(
+                { error: "Not enough stock."},
+                { status: 400 }
+            );
+        }
+
+        // if (product.stock < quantity) {
+        //     return NextResponse.json(
+        //         { error: "Not enough stock."},
+        //         { status: 400}
+        //     );
+        // }
 
         const cart = await prisma.cart.upsert({
             where: {
@@ -102,9 +121,9 @@ export async function POST(request: Request) {
 
         const existingItem = await prisma.cartItem.findUnique({
             where: {
-                cartId_productId: {
+                cartId_variantId: {
                     cartId: cart.id,
-                    productId,
+                    variantId: variant.id,
                 },
             },
         });
@@ -112,7 +131,7 @@ export async function POST(request: Request) {
         if (existingItem) {
             const newQuantity = existingItem.quantity + quantity;
 
-            if (newQuantity > product.stock) {
+            if (newQuantity > variant.stock) {
                 return NextResponse.json(
                     { error: "Quantity exceeds available stock" },
                     { status: 400 }
@@ -125,6 +144,7 @@ export async function POST(request: Request) {
                 },
                 data: {
                     quantity: newQuantity,
+                    variantId: variant.id,
                 },
             });
         } else {
@@ -132,6 +152,7 @@ export async function POST(request: Request) {
                 data: {
                     cartId: cart.id,
                     productId,
+                    variantId: variant.id,
                     quantity,
                 },
             });
@@ -145,6 +166,7 @@ export async function POST(request: Request) {
                 items: {
                     include: {
                         product: true,
+                        variant: true,
                     },
                 },
             },
@@ -175,10 +197,11 @@ export async function PATCH(request: Request) {
 
         const body = await request.json();
 
-        const productId = Number(body.product);
+        const productId = Number(body.productId);
+        const variantId = Number(body.variantId);
         const quantity = Number(body.quantity);
 
-        if (!productId || !Number.isInteger(quantity) || quantity < 1) {
+        if (!variantId || !Number.isInteger(quantity) || quantity < 1) {
             return NextResponse.json(
                 { error: "Invalid product or quantity"},
                 { status: 400 }
@@ -198,32 +221,15 @@ export async function PATCH(request: Request) {
             );
         }
 
-        const product = await prisma.product.findUnique({
-            where: {
-                id: productId,
-            },
-        });
-
-        if (!product) {
-            return NextResponse.json(
-                { error: "Product not found"},
-                { status: 404 }
-            );
-        }
-
-        if (quantity > product.stock) {
-            return NextResponse.json(
-                { error: "Quantity exceeds available stock"},
-                {status: 400}
-            );
-        }
-
         const cartItem = await prisma.cartItem.findUnique({
             where: {
-                cartId_productId: {
+                cartId_variantId: {
                     cartId: cart.id,
-                    productId,
+                    variantId,
                 },
+            },
+            include: {
+                variant: true,
             },
         });
 
@@ -233,6 +239,42 @@ export async function PATCH(request: Request) {
                 { status: 404 }
             );
         }
+
+        // const product = await prisma.product.findUnique({
+        //     where: {
+        //         id: productId,
+        //     },
+        // });
+
+        // if (!product) {
+        //     return NextResponse.json(
+        //         { error: "Product not found"},
+        //         { status: 404 }
+        //     );
+        // }
+
+        if (quantity > cartItem.variant.stock) {
+            return NextResponse.json(
+                { error: "Quantity exceeds available stock"},
+                {status: 400}
+            );
+        }
+
+        // const cartItem = await prisma.cartItem.findUnique({
+        //     where: {
+        //         cartId_productId: {
+        //             cartId: cart.id,
+        //             productId,
+        //         },
+        //     },
+        // });
+
+        // if (!cartItem) {
+        //     return NextResponse.json(
+        //         { error: "Cart item not found"},
+        //         { status: 404 }
+        //     );
+        // }
 
         await prisma.cartItem.update({
             where: {
@@ -252,6 +294,7 @@ export async function PATCH(request: Request) {
                 items: {
                     include:{
                         product: true,
+                        variant: true,
                     },
                 },
             },
@@ -306,8 +349,9 @@ export async function DELETE(request: Request) {
 
 
         const productId = Number(body.productId);
+        const variantId = Number(body.variantId);
 
-        if (!productId) {
+        if (!variantId) {
             return NextResponse.json(
                 { error: "Invalid product"},
                 { status: 400 }
@@ -329,9 +373,9 @@ export async function DELETE(request: Request) {
 
         const cartItem = await prisma.cartItem.findUnique({
             where: {
-                cartId_productId: {
+                cartId_variantId: {
                     cartId: cart.id,
-                    productId,
+                    variantId,
                 },
             },
         });
@@ -357,6 +401,7 @@ export async function DELETE(request: Request) {
                 items: {
                     include: {
                         product: true,
+                        variant: true,
                     },
                 },
             },
