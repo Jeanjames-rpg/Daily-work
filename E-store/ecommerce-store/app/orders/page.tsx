@@ -11,11 +11,18 @@ type Product = {
     image: string;
 };
 
+type Variant = {
+    id: number;
+    price: string;
+    stock: number;
+}
+
 type OrderItem = {
     id: number;
     quantity: number;
     price: string;
     product: Product;
+    variant: Variant;
 };
 
 type Order = {
@@ -179,6 +186,11 @@ export default function OrdersPage() {
                                             <h3 className="font-semibold text-slate-700">
                                                 {item.product.title}
                                             </h3>
+
+                                            {/* <p className="text-sm text-gray-500">
+                                                 Size: {item.variant}
+                                            </p> */}
+
 
                                             <p className="text-slate-800">
                                                 ₹{Number(item.price).toFixed(2)}

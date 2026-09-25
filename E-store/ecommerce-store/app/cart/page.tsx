@@ -49,7 +49,7 @@ export default function CartPage() {
             <div className="space-y-6">
                 {cart.map((item)=> (
                     <div
-                        key={item.id}
+                        key={item.variantId}
                         className="bg-white rounded-xl shadow p-5 flex flex-col md:flex-row md:items-center gap-5"
                     >
                         {/* <img
@@ -86,7 +86,7 @@ export default function CartPage() {
 
                         <div className="flex items-center gap-4">
                             <button
-                                onClick={()=> decreaseQuantity(item.id)}
+                                onClick={()=> decreaseQuantity(item.variantId)}
                                 className="h-9 w-9 rounded border text-slate-600"
                             >
                                 -
@@ -97,7 +97,7 @@ export default function CartPage() {
                             </span>
 
                             <button
-                                onClick={()=> increaseQuantity(item.id)}
+                                onClick={()=> increaseQuantity(item.variantId)}
                                 disabled={item.quantity >= item.stock}
                                 className="h-9 w-9 rounded border text-slate-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
                             >
@@ -106,7 +106,7 @@ export default function CartPage() {
                         </div>
 
                         <button
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => removeFromCart(item.variantId)}
                             className="text-red-600 hover:text-red-700"
                         >
                             Remove

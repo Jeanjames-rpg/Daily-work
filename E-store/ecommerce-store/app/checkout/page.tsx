@@ -82,7 +82,8 @@ export default function CheckoutPage() {
                 },
                 body: JSON.stringify({
                     items: cart.map((item) => ({
-                        productId: item.id,
+                        // productId: item.id,
+                        variantId: item.variantId,
                         quantity: item.quantity,
                     })),
                 }),
@@ -95,7 +96,7 @@ export default function CheckoutPage() {
                 return;
             }
 
-            clearCart();
+             await clearCart();
 
             alert(`Order placed successfully! Order Id: ${data.orderId}`);
 
@@ -155,7 +156,7 @@ export default function CheckoutPage() {
                     <div className="space-y-4">
                         {cart.map((item) => (
                             <div 
-                                key={item.id}
+                                key={item.variantId}
                                 className="flex justify-between border-b pb-3"
                             >
                                 <div>

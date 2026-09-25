@@ -35,7 +35,7 @@ export async function GET() {
                 items: [],
             });
         }
-
+        console.log(cart);
         return NextResponse.json(cart);
     } catch (error) {
         console.error("Fetch cart error:", error);

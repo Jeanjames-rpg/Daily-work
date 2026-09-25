@@ -44,20 +44,45 @@ export async function POST(request:Request) {
             );
         }
 
+        for (const item of items) {
+            if (
+                !Number.isInteger(item.variantId) ||
+                item.variantId <= 0 
+            ) {
+                return NextResponse.json(
+                    { error: "Invalid variant."},
+                    { status: 400 }
+                );
+            }
+
+            if (
+                !Number.isInteger(item.quantity) ||
+                item.quantity <= 0
+            ) {
+                return NextResponse.json(
+                    { error: "Invalid quantity."},
+                    { status: 400 }
+                );
+            }
+        }
+
         // Get  PRODUCTS FROM DB 
-        const productIds = items.map(
-            (item: { productId: number}) => item.productId
+        const variantIds = items.map(
+            (item: { variantId: number}) => item.variantId
         );
 
-        const products = await prisma.product.findMany({
+        const variants = await prisma.productVarient.findMany({
             where: {
                 id: {
-                    in: productIds,
+                    in: variantIds,
                 },
+            },
+            include: {
+                product: true,
             },
         });
 
-        if (products.length !== productIds.length) {
+        if (variants.length !== variantIds.length) {
             return NextResponse.json(
                 {error: "One or more products were not found."},
                 {status: 400}
@@ -70,16 +95,17 @@ export async function POST(request:Request) {
 
         const orderItems: {
             productId: number;
+            variantId: number;
             quantity: number;
-            price: typeof products[number]["price"];
+            price: typeof variants[number]["price"];
         }[] = [];
 
         for (const item of items) {
-            const product = products.find(
-                (product) => product.id === item.productId
+            const variant = variants.find(
+                (variant) => variant.id === item.variantId
             );
 
-            if (!product) {
+            if (!variant) {
                 return NextResponse.json(
                     { error: "Product not found."},
                     {status: 400}
@@ -93,21 +119,22 @@ export async function POST(request:Request) {
                 );
             }
 
-            if (item.quantity > product.stock) {
+            if (item.quantity > variant.stock) {
                 return NextResponse.json(
-                    { error: `${product.title} does not have enough stock.`,},
+                    { error: `${variant.product.title} does not have enough stock.`,},
                     {status: 400}
                 );
             }
 
-            const price = Number(product.price);
+            const price = Number(variant.price);
 
             total += price * item.quantity;
 
             orderItems.push({
-                productId: product.id,
+                productId: variant.productId,
+                variantId: variant.id,
                 quantity: item.quantity,
-                price: product.price,
+                price: variant.price,
 
             });
         }
@@ -138,9 +165,9 @@ export async function POST(request:Request) {
             // }
 
             for (const item of items) {
-                const updatedProduct = await tx.product.updateMany({
+                const updatedVariant = await tx.productVarient.updateMany({
                     where: {
-                        id: item.productId,
+                        id: item.variantId,
                         stock: {
                             gte: item.quantity,
                         },
@@ -152,9 +179,9 @@ export async function POST(request:Request) {
                     },
                 });
 
-                if (updatedProduct.count === 0) {
+                if (updatedVariant.count === 0) {
                     throw new Error(
-                        `Not enough stock for product ${item.productId}`
+                        `Not enough stock for product ${item.variantId}`
                     );
                 }
             }
@@ -209,6 +236,7 @@ export async function GET() {
                 items: {
                     include: {
                         product: true,
+                        variant: true,
                     },
                 },
             },
