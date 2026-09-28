@@ -11,6 +11,7 @@ type CartProduct = {
     stock: number;
     color: string | null;
     storage: string | null;
+    variantId: number;
 };
 
 type CartItem = CartProduct & {
@@ -107,6 +108,7 @@ export function CartProvider({
                 },
                 body: JSON.stringify({
                     productId: product.id,
+                    variantId: product.variantId,
                     quantity,
                 }),
             });
@@ -125,6 +127,8 @@ export function CartProvider({
                         id: number;
                         price: string;
                         stock: number;
+                        color: string | null;
+                        storage: string | null;
                     }
                     product: {
                         id: number;
@@ -140,6 +144,8 @@ export function CartProvider({
                     price: Number(item.variant.price),
                     image: item.product.image,
                     stock: item.variant.stock,
+                    color: item.variant.color,
+                    storage: item.variant.storage,
                     quantity: item.quantity,
                 })
             );
@@ -176,6 +182,8 @@ export function CartProvider({
                         id: number;
                         price: string;
                         stock: number;
+                        color: string | null;
+                        storage: string | null;
                     }
                     product: {
                         id: number;
@@ -191,6 +199,8 @@ export function CartProvider({
                     price: Number(item.variant.price),
                     image: item.product.image,
                     stock: item.variant.stock,
+                    color: item.variant.color,
+                    storage: item.variant.storage,
                     quantity: item.quantity,
                 })
             );
@@ -229,6 +239,8 @@ export function CartProvider({
                         id: number;
                         price: string;
                         stock: number;
+                        color: string | null;
+                        storage: string | null;
                     }
                     product: {
                         id: number;
@@ -244,6 +256,8 @@ export function CartProvider({
                     price: Number(item.variant.price),
                     image: item.product.image,
                     stock: item.variant.stock,
+                    color: item.variant.color,
+                    storage: item.variant.storage,
                     quantity: item.quantity,
                 })
             );

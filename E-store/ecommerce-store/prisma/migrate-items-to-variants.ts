@@ -17,7 +17,7 @@ async function main() {
     const cartItems = await prisma.cartItem.findMany();
 
     for (const item of cartItems) {
-        const variant = await prisma.productVarient.findFirst({
+        const variant = await prisma.productVariant.findFirst({
             where: {
                 productId: item.productId,
             },
@@ -47,7 +47,7 @@ async function main() {
     const orderItems = await prisma.orderItem.findMany();
 
     for (const item of orderItems) {
-        const variant = await prisma.productVarient.findFirst({
+        const variant = await prisma.productVariant.findFirst({
             where: {
                 productId: item.productId,
             },

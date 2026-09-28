@@ -36,6 +36,7 @@ export default async function FeaturedProducts(){
     },
     include: {
       categoryRef: true,
+      variants: true,
     },
     take: 4,
   });
@@ -68,6 +69,14 @@ export default async function FeaturedProducts(){
                     image: product.image,
                     stock: product.stock,
                     categoryName: product.categoryRef.name,
+                    variants : product.variants.map((variant) => ({
+                      id: variant.id,
+                      sku: variant.sku,
+                      color: variant.color,
+                      storage: variant.storage,
+                      price: Number(variant.price),
+                      stock: variant.stock,
+                    })),
                   }}
                   />
                 ))}

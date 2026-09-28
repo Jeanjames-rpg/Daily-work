@@ -61,11 +61,12 @@ export async function POST(request: Request) {
         const body = await request.json();
 
         const productId = Number(body.productId);
+        const variantId = Number(body.variantId);
         const quantity = Number(body.quantity);
 
-        if (!productId || !quantity || quantity < 1) {
+        if (!productId || !variantId || !Number.isInteger(quantity) || quantity < 1) {
             return NextResponse.json(
-                { error: "Invalid product or quantity" },
+                { error: "Invalid product,variant or quantity" },
                 { status: 400 }
             );
         }
@@ -86,7 +87,9 @@ export async function POST(request: Request) {
             );
         }
 
-        const variant = product.variants[0];
+        const variant = product.variants.find(
+            (item) => item.id === variantId
+        );
 
         if (!variant) {
             return NextResponse.json(

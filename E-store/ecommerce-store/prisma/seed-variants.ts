@@ -18,7 +18,7 @@ async function main() {
     const products = await prisma.product.findMany();
 
     for (const product of products) {
-        const existingVariant = await prisma.productVarient.findFirst({
+        const existingVariant = await prisma.productVariant.findFirst({
             where: {
                 productId: product.id,
             },
@@ -28,7 +28,7 @@ async function main() {
             continue;
         }
 
-        await prisma.productVarient.create({
+        await prisma.productVariant.create({
             data: {
                 sku: `PRODUCT-${product.id}-DEFAULT`,
                 productId: product.id,

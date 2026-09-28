@@ -2,6 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
 
+
+type Variant = {
+    id: number;
+    sku: string;
+    color: string | null;
+    storage: string | null;
+    price: number;
+    stock: number;
+}
+
 type Product = {
     id: number;
     name: string;
@@ -9,6 +19,7 @@ type Product = {
     image: string;
     stock: number;
     categoryName?: string;
+    variants: Variant[];
 };
 
 export default function ProductCard({product}: {product:Product}) {
@@ -64,7 +75,7 @@ export default function ProductCard({product}: {product:Product}) {
           </Link>  
             <div className="px-5 pb-5">
                 
-                <AddToCartButton product={product} />
+                <AddToCartButton product={product} variants={product.variants} />
             </div>
         </div>
     );

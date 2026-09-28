@@ -17,8 +17,11 @@ export default async function ProductDetails({params}:Props) {
         },
         include: {
             categoryRef: true,
+            variants: true,
         },
     });
+
+    console.log(product?.variants);
 
     if (!product) {
         notFound();
@@ -115,7 +118,7 @@ return (
             </p>
 
             {/* Stock */}
-            <div className="mt-6">
+            {/* <div className="mt-6">
                 {product.stock === 0 ? (
                     <p className="font-semibold text-red-600">
                         Out of Stock
@@ -129,7 +132,8 @@ return (
                         In Stock
                     </p>
                 )}
-            </div>
+            </div> */}
+            
 
             <div className="mt-8">
                 <AddToCartButton
@@ -139,7 +143,18 @@ return (
                         price: Number(product.price),
                         image: product.image,
                         stock: product.stock,
+                        // variantId: product.variants[0]?.id ?? 0,
+                        // color: product.variants[0]?.color ?? null,
+                        // storage: product.variants[0]?.storage ?? null,
                     }}
+                    variants={product.variants.map((variant) => ({
+                        id: variant.id,
+                        sku: variant.sku,
+                        color: variant.color,
+                        storage: variant.storage,
+                        price: Number(variant.price),
+                        stock: variant.stock,
+                    }))}
                     showQuantity
                 />
             </div>
