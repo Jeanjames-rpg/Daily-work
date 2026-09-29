@@ -12,6 +12,7 @@ type CartProduct = {
     color: string | null;
     storage: string | null;
     variantId: number;
+    sku: string;
 };
 
 type CartItem = CartProduct & {
@@ -125,6 +126,7 @@ export function CartProvider({
                     quantity: number;
                     variant: {
                         id: number;
+                        sku: string;
                         price: string;
                         stock: number;
                         color: string | null;
@@ -140,6 +142,7 @@ export function CartProvider({
                 }) => ({
                     id: item.product.id,
                     variantId: item.variant.id,
+                    sku: item.variant.sku,
                     name: item.product.title,
                     price: Number(item.variant.price),
                     image: item.product.image,

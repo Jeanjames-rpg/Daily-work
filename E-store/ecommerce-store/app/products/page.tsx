@@ -6,6 +6,7 @@ export default async function ProductsPage() {
     const products = await prisma.product.findMany({
         include: {
             categoryRef: true,
+            variants: true,
         },
         orderBy: {
             createdAt: "desc",
@@ -62,6 +63,15 @@ export default async function ProductsPage() {
                     categoryId: product.categoryId,
                     categoryName: product.categoryRef.name,
                     stock: product.stock,
+
+                    variants: product.variants.map((variant) => ({
+                        id: variant.id,
+                        sku: variant.sku,
+                        color: variant.color,
+                        storage: variant.storage,
+                        price: Number(variant.price),
+                        stock: variant.stock,
+                    }))
                 }))}
 
                 categories={categories}

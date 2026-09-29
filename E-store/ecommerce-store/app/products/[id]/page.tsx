@@ -109,9 +109,9 @@ return (
                 {product.title}
             </h1>
 
-            <p className="mt-5 text-3xl font-bold text-indigo-600">
+            {/* <p className="mt-5 text-3xl font-bold text-indigo-600">
                 ₹{product.price.toString()}
-            </p>
+            </p> */}
 
             <p className="mt-6 leading-7 text-gray-300">
                 {product.description}
@@ -156,6 +156,7 @@ return (
                         stock: variant.stock,
                     }))}
                     showQuantity
+                    dark
                 />
             </div>
         </div>

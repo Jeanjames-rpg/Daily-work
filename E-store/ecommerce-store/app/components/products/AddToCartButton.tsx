@@ -28,9 +28,10 @@ type Props = {
     product: Product;
     variants?: Variant[];
     showQuantity?: boolean;
+    dark?: boolean;
 };
 
-export default function AddToCartButton({ product,variants = [], showQuantity = false, }: Props) {
+export default function AddToCartButton({ product,variants = [], showQuantity = false, dark = false }: Props) {
     const { addToCart} = useCart();
 
     const [selectedVariantId, setSelectedVariantId] = useState(
@@ -44,7 +45,7 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
     );
 
     if (!selectedVariant) {
-        return <p>No variant available.</p>;
+        return <p className={dark ? "text-white" : "text-gray-800"}>No variant available.</p>;
     }
 
     async function handleAddToCart() {
@@ -60,6 +61,7 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                 image: product.image,
                 stock: selectedVariant.stock,
                 variantId: selectedVariant.id,
+                sku: selectedVariant.sku,
                 color: selectedVariant.color,
                 storage: selectedVariant.storage,
             },
@@ -120,14 +122,14 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
             
         // </div>
 
-        <div>
+        <div className="space-y-5">
             
             {/* color */}
             {variants.some((variant) => variant.color) && (
                 <div>
-                    <p className="mb-2 font-medium">Color</p>
+                    <p className={`mb-2 font-medium ${ dark ? "text-gray-300" :" text-gray-700" }`}>Color</p>
 
-                    <div>
+                    <div className="flex flex-wrap gap-2">
                         {variants
                             .filter((variant) => variant.color)
                             .map((variant) => (
@@ -137,10 +139,14 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                                     onClick={() => 
                                         setSelectedVariantId(variant.id)
                                     }
-                                    className={`rounded border px-4 py-2 ${
+                                    className={`rounded border px-4 py-2 transition ${
                                         selectedVariantId === variant.id
-                                            ? "border-black bg-black text-white"
-                                            : "border-gray-300"
+                                           ? dark
+                                                ? "border-white bg-white text-black"
+                                                : "border-black bg-black text-white"
+                                            : dark
+                                                ? "border-gray-600 bg-transparent text-white hover:border-white"
+                                                : "border-gray-300 bg-white text-gray-800 hover:border-black"
                                     }`}
                                 >
                                     {variant.color}
@@ -155,9 +161,13 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
             {/* Storage  */}
             {variants.some((variant) => variant.storage) && (
                 <div>
-                    <p className="mb-2 font-medium">Storage</p>
+                    <p className={`mb-2 font-medium ${
+                            dark ? "text-gray-300" : "text-gray-700"
+                    }`}>
+                        Storage
+                    </p>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {variants
                             .filter((variant) => variant.storage)
                             .map((variant) => (
@@ -167,10 +177,14 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                                     onClick={() => 
                                         setSelectedVariantId(variant.id)
                                     }
-                                    className={`rounded border px-4 py-2 ${
+                                    className={`rounded border px-4 py-2 transition ${
                                         selectedVariantId === variant.id
-                                            ? "border-black bg-black text-white"
-                                            : "border-gray-300"
+                                            ? dark
+                                                ? "border-white bg-white text-black"
+                                                : "border-black bg-black text-white"
+                                            : dark
+                                                ? "border-gray-600 bg-transparent text-white hover:border-white"
+                                                : "border-gray-300 bg-white text-gray-800 hover:border-black"    
                                     }`}
                                 >
                                     {variant.storage}
@@ -181,13 +195,13 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
             )}
 
             {/* Price  */}
-            <p className="text-xl font-bold">
+            <p className={`text-xl font-bold ${ dark ? "text-white" : "text-gray-900"}`}>
                 ₹{Number(selectedVariant.price).toLocaleString()}
             </p>
 
 
             {/* Stock  */}
-            <p className="text-sm">
+            <p className={`text-sm ${ dark ? "text-gray-400" : "text-gray-600"}`}>
                 Stock: {selectedVariant.stock}
             </p>
 
@@ -217,12 +231,18 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                         onClick={() => 
                             setQuantity((q) => Math.max(1, q - 1))
                         }
-                        className="rounded border px-3 py-1"
+                        className={`rounded border px-3 py-1 ${
+                            dark
+                                ? "border-gray-600 text-white hover:bg-gray-800"
+                                : "border-gray-300 bg-white text-gray-800 hover:bg-gray-100"
+                        } disabled:cursor-not-allowed disabled:opacity-40`}
                     >
                         -
                     </button>
 
-                    <span>{quantity}</span>
+                    <span className={ dark ? "text-white" : "text-gray-800"}>
+                        {quantity}
+                    </span>
 
                     <button
                         type="button"
@@ -230,7 +250,11 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                         onClick={() => 
                             setQuantity((q) => q + 1)
                         }
-                        className="rounded border px-3 py-1"
+                        className={`rounded border px-3 py-1 ${
+                            dark
+                                ? "border-gray-600 text-white hover:bg-gray-800"
+                                : "border-gray-300 bg-white text-gray-800 hover:bg-gray-100"
+                        } disabled:cursor-not-allowed disabled:opacity-40`}
                     >
                         +
                     </button>
@@ -242,7 +266,11 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                 type="button"
                 disabled={selectedVariant.stock === 0}
                 onClick={handleAddToCart}
-                className="rounded bg-black px-6 py-3 text-white disabled:opacity-50"
+                className={`rounded px-6 py-3 font-semibold transition ${
+                    dark
+                        ? "bg-white text-black hover:bg-gray-200"
+                        : "bg-black text-white hover:bg-gray-800"
+                } disabled:cursor-not-allowed disabled:opacity-50`}
             >
                 {selectedVariant.stock === 0
                     ? "Out of Stock"

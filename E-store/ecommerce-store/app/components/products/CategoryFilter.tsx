@@ -3,6 +3,15 @@
 import { useState } from "react";
 import ProductCard from "./Productcard";
 
+type Variant = {
+    id: number;
+    sku: string;
+    color: string | null;
+    storage: string | null;
+    price: number;
+    stock: number;
+}
+
 
 type Product = {
     id: number;
@@ -12,6 +21,8 @@ type Product = {
     categoryId: number;
     categoryName?: string;
     stock:  number;
+    variants: Variant[];
+
 };
 
 type Category = {

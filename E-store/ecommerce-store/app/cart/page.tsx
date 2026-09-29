@@ -74,7 +74,39 @@ export default function CartPage() {
                                 {item.name}
                             </h2>
 
-                            <p className="mt-2 text-sm text-gray-500">
+                            {/* Variant information  */}
+                            {(item.color || item.storage || item.sku) && (
+                                <div className="mt-2 space-y-1 text-sm text-gray-500">
+                                    {item.color && (
+                                        <p>
+                                            <span className="font-medium text-gray-700">
+                                                Color:
+                                            </span>{" "}
+                                            {item.color}
+                                        </p>
+                                    )}
+
+                                    {item.storage && (
+                                        <p>
+                                            <span className="font-medium text-gray-700">
+                                                Storage:
+                                            </span>{" "}
+                                            {item.storage}
+                                        </p>
+                                    )}
+
+                                    {item.sku && (
+                                        <p>
+                                            <span className="font-medium text-gray-700">
+                                                SKU:
+                                            </span>{" "}
+                                            {item.sku}
+                                        </p>
+                                    )}
+                                </div>    
+                            )}
+
+                            <p className="mt-3 text-sm text-gray-500">
                                 ₹{item.price} × {item.quantity}
                             </p>
 
