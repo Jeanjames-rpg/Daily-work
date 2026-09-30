@@ -71,7 +71,7 @@ export async function POST(request:Request) {
             (item: { variantId: number}) => item.variantId
         );
 
-        const variants = await prisma.productVarient.findMany({
+        const variants = await prisma.productVariant.findMany({
             where: {
                 id: {
                     in: variantIds,
@@ -165,7 +165,7 @@ export async function POST(request:Request) {
             // }
 
             for (const item of items) {
-                const updatedVariant = await tx.productVarient.updateMany({
+                const updatedVariant = await tx.productVariant.updateMany({
                     where: {
                         id: item.variantId,
                         stock: {

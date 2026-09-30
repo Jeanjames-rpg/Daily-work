@@ -72,7 +72,6 @@ export async function PATCH(request: Request,
                 price: Number(price),
                 image,
                 stock: Number(stock),
-                category: "",
                 categoryId: Number(categoryId),
             },
         });
