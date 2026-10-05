@@ -1,4 +1,5 @@
-import AddToCartButton from "@/app/components/products/AddToCartButton";
+// import AddToCartButton from "@/app/components/products/AddToCartButton";
+import ProductDetailsClient from "@/app/components/products/ProductDetailsClient";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -27,51 +28,6 @@ export default async function ProductDetails({params}:Props) {
         notFound();
     }
 
-    // return (
-    //     <section className="grid gap-10 md:grid-cols-2">
-    //         <div className="overflow-hidden rounded-2xl bg-white">
-    //             <img
-    //                 src={product.image}
-    //                 alt={product.title}
-    //                 className="w-full object-cover"
-    //             />
-    //         </div>
-
-    //         <div>
-    //             <p className="text-sm font-medium text-indigo-600">
-    //                 {product.categoryRef?.name || "No category"}
-    //             </p>
-
-    //             <h1 className="mt-2 text-4xl font-bold">
-    //                 {product.title}
-    //             </h1>
-
-    //             <p className="mt-4 text-2xl font-bold text-indigo-600">
-    //                 {product.price.toString()}
-    //             </p>
-
-    //             <p className="mt-6 text-gray-600 leading-7">
-    //                 {product.description}
-    //             </p>
-
-    //             <p className="mt-6">
-    //                 <span className="font-semibold">Stock:</span>{" "}
-    //                 {product.stock}
-    //             </p>
-
-    //             <AddToCartButton
-    //                 product={{
-    //                     id: product.id,
-    //                     name: product.title,
-    //                     price: Number(product.price),
-    //                     image: product.image,
-    //                     stock: product.stock,
-    //                 }}
-    //             />
-    //         </div>
-
-    //     </section>
-    // );
 return (
    <>
     <Link
@@ -84,7 +40,7 @@ return (
     <section className="grid gap-10 md:grid-cols-2">
 
         {/* Product Image */}
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+        {/* <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
             {product.image ? (
                 <img
                     src={product.image}
@@ -96,7 +52,7 @@ return (
                     No image available
                 </div>
             )}
-        </div>
+        </div> */}
 
         {/* Product Information */}
         <div className="flex flex-col justify-center">
@@ -109,34 +65,16 @@ return (
                 {product.title}
             </h1>
 
-            {/* <p className="mt-5 text-3xl font-bold text-indigo-600">
-                ₹{product.price.toString()}
-            </p> */}
-
+           
             <p className="mt-6 leading-7 text-gray-300">
                 {product.description}
             </p>
 
-            {/* Stock */}
-            {/* <div className="mt-6">
-                {product.stock === 0 ? (
-                    <p className="font-semibold text-red-600">
-                        Out of Stock
-                    </p>
-                ) : product.stock <= 5 ? (
-                    <p className="font-semibold text-orange-600">
-                        Only {product.stock} left
-                    </p>
-                ) : (
-                    <p className="font-semibold text-green-600">
-                        In Stock
-                    </p>
-                )}
-            </div> */}
+           
             
 
             <div className="mt-8">
-                <AddToCartButton
+                {/* <AddToCartButton
                     product={{
                         id: product.id,
                         name: product.title,
@@ -154,8 +92,29 @@ return (
                         storage: variant.storage,
                         price: Number(variant.price),
                         stock: variant.stock,
+                        image: variant.image,
                     }))}
                     showQuantity
+                    dark
+                /> */}
+
+                <ProductDetailsClient
+                    product={{
+                        id: product.id,
+                        name: product.title,
+                        price: Number(product.price),
+                        image: product.image,
+                        stock: product.stock,
+                    }}
+                    varaints={product.variants.map((variant) => ({
+                        id: variant.id,
+                        sku: variant.sku,
+                        color: variant.color,
+                        storage: variant.storage,
+                        price: Number(variant.price),
+                        stock: variant.stock,
+                        image: variant.image,
+                    }))}
                     dark
                 />
             </div>

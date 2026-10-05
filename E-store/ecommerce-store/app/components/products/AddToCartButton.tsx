@@ -1,7 +1,7 @@
 "use client";
 
 import { useCart } from "@/app/context/CartContext";
-import { useState } from "react";
+import React, { useState } from "react";
 
 
 type Variant ={
@@ -11,6 +11,7 @@ type Variant ={
     storage: string | null;
     price: string | number;
     stock: number;
+    image: string | null ;
 } ;
 
 type Product = {
@@ -29,14 +30,16 @@ type Props = {
     variants?: Variant[];
     showQuantity?: boolean;
     dark?: boolean;
+    selectedVariantId: number | null;
+    // onVariantChange: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export default function AddToCartButton({ product,variants = [], showQuantity = false, dark = false }: Props) {
+export default function AddToCartButton({ product,variants = [], showQuantity = false, dark = false, selectedVariantId , }: Props) {
     const { addToCart} = useCart();
 
-    const [selectedVariantId, setSelectedVariantId] = useState(
-        variants[0]?.id ?? null
-    );
+    // const [selectedVariantId, setSelectedVariantId] = useState(
+    //     variants[0]?.id ?? null
+    // );
 
     const [quantity, setQuantity] = useState(1);
 
@@ -58,7 +61,7 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
                 id: product.id,
                 name: product.name,
                 price: Number(selectedVariant.price),
-                image: product.image,
+                image: selectedVariant.image || product.image,
                 stock: selectedVariant.stock,
                 variantId: selectedVariant.id,
                 sku: selectedVariant.sku,
@@ -125,103 +128,7 @@ export default function AddToCartButton({ product,variants = [], showQuantity = 
         <div className="space-y-5">
             
             {/* color */}
-            {variants.some((variant) => variant.color) && (
-                <div>
-                    <p className={`mb-2 font-medium ${ dark ? "text-gray-300" :" text-gray-700" }`}>Color</p>
-
-                    <div className="flex flex-wrap gap-2">
-                        {variants
-                            .filter((variant) => variant.color)
-                            .map((variant) => (
-                                <button
-                                    key={variant.id}
-                                    type="button"
-                                    onClick={() => 
-                                        setSelectedVariantId(variant.id)
-                                    }
-                                    className={`rounded border px-4 py-2 transition ${
-                                        selectedVariantId === variant.id
-                                           ? dark
-                                                ? "border-white bg-white text-black"
-                                                : "border-black bg-black text-white"
-                                            : dark
-                                                ? "border-gray-600 bg-transparent text-white hover:border-white"
-                                                : "border-gray-300 bg-white text-gray-800 hover:border-black"
-                                    }`}
-                                >
-                                    {variant.color}
-                                </button>
-                            ))
-                        }
-                    </div>    
-                </div>    
-            )}
-
-
-            {/* Storage  */}
-            {variants.some((variant) => variant.storage) && (
-                <div>
-                    <p className={`mb-2 font-medium ${
-                            dark ? "text-gray-300" : "text-gray-700"
-                    }`}>
-                        Storage
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                        {variants
-                            .filter((variant) => variant.storage)
-                            .map((variant) => (
-                                <button
-                                    key={variant.id}
-                                    type="button"
-                                    onClick={() => 
-                                        setSelectedVariantId(variant.id)
-                                    }
-                                    className={`rounded border px-4 py-2 transition ${
-                                        selectedVariantId === variant.id
-                                            ? dark
-                                                ? "border-white bg-white text-black"
-                                                : "border-black bg-black text-white"
-                                            : dark
-                                                ? "border-gray-600 bg-transparent text-white hover:border-white"
-                                                : "border-gray-300 bg-white text-gray-800 hover:border-black"    
-                                    }`}
-                                >
-                                    {variant.storage}
-                                </button>
-                            ))}
-                    </div>    
-                </div>    
-            )}
-
-            {/* Price  */}
-            <p className={`text-xl font-bold ${ dark ? "text-white" : "text-gray-900"}`}>
-                ₹{Number(selectedVariant.price).toLocaleString()}
-            </p>
-
-
-            {/* Stock  */}
-            <p className={`text-sm ${ dark ? "text-gray-400" : "text-gray-600"}`}>
-                Stock: {selectedVariant.stock}
-            </p>
-
-            {/* Stock status  */}
-            <div>
-                {selectedVariant.stock === 0 ? (
-                    <p className="font-semibold text-red-600">
-                        Out of Stock
-                    </p>
-                ) : selectedVariant.stock <= 5 ? (
-                    <p className="font-semibold text-orange-600">
-                        Only {selectedVariant.stock} left
-                    </p>
-                ) : (
-                    <p className="font-semibold text-green-600">
-                        In Stock
-                    </p>
-                )}
-            </div>
-
+            
 
             {/* Quantity  */}
             {showQuantity && (

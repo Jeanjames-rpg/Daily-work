@@ -10,6 +10,7 @@ type Variant = {
     storage: string | null;
     price: number;
     stock: number;
+    image: string | null;
 }
 
 type Product = {
@@ -23,6 +24,11 @@ type Product = {
 };
 
 export default function ProductCard({product}: {product:Product}) {
+    const startingPrice = 
+        product.variants.length > 0
+            ? Math.min(...product.variants.map((variant) => variant.price))
+            : product.price;
+
     return (
         <div className="group overflow-hidden rounded-2xl bg-white shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl">
             
@@ -52,9 +58,9 @@ export default function ProductCard({product}: {product:Product}) {
 
                 <h3 className="mt-1 text-xl font-semibold text-slate-800">{product.name}</h3>
 
-                {/* <p className="text-indigo-600 text-lg font-bold mt-2">
-                    ₹{product.price}
-                </p> */}
+                <p className="mt-2 text-lg font-bold text-indigo-600">
+                    From ₹{startingPrice.toLocaleString("en-IN")}
+                </p>
 
                 {/* {product.stock === 0 ? (
                     <p className="mt-2 text-sm font-medium text-red-600">
@@ -71,12 +77,14 @@ export default function ProductCard({product}: {product:Product}) {
                 )
                 } */}
 
+
             </div>
           </Link>  
-            <div className="px-5 pb-5">
+            {/* <div className="px-5 pb-5">
                 
                 <AddToCartButton product={product} variants={product.variants} />
-            </div>
+            </div> */}
+
         </div>
     );
 }
