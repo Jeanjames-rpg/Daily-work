@@ -15,6 +15,10 @@ type Variant = {
     id: number;
     price: string;
     stock: number;
+    sku: string;
+    color: string | null;
+    storage: string | null;
+    image: string | null;
 }
 
 type OrderItem = {
@@ -171,9 +175,9 @@ export default function OrdersPage() {
                                 >
                                     <div  className="flex items-center gap-4">
 
-                                        {item.product.image ? (
+                                        {item.variant.image || item.product.image ? (
                                             <img
-                                                src={item.product.image}
+                                                src={ item.variant.image || item.product.image}
                                                 alt={item.product.title}
                                                 className="h-16 w-16 rounded-lg object-cover" 
                                             />
@@ -190,7 +194,23 @@ export default function OrdersPage() {
                                             {/* <p className="text-sm text-gray-500">
                                                  Size: {item.variant}
                                             </p> */}
+                                            <div className="mt-1 space-y-0.5 text-sm text-gray-500">
+                                                {item.variant.color && (
+                                                    <p>
+                                                        Color: {item.variant.color}
+                                                    </p>
+                                                )}
 
+                                                {item.variant.storage && (
+                                                    <p>
+                                                        Storage: {item.variant.storage}
+                                                    </p>
+                                                )}
+
+                                                <p>
+                                                    SKU: {item.variant.sku}    
+                                                </p> 
+                                            </div>    
 
                                             <p className="text-slate-800">
                                                 ₹{Number(item.price).toFixed(2)}

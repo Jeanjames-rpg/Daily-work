@@ -131,6 +131,7 @@ export function CartProvider({
                         stock: number;
                         color: string | null;
                         storage: string | null;
+                        image: string | null;
                     }
                     product: {
                         id: number;
@@ -145,7 +146,7 @@ export function CartProvider({
                     sku: item.variant.sku,
                     name: item.product.title,
                     price: Number(item.variant.price),
-                    image: item.product.image,
+                    image: item.variant.image || item.product.image,
                     stock: item.variant.stock,
                     color: item.variant.color,
                     storage: item.variant.storage,

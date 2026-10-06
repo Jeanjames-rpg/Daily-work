@@ -4,13 +4,25 @@ import OrderStatusSelect from "./OrderStatusSelect";
 type Product = {
   id: number;
   title: string;
+  image: string;
 };
+
+type Variant = {
+  id: number;
+  sku: string;
+  color: string | null;
+  storage: string | null;
+  price: string;
+  stock: number;
+  image: string | null;
+}
 
 type OrderItem = {
   id: number;
   quantity: number;
   price: string;
   product: Product;
+  variant: Variant;
 };
 
 type User = {
@@ -76,29 +88,78 @@ export default function OrderCard({ order, onStatusUpdated }: OrderCardProps) {
         </h3>
 
         <div className="mt-3 space-y-3 text-slate-700">
-          {order.items.map((item) => (
-            <div
-              key={item.id}
-              className="flex justify-between rounded-lg bg-gray-50 p-4"
-            >
-              <div>
-                <p className="font-medium">
-                  {item.product.title}
-                </p>
+          {order.items.map((item) => {
 
-                <p className="text-sm text-gray-500">
-                  Quantity: {item.quantity}
-                </p>
-              </div>
+            const image = item.variant.image || item.product.image;
 
-              <p className="font-semibold">
-                ₹
-                {(
-                  Number(item.price) * item.quantity
-                ).toFixed(2)}
-              </p>
-            </div>
-          ))}
+            return (
+              <div
+                key={item.id}
+                className="flex justify-between gap-4 rounded-lg bg-gray-50 p-4"
+              >
+                {/* Product information  */}
+                <div className="flex gap-4">
+                  {/* Image  */}
+                  {image ? (
+                    <img
+                      src={image}
+                      alt={item.product.title}
+                      className="h-20 w-20 rounded-lg object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-500">
+                        No Image
+                    </div> 
+                  )}
+
+                  <div>
+                    <p className="font-medium">
+                      {item.product.title}
+                    </p>
+
+                    {/* Variant information  */}
+                    {item.variant.color && (
+                      <p className="text-sm text-gray-500">
+                        Color: {item.variant.color}
+                      </p>
+                    )}
+
+                    {item.variant.storage && (
+                      <p className="text-sm text-gray-500">
+                        Storage: {item.variant.storage}
+                      </p>
+                    )}
+
+                    <p className="text-sm text-gray-500">
+                      SKU: {item.variant.sku}
+                    </p>
+
+                    <p className="text-sm text-gray-500">
+                      Quantity: {item.quantity}
+                    </p>
+
+                  </div>  
+
+                </div>
+
+                {/* Item Total  */}
+                <div className="text-right">
+                    <p className="font-semibold">
+                      ₹
+                      {(
+                        Number(item.price) * item.quantity
+                      ).toFixed(2)}
+                    </p>
+
+                    <p className="mt-1 text-sm text-gray-500">
+                      ₹{Number(item.price).toFixed(2)} each
+                    </p>
+                </div>  
+
+              </div> 
+            
+          );
+        })}
         </div>
       </div>
 

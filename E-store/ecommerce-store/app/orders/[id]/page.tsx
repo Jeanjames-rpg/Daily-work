@@ -11,11 +11,22 @@ type Product = {
     image: string;
 };
 
+type Variant = {
+    id: number;
+    sku: string;
+    price: string;
+    stock: number;
+    color: string | null;
+    storage: string | null;
+    image: string | null;
+};
+
 type OrderItem = {
     id: number;
     quantity: number;
     price: string;
     product: Product;
+    variant: Variant;
 };
 
 type Order = {
@@ -26,6 +37,13 @@ type Order = {
     items: OrderItem[];
 };
 
+const statusSteps = [
+    "PENDING",
+    "CONFIRMED",
+    "SHIPPED",
+    "DELIVERED",
+];
+
 export default function OrderDetailsPage() {
     const params = useParams();
     const router = useRouter();
@@ -33,6 +51,7 @@ export default function OrderDetailsPage() {
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const currentStatusIndex = statusSteps.indexOf(order?.status || "PENDING");
 
     useEffect(() => {
         async function fetchOrder() {
@@ -123,60 +142,113 @@ export default function OrderDetailsPage() {
             </div>
 
             {/* status  */}
-            <div className="mt-10 rounded-2xl border bg-white p-6">
+           <div className="mt-10 rounded-2xl border bg-white p-6">
                 <h2 className="text-xl font-bold text-slate-600">
                     Order Status
                 </h2>
 
-                <div className="mt-6 flex items-center justify-between text-slate-500">
-                    <div className="text-center">
-                        <div className="mx-auto h-8 w-8 rounded-full bg-green-500 text-white flex items-center justify-center">
-                            ✓
-                        </div>
+                <div className="mt-6 flex items-center text-slate-500">
 
+                    {/* Placed  */}
+                    <div className="min-width: 70px text-center">
+                        <div
+                            className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
+                                currentStatusIndex >= 0
+                                    ? "bg-green-500 text-white"
+                                    : "bg-gray-300"
+                            }`}
+                        >
+                            {currentStatusIndex >= 0 ? "✓" : "1"}
+                        </div>
+                        
                         <p className="mt-2 text-sm">
                             Placed
                         </p>
                     </div>
-                    
-                    <div className="h-1 flex-1 bg-gray-200 mx-2" />
 
-                    <div className="text-center">
-                        <div className="mx-auto h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                            2
+
+                    {/* Line  */}
+                    <div
+                        className={`mx-2 h-1 flex-1 ${
+                            currentStatusIndex >= 1
+                                ? "bg-green-500"
+                                : "bg-gray-200"
+                        }`}
+                    />
+
+                    {/* Confirmed  */}
+                    <div className="min-width: 80px text-center">
+                        <div
+                            className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
+                                currentStatusIndex >= 1
+                                    ? "bg-green-500 text-white"
+                                    : "bg-gray-300"
+                            }`}
+                        >
+                            {currentStatusIndex >= 1 ? "✓" : "2"}
                         </div>
 
                         <p className="mt-2 text-sm">
                             Confirmed
                         </p>
-                    </div>    
+                    </div>
 
-                    <div className="h-1 flex-1 bg-gray-200 mx-2" />
+                    {/* Line  */}
+                    <div
+                        className={`mx-2 h-1 flex-1 ${
+                            currentStatusIndex >= 2
+                                ? "bg-green-500"
+                                : "bg-gray-200"
+                        }`}
+                    />
 
-                    <div className="text-center">
-                        <div className="mx-auto h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                            3
+                    {/* Shipped  */}
+                    <div className="min-width: 70px text-center">
+                        <div
+                            className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
+                                currentStatusIndex >= 2
+                                    ? "bg-green-500 text-white"
+                                    : "bg-gray-300"
+                            }`}
+                        >
+                            {currentStatusIndex >= 2 ? "✓" : "3"}
                         </div>
 
                         <p className="mt-2 text-sm">
                             Shipped
                         </p>
-                    </div> 
 
-                    <div className="h-1 flex-1 bg-gray-200 mx-2" />
+                    </div>
 
-                    <div className="text-center">
-                        <div className="mx-auto h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                            4
+
+                    {/* Line  */}
+                    <div
+                        className={`mx-2 h-1 flex-1 ${
+                            currentStatusIndex >= 3
+                                ? "bg-green-500"
+                                : "bg-gray-200"
+                        }`}
+                    />
+
+                    {/* Delivered  */}
+                    <div className="min-width: 75px text-center">
+                        <div
+                            className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
+                                currentStatusIndex >= 3
+                                    ? "bg-green-500"
+                                    : "bg-gray-300"
+                            }`}
+                        >
+                            {currentStatusIndex >= 3 ? "✓" : "4"}
                         </div>
 
                         <p className="mt-2 text-sm">
                             Delivered
                         </p>
-                    </div> 
+                    </div>
 
                 </div>
-            </div>
+           </div>
 
             {/* products  */}
             <div className="mt-8 rounded-2xl border bg-white p-6">
@@ -190,22 +262,55 @@ export default function OrderDetailsPage() {
                             key={item.id}
                             className="flex items-center justify-between border-b pb-5 last:border-b-0 last:pb-0 text-slate-600"
                         >
-                            <div>
-                                <h3 className="font-semibold">
-                                    {item.product.title}
-                                </h3>
+                            <div className="flex items-center gap-4">
 
-                                <p>
-                                   ₹{Number(item.price).toFixed(2)}
-                                   {" x "}
-                                   {item.quantity} 
-                                </p>
-                            </div> 
+                                {item.variant.image || item.product.image ? (
+                                    <img
+                                        src={item.variant.image || item.product.image}
+                                        alt={item.product.title}
+                                        className="h-20 w-20 rounded-lg object-cover"
+                                    />   
+                                ) : (
+                                    <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">
+                                        No image
+                                    </div>    
+                                 )}
 
-                            <p>
+
+                            
+                                <div>
+                                    <h3 className="font-semibold">
+                                        {item.product.title}
+                                    </h3>
+
+                                    {item.variant.color && (
+                                        <p className="text-sm text-gray-500">
+                                            Color: {item.variant.color}
+                                        </p>
+                                    )}
+
+                                    {item.variant.storage && (
+                                        <p className="text-sm text-gray-500">
+                                            Storage: {item.variant.storage}
+                                        </p>
+                                    )}
+
+                                    <p className="text-sm text-gray-500">
+                                        SKU: {item.variant.sku}
+                                    </p>
+
+                                    <p className="mt-1">
+                                        ₹{Number(item.price).toFixed(2)}
+                                        {" x "}
+                                        {item.quantity} 
+                                    </p>
+                                </div> 
+                            </div>
+                            <p className="font-semibold">
                             ₹{(Number(item.price) * item.quantity).toFixed(2)}
                             </p>   
-                        </div>    
+                        </div>
+                        
                     ))}
                 </div>
 
