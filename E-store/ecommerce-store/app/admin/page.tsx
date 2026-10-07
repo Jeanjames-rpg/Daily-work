@@ -31,33 +31,36 @@ export default async function AdminPage() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
-                <div className="rounded-2xl border bg-white p-6 shadow-sm">
-                    <Link 
-                        href="/admin/products"
-                        className="text-lg font-semibold text-slate-500"
-                    >
+                <Link 
+                    className="rounded-2xl border bg-white p-6 shadow-sm"
+                    href="/admin/products"
+                >
+                    <h2 className="text-lg font-semibold text-slate-500">
                         Products
-                    </Link>
+                    </h2>
 
                     <p className="mt-2 text-gray-500">
                         Manage your store products.
                     </p>
-                </div>
+                </Link>
 
-               <div className="rounded-2xl border bg-white p-6 shadow-sm">
-                    <Link 
-                        href="/admin/orders"
-                        className="text-lg font-semibold text-slate-500"
-                    >
+               <Link 
+                    className="rounded-2xl border bg-white p-6 shadow-sm"
+                    href="/admin/orders"    
+                >
+                    <h2 className="text-lg font-semibold text-slate-500">
                         Orders
-                    </Link> 
+                    </h2> 
 
                     <p className="mt-2 text-gray-500">
                         View and manage customer orders
                     </p>
-               </div> 
+               </Link> 
 
-               <div className="rounded-2xl border bg-white p-6 shadow-sm">
+               <Link 
+                    className="block rounded-2xl border bg-white p-6 shadow-sm"
+                    href="/admin/inventory"
+                >
                     <h2 className="text-lg font-semibold text-slate-500">
                         Inventory
                     </h2>
@@ -65,7 +68,7 @@ export default async function AdminPage() {
                     <p className="mt-2 text-gray-500">
                         Manage product stock
                     </p>
-               </div>
+               </Link>
             </div>
 
             {user.role === "OWNER" && (

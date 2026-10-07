@@ -42,6 +42,40 @@ export default function InventoryPage() {
         fetchInventory();
     }, []);
 
+    async function updateStock(variantId: number, stock: number) {
+        try {
+            const response = await fetch(
+                `/api/admin/inventory/${variantId}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        stock,
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                const data = await response.json();
+                alert(data.error || "Failed to update stock");
+                return;
+            }
+
+            setInventory((current) => 
+                current.map((item) =>
+                    item.id === variantId
+                        ? { ...item, stock}
+                        : item
+                )
+            );
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong");
+        }
+    }
+
     if (loading) {
         return (
             <div className="p-8 text-white">
@@ -64,12 +98,13 @@ export default function InventoryPage() {
                 <table className="w-full text-left">
                     <thead className="border-b bg-gray-100">
                         <tr>
-                            <th className="px-6 py-4">Product</th>
-                            <th className="px-6 py-4">Variant</th>
-                            <th className="px-6 py-4">SKU</th>
-                            <th className="px-6 py-4">Price</th>
-                            <th className="px-6 py-4">Stock</th>
-                            <th className="px-6 py-4">Status</th>
+                            <th className="px-6 py-4 text-slate-700">Product</th>
+                            <th className="px-6 py-4 text-slate-700">Variant</th>
+                            <th className="px-6 py-4 text-slate-700">SKU</th>
+                            <th className="px-6 py-4 text-slate-700">Price</th>
+                            <th className="px-6 py-4 text-slate-700">Stock</th>
+                            <th className="px-6 py-4 text-slate-700">Status</th>
+                            <th className="px-6 py-4 text-slate-400">Action</th>
                         </tr>
                     </thead>
 
@@ -79,7 +114,7 @@ export default function InventoryPage() {
                                 key={item.id}
                                 className="border-b last:border-0"
                             >
-                                <td className="px-6 py-4 font-medium">
+                                <td className="px-6 py-4 font-medium text-slate-600">
                                     {item.product.title}    
                                 </td>            
 
@@ -92,11 +127,11 @@ export default function InventoryPage() {
                                     {item.sku}
                                 </td>
 
-                                <td className="px-6 py-4">
+                                <td className="px-6 py-4 text-slate-600">
                                     ₹{Number(item.price).toLocaleString()}
                                 </td>
 
-                                <td className="px-6 py-4 font-semibold">
+                                <td className="px-6 py-4 font-semibold text-slate-600">
                                     {item.stock}
                                 </td>
 
@@ -116,6 +151,29 @@ export default function InventoryPage() {
                                     )
                                     
                                     }
+                                </td>
+
+                                <td className="px-6 py-4">
+                                    <button 
+                                        type="button"
+                                        onClick={() => {
+                                            const newStock = prompt("Enter new stock:", String(item.stock));
+
+                                            if (newStock === null) return;
+
+                                            const stock = Number(newStock);
+
+                                            if (!Number.isInteger(stock) || stock < 0){
+                                                alert("Please enter a valid stock number.");
+                                                return;
+                                            }
+
+                                            updateStock(item.id, stock);
+                                        }}
+                                        className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                                    >
+                                        Edit Stock
+                                    </button>
                                 </td>
                             </tr>
                         ))}
