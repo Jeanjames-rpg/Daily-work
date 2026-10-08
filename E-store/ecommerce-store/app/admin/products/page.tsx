@@ -1,6 +1,7 @@
 "use client";
 
 import React, {  useEffect, useState } from "react";
+import Image from "next/image";
 
 
 type Product = {
@@ -39,6 +40,17 @@ export default function AdminProductsPage() {
     >([]);
 
     const [categoryId, setCategoryId] = useState("");
+
+    const [variants, setVariants] = useState([
+        {
+            sku: "",
+            color: "",
+            storage: "",
+            price: "",
+            stock: "",
+            image: "",
+        },
+    ]);
 
     async function fetchProducts() {
         try {
@@ -127,6 +139,43 @@ async function handleDelete(id: number) {
             setError("Something went wrong.");
         }
     }
+
+    function addVariant() {
+        setVariants((current) => [
+            ...current,
+            {
+                sku:"",
+                color: "",
+                storage: "",
+                price: "",
+                stock: "",
+                image: "",
+            },
+        ]);
+    }
+
+    function removeVariant(index: number) {
+        setVariants((current) => 
+            current.filter((_, i) => i !== index)
+        );
+    }
+
+    function updateVariant(
+        index: number,
+        field: string,
+        value: string
+    ) {
+        setVariants((current) => 
+            current.map((variant, i) => 
+                i === index
+                    ? {
+                        ...variant,
+                        [field]: value,
+                    }
+                    : variant
+            )
+        );
+    }
     
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -154,6 +203,15 @@ async function handleDelete(id: number) {
                     image,
                     stock: Number(stock),
                     categoryId: Number(categoryId),
+
+                    variants: variants.map((variant) => ({
+                        sku: variant.sku,
+                        color: variant.color,
+                        storage: variant.storage,
+                        price: Number(variant.price),
+                        stock: Number(variant.stock),
+                        image: variant.image,
+                    })),
                 }),
             });
             
@@ -275,6 +333,146 @@ async function handleDelete(id: number) {
                         required
                     />
 
+                    <div className="md:col-span-2">
+                        <div className="mb-4 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-xl font-semibold text-slate-700">
+                                    Product Variants
+                                </h3>
+
+                                <p className="text-sm text-gray-500">
+                                    Add different versions of this product.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={addVariant}
+                                className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700"
+                            >
+                                + Add Variant
+                            </button>
+                        </div>
+
+                        <div className="space-y-5">
+                            {variants.map((variant, index) => (
+                                <div
+                                    key={index}
+                                    className="rounded-xl border bg-gray-50 p-5"
+                                >
+                                    <div className="mb-4 flex items-center justify-between">
+                                        <h4 className="font-semibold text-slate-700">
+                                            Variant {index + 1}
+                                        </h4>
+
+                                        {variants.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeVariant(index)}
+                                                className="text-sm font-medium text-red-600 hover:text-red-800"
+                                            >
+                                                Remove
+                                            </button>
+                                        )}
+                                    </div> 
+
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        <input
+                                            type="text"
+                                            placeholder="SKU"
+                                            value={variant.sku}
+                                            onChange={(e) => 
+                                                updateVariant(
+                                                    index,
+                                                    "sku",
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                            required
+                                        />
+
+                                        <input
+                                            type="text"
+                                            placeholder="Color"
+                                            value={variant.color}
+                                            onChange={(e) => 
+                                                updateVariant(
+                                                    index,
+                                                    "color",
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+
+                                        <input
+                                            type="text"
+                                            placeholder="Storage"
+                                            value={variant.storage}
+                                            onChange={(e) => 
+                                                updateVariant(
+                                                    index,
+                                                    "storage",
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+
+                                        <input
+                                            type="number"
+                                            placeholder="Variant price"
+                                            min="0"
+                                            step="0.01"
+                                            value={variant.price}
+                                            onChange={(e) => 
+                                                updateVariant(
+                                                    index,
+                                                    "price",
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                            required
+                                        />
+
+                                        <input
+                                            type="number"
+                                            placeholder="Variant stock"
+                                            min="0"
+                                            value={variant.stock}
+                                            onChange={(e) => 
+                                                updateVariant(
+                                                    index,
+                                                    "stock",
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                            required
+                                        />
+
+                                        <input
+                                            type="text"
+                                            placeholder="Variant image path"
+                                            value={variant.image}
+                                            onChange={(e) => 
+                                                updateVariant(
+                                                    index,
+                                                    "image",
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                    </div>       
+                                </div>    
+                            ))}
+                        </div>
+                    
+                    </div>    
+
                     <button
                         type="submit"
                         className="rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-700 md:col-span-2"
@@ -301,6 +499,14 @@ async function handleDelete(id: number) {
                                 key={product.id}
                                 className="rounded-2xl border bg-white p-6 shadow-sm text-slate-700"
                             >
+                                <Image
+                                    src={product.image}
+                                    alt={product.title}
+                                    width={500}
+                                    height={300}
+                                    className="mb-4 h-48 w-full rounded-xl object-cover "
+                                />
+
                                 <h3 className="text-xl font-bold">
                                     {product.title}
                                 </h3>

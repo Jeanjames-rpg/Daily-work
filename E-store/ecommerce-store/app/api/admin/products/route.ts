@@ -36,11 +36,11 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const { title, description, price, image, stock, categoryId,} = body;
+    const { title, description, price, image, stock, categoryId,variants,} = body;
 
-    if (!title || !description || price === undefined || !image || stock === undefined || !categoryId) {
+    if (!title || !description || price === undefined || !image || stock === undefined || !categoryId || !Array.isArray(variants) || variants.length === 0 ) {
         return NextResponse.json(
-            {error: "All fields are required."},
+            {error: "Product and at least one variant are required."},
             {status: 400}
         );
     }
@@ -53,6 +53,27 @@ export async function POST(request: Request) {
             image,
             stock: Number(stock),
             categoryId: Number(categoryId),
+
+            variants: {
+                create: variants.map((variant: {
+                    sku: string;
+                    color?: string;
+                    storage?: string;
+                    price: string | number;
+                    stock: string | number;
+                    image?: string;
+                }) => ({
+                    sku: variant.sku,
+                    color: variant.color || null,
+                    storage: variant.storage || null,
+                    price: Number(variant.price),
+                    stock: Number(variant.stock),
+                    image: variant.image || null,
+                })),
+            }
+        },
+        include: {
+            variants: true,
         },
     });
 
