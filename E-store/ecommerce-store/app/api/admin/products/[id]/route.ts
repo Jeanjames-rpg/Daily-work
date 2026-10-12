@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { use } from "react";
+
 
 
 async function checkAdmin() {
@@ -15,7 +15,7 @@ async function checkAdmin() {
 }
 
 
-// Update PRODUCT 
+// Update PRODUCT and VARIANTS
 export async function PATCH(request: Request,
     context: {
         params: Promise<{ id: string }>;
@@ -34,7 +34,7 @@ export async function PATCH(request: Request,
         const {id} = await context.params;
         const productId = Number(id);
 
-        if (!Number.isInteger(productId)) {
+        if (!Number.isInteger(productId) || productId <= 0) {
             return NextResponse.json(
                 { error: "Invalid product ID."},
                 { status: 400 }
@@ -49,42 +49,158 @@ export async function PATCH(request: Request,
             price,
             image,
             stock,
-            // category,
             categoryId,
+            variants,
         } = body;
 
         if (
-            !title || !description || price === undefined || !image || stock === undefined || !categoryId
+            !title || !description || price === undefined || !image || stock === undefined || !categoryId || !Array.isArray(variants) || variants.length === 0
         ) {
             return NextResponse.json(
-                {error: "All fields are required."},
+                {error: "Product details and at least one variant are required."},
                 {status: 400}
             );
         }
 
-        const product = await prisma.product.update({
-            where: {
-                id: productId,
-            },
-            data: {
-                title,
-                description,
-                price: Number(price),
-                image,
-                stock: Number(stock),
-                categoryId: Number(categoryId),
-            },
+        // Validate variant fields before writing to the database. 
+        for (const variant of variants) {
+            if (
+                !variant.sku?.trim() ||
+                variant.price === undefined ||
+                variant.price === "" ||
+                variant.stock === undefined || 
+                variant.stock === "" ||
+                !Number.isFinite(Number(variant.price)) ||
+                Number(variant.price) < 0 ||
+                !Number.isInteger(Number(variant.stock)) ||
+                Number(variant.stock) < 0
+            ) {
+                return NextResponse.json(
+                    { error: "Each variant needs a SKU, valid price, and valid stock."},
+                    {status: 400}
+                );
+            }
+        }
+
+        const product = await prisma.$transaction(async (tx) => {
+            const existingProduct = await tx.product.findUnique({
+                where: { id: productId },
+                include: { variants: true},
+            });
+
+            if (!existingProduct) {
+                throw new Error("PRODUCT_NOT_FOUND");
+            }
+
+            const existingVariantIds = new Set(
+                existingProduct.variants.map((variant) => variant.id)
+            );
+
+            // Update  product details 
+            await tx.product.update({
+                where: { id: productId},
+                data: {
+                    title,
+                    description,
+                    price: Number(price),
+                    image,
+                    stock: Number(stock),
+                    categoryId: Number(categoryId),
+                },
+            });
+
+            // Update existing variants or  create new ones .
+            for (const variant of variants) {
+                const variantData =  {
+                    sku: variant.sku.trim(),
+                    color: variant.color?.trim() || null,
+                    storage: variant.storage?.trim() || null,
+                    price: Number(variant.price),
+                    stock: Number(variant.stock),
+                    image: variant.image?.trim() || null,
+                };
+
+                if (variant.id !== undefined && variant.id !== null) {
+                    const variantId = Number(variant.id);
+
+                    if (!existingVariantIds.has(variantId)) {
+                        throw new Error("INVALID_VARIANT_ID");
+                    }
+
+                    await tx.productVariant.update({
+                        where: {
+                            id: variantId,
+                            productId,
+                        },
+                        data: variantData,
+                    });
+                } else {
+                    await tx.productVariant.create({
+                        data: {
+                            ...variantData,
+                            productId,
+                        },
+                    });
+                }
+            }
+
+            return tx.product.findUniqueOrThrow({
+                where: { id: productId },
+                include: {
+                    categoryRef: true,
+                    variants: true,
+                },
+            });
         });
 
         return NextResponse.json({
-            message: "Product updated successfully.",
+            message: "Product and variants updated successfully.",
             product,
         });
+
+        // const product = await prisma.product.update({
+        //     where: {
+        //         id: productId,
+        //     },
+        //     data: {
+        //         title,
+        //         description,
+        //         price: Number(price),
+        //         image,
+        //         stock: Number(stock),
+        //         categoryId: Number(categoryId),
+        //     },
+        // });
+
+        // return NextResponse.json({
+        //     message: "Product updated successfully.",
+        //     product,
+        // });
     } catch (error) {
-        console.error("Update product error:", error);
+        // console.error("Update product error:", error);
+
+        // return NextResponse.json(
+        //     { error: "Failed to update product."},
+        //     { status: 500 }
+        // );
+        if (error instanceof Error && error.message === "PRODUCT_NOT_FOUND") {
+            return NextResponse.json(
+                { error: "Product not found."},
+                { status: 404}
+            );
+        }
+
+        if (error instanceof Error && error.message === "INVALID_VARIANT_ID") {
+            return NextResponse.json(
+                { error: "A variant does not belong to this product."},
+                { status: 400 }
+            );
+        }
+
+        console.error("Update product error:",error);
 
         return NextResponse.json(
-            { error: "Failed to update product."},
+            { error: "Failed to update product. Check the SKUs are unique."},
             { status: 500 }
         );
     }

@@ -11,12 +11,31 @@ type Product = {
     price: string;
     image: string;
     stock: number;
-    // category: string;
     categoryId: number | null;
     categoryRef: {
         id: number;
         name: string;
     } | null ;
+
+    variants: {
+        id: number;
+        sku: string;
+        color: string | null;
+        storage: string | null;
+        price: string;
+        stock: number;
+        image: string | null;
+    }[];
+};
+
+type VariantForm = {
+    id?: number;
+    sku: string;
+    color: string;
+    storage: string;
+    price: string;
+    stock: string;
+    image: string;
 };
 
 export default function AdminProductsPage() {
@@ -41,7 +60,7 @@ export default function AdminProductsPage() {
 
     const [categoryId, setCategoryId] = useState("");
 
-    const [variants, setVariants] = useState([
+    const [variants, setVariants] = useState<VariantForm[]>([
         {
             sku: "",
             color: "",
@@ -100,9 +119,20 @@ export default function AdminProductsPage() {
         setPrice(product.price);
         setImage(product.image);
         setStock(String(product.stock));
-        // setCategory(product.category);
         setCategoryId(
             product.categoryId ? String(product.categoryId) : ""
+        );
+        
+        setVariants(
+            product.variants.map((variant) => ({
+                id: variant.id,
+                sku: variant.sku,
+                color: variant.color || "",
+                storage: variant.storage || "",
+                price: variant.price,
+                stock: String(variant.stock),
+                image: variant.image || "",
+            }))
         );
 
         setIsEditing(true);
@@ -205,6 +235,7 @@ async function handleDelete(id: number) {
                     categoryId: Number(categoryId),
 
                     variants: variants.map((variant) => ({
+                        id: variant.id,
                         sku: variant.sku,
                         color: variant.color,
                         storage: variant.storage,
@@ -552,6 +583,35 @@ async function handleDelete(id: number) {
                                         </span>{" "}
                                         {product.categoryRef?.name || "No category"}
                                     </p>
+
+                                    <div className="mt-4 border-t pt-4">
+                                        <p className="font-semibold">
+                                            Variants:
+                                        </p>
+
+                                        <div className="mt-2 space-y-2">
+                                            {product.variants.map((variant) => (
+                                                <div
+                                                    key={variant.id}
+                                                    className="rounded-lg bg-gray-50 p-3 text-sm"
+                                                >
+                                                    <p className="font-medium">
+                                                        {variant.color || "No color"}
+                                                        {variant.storage && ` / ${variant.storage}`}
+                                                    </p>
+
+                                                    <p className="text-gray-500">
+                                                        SKU: {variant.sku}
+                                                    </p>
+
+                                                    <p>
+                                                        ₹{Number(variant.price).toLocaleString()} . Stock:{" "}
+                                                        {variant.stock}
+                                                    </p>
+                                                </div>    
+                                            ))}
+                                        </div>    
+                                    </div>    
 
                                     <div className="mt-5 flex gap-3">
                                         <button

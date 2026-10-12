@@ -25,22 +25,56 @@ type Product = {
 
 type Props = {
     product: Product;
-    varaints: Variant[];
+    variants: Variant[];
     dark?: boolean;
 };
 
 export default function ProductDetailsClient({
     product,
-    varaints,
+    variants,
     dark = false,
 }: Props) {
-    const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
-        varaints[0]?.id ?? null
+
+    const [selectedColor, setSelectedColor] = useState<string | null>(
+        variants[0]?.color ?? null
     );
 
-    const selectedVariant = varaints.find(
+    const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
+        variants[0]?.id ?? null
+    );
+
+    // Show only storage options for the selcted color 
+    const filteredVariants = variants.filter(
+        (variant) => variant.color === selectedColor
+    );
+
+    // Find unique colors.
+    const colors = [
+        ...new Set(
+            variants
+                .map((variant) => variant.color)
+                .filter((color): color is string => Boolean(color))
+        ),
+    ];
+
+    const selectedVariant = variants.find(
         (variant) => variant.id === selectedVariantId
     );
+
+    const handleColorChange = (color: string) => {
+        setSelectedColor(color)
+
+        // Select the first variant available in this color.
+        const firstVariant = variants.find(
+            (variant) => variant.color === color
+        );
+
+        setSelectedVariantId(firstVariant?.id ?? null);
+    };
+
+    const handleStorageChange = (variantId: number) => {
+        setSelectedVariantId(variantId)
+    }
 
     if (!selectedVariant) {
         return (
@@ -63,12 +97,91 @@ export default function ProductDetailsClient({
 
             </div>
 
+            <div className="space-y-5">
+                {/* Color Selection  */}
+                
+                {colors.length > 0 && (
+                    <div>
+                        <p
+                            className={`mb-2 font-medium ${
+                                dark ? "text-gray-300" : "text-gray-700"
+                            }`}
+                        >
+                            Color: {selectedColor}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-2">
+                            {colors.map((color) => (
+                                <button
+                                    key={color}
+                                    type="button"
+                                    onClick={() => handleColorChange(color)}
+                                    className={`rounded-lg border px-4 py-2 ${
+                                        selectedColor === color
+                                             ? dark
+                                                ? "border-white bg-white text-black"
+                                                : "border-black bg-black text-white"
+                                            : dark
+                                                ? "border-gray-600 text-white"
+                                                : "border-gray-300 text-gray-800"
+                                    }`}
+                                >
+                                    {color}
+                                </button>
+                            ))}
+                        </div>    
+                    </div>    
+                )}
+
+                {/* Storage selection  */}
+
+                {filteredVariants.some((variant) => variant.storage) && (
+                    <div>
+                        <p
+                            className={`mb-2 font-medium ${
+                                dark ? "text-gray-300" : "text-gray-700"
+                            }`}
+                        >
+                            Storage
+                        </p>
+
+                        <div>
+                            {filteredVariants
+                            .filter(
+                                (variant) => variant.storage !== null
+                            )
+                            .map((variant) => (
+                                <button
+                                    key={variant.id}
+                                    type="button"
+                                    onClick={() => 
+                                        handleStorageChange(variant.id)
+                                    }
+                                    className={`rounded-lg border px-4 py-2 ${
+                                        selectedVariantId === variant.id
+                                            ? dark
+                                                ? "border-white bg-white text-black"
+                                                : "border-black bg-black text-white"
+                                            : dark
+                                                ? "border-gray-600 text-white"
+                                                : "border-gray-300 text-gray-800"    
+                                    }`}
+                                >
+                                    {variant.storage}
+                                </button>
+                            ))
+                            }
+                        </div>    
+                    </div>    
+                )}
+
+            </div>
 
             {/* Variant Selection  */}
-            <div className="space-y-5">
+            {/* <div className="space-y-5"> */}
 
                 {/* Color  */}
-                {varaints.some((varaint) => varaint.color) && (
+                {/* {variants.some((variant) => variant.color) && (
                     <div>
                         <p
                             className={`mb-2 font-medium ${
@@ -79,17 +192,17 @@ export default function ProductDetailsClient({
                         </p>
 
                         <div>
-                            {varaints
-                                .filter((varaint) => varaint.color)
-                                .map((varaint) => (
+                            {variants
+                                .filter((variant) => variant.color)
+                                .map((variant) => (
                                     <button
-                                        key={varaint.id}
+                                        key={variant.id}
                                         type="button"
                                         onClick={() =>
-                                            setSelectedVariantId(varaint.id)
+                                            setSelectedVariantId(variant.id)
                                         }
                                         className={`rounded border px-4 py-2 ${
-                                            selectedVariantId === varaint.id
+                                            selectedVariantId === variant.id
                                                 ? dark
                                                     ? "border-white bg-white text-black"
                                                     : "border-black bg-black text-white"
@@ -98,16 +211,16 @@ export default function ProductDetailsClient({
                                                     : "border-gray-300 text-gray-800"    
                                         }`}
                                     >
-                                        {varaint.color}
+                                        {variant.color}
                                     </button>
                                 ))
                             }
                         </div>   
                     </div>    
-                )}
+                )} */}
 
                 {/* Storage  */}
-                {varaints.some((varaint) => varaint.storage) && (
+                {/* {variants.some((variant) => variant.storage) && (
                     <div>
                         <p 
                             className={`mb-2 font-medium ${
@@ -118,15 +231,15 @@ export default function ProductDetailsClient({
                         </p>
 
                         <div className="flex flex-wrap gap-2">
-                            {varaints
-                                .filter((varaint) => varaint.storage)
-                                .map((varaint) => (
+                            {variants
+                                .filter((variant) => variant.storage)
+                                .map((variant) => (
                                     <button
-                                        key={varaint.id}
+                                        key={variant.id}
                                         type="button"
-                                        onClick={() => setSelectedVariantId(varaint.id)}
+                                        onClick={() => setSelectedVariantId(variant.id)}
                                         className={`rounded border px-4 py-2 ${
-                                            selectedVariantId === varaint.id
+                                            selectedVariantId === variant.id
                                                 ? dark
                                                     ? "border-white bg-white text-black"
                                                     : "border-black bg-black text-white"
@@ -135,13 +248,13 @@ export default function ProductDetailsClient({
                                                     : "border-gray-300 text-gray-800"
                                         }`}
                                     >
-                                        {varaint.storage}
+                                        {variant.storage}
                                     </button>
                                 ))
                             }
                         </div>    
                     </div>    
-                )}
+                )} */}
 
                 {/* Price */}
                 <p
@@ -149,7 +262,7 @@ export default function ProductDetailsClient({
                         dark ? "text-white" : "text-gray-900"
                     }`}
                 >
-                    ₹{selectedVariant.price.toLocaleString()}
+                    ₹{Number(selectedVariant.price).toLocaleString("en-IN")}
                 </p>
 
                 {/* Stock  */}
@@ -158,21 +271,28 @@ export default function ProductDetailsClient({
                         dark ? "text-gray-400" : "text-gray-600"
                     }`}
                 >
-                    Stock: {selectedVariant.stock}
+                    {selectedVariant.stock > 0
+                        ? `Stock: ${selectedVariant.stock}`
+                        : "Out of stock"
+                    }
                 </p>
 
 
                 {/* Add to cart  */}
                 <AddToCartButton
-                    product={product}
-                    variants={varaints}
+                    product={{
+                        ...product,
+                        price: selectedVariant.price,
+                        stock: selectedVariant.stock,
+                        image: selectedVariant.image || product.image,
+                    }}
+                    variants={variants}
                     selectedVariantId={selectedVariantId}
-                    // onVariantChange={setSelectedVariantId}
                     showQuantity
                     dark={dark}
                 />
             </div>
 
-        </div>
-    )
+        
+    );
 }

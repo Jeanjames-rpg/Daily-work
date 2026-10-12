@@ -74,29 +74,7 @@ return (
             
 
             <div className="mt-8">
-                {/* <AddToCartButton
-                    product={{
-                        id: product.id,
-                        name: product.title,
-                        price: Number(product.price),
-                        image: product.image,
-                        stock: product.stock,
-                        // variantId: product.variants[0]?.id ?? 0,
-                        // color: product.variants[0]?.color ?? null,
-                        // storage: product.variants[0]?.storage ?? null,
-                    }}
-                    variants={product.variants.map((variant) => ({
-                        id: variant.id,
-                        sku: variant.sku,
-                        color: variant.color,
-                        storage: variant.storage,
-                        price: Number(variant.price),
-                        stock: variant.stock,
-                        image: variant.image,
-                    }))}
-                    showQuantity
-                    dark
-                /> */}
+                
 
                 <ProductDetailsClient
                     product={{
@@ -106,7 +84,7 @@ return (
                         image: product.image,
                         stock: product.stock,
                     }}
-                    varaints={product.variants.map((variant) => ({
+                    variants={product.variants.map((variant) => ({
                         id: variant.id,
                         sku: variant.sku,
                         color: variant.color,
