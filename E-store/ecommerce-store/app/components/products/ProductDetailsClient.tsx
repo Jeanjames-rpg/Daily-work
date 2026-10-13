@@ -85,19 +85,19 @@ export default function ProductDetailsClient({
     }
 
     return (
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2 lg:gap-12">
 
             {/* Product Image  */}
             <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
                 <img
                     src={selectedVariant.image || product.image}
                     alt={product.name}
-                    className="h-full max-h-150 w-full object-cover"
+                    className="h-auto max-height: 600px w-full object-contain"
                 />
 
             </div>
 
-            <div className="space-y-5">
+            <div className="flex flex-col gap-6">
                 {/* Color Selection  */}
                 
                 {colors.length > 0 && (
@@ -145,7 +145,7 @@ export default function ProductDetailsClient({
                             Storage
                         </p>
 
-                        <div>
+                        <div className="flex flex-wrap gap-2">
                             {filteredVariants
                             .filter(
                                 (variant) => variant.storage !== null
@@ -175,86 +175,8 @@ export default function ProductDetailsClient({
                     </div>    
                 )}
 
-            </div>
+            
 
-            {/* Variant Selection  */}
-            {/* <div className="space-y-5"> */}
-
-                {/* Color  */}
-                {/* {variants.some((variant) => variant.color) && (
-                    <div>
-                        <p
-                            className={`mb-2 font-medium ${
-                                dark ? "text-gray-300" : "text-gray-700"
-                            }`}
-                        >
-                            Color
-                        </p>
-
-                        <div>
-                            {variants
-                                .filter((variant) => variant.color)
-                                .map((variant) => (
-                                    <button
-                                        key={variant.id}
-                                        type="button"
-                                        onClick={() =>
-                                            setSelectedVariantId(variant.id)
-                                        }
-                                        className={`rounded border px-4 py-2 ${
-                                            selectedVariantId === variant.id
-                                                ? dark
-                                                    ? "border-white bg-white text-black"
-                                                    : "border-black bg-black text-white"
-                                                : dark
-                                                    ? "border-gray-600 text-white"
-                                                    : "border-gray-300 text-gray-800"    
-                                        }`}
-                                    >
-                                        {variant.color}
-                                    </button>
-                                ))
-                            }
-                        </div>   
-                    </div>    
-                )} */}
-
-                {/* Storage  */}
-                {/* {variants.some((variant) => variant.storage) && (
-                    <div>
-                        <p 
-                            className={`mb-2 font-medium ${
-                                dark ? "text-gray-300" : "text-gray-700"
-                            }`}
-                        >
-                            Storage
-                        </p>
-
-                        <div className="flex flex-wrap gap-2">
-                            {variants
-                                .filter((variant) => variant.storage)
-                                .map((variant) => (
-                                    <button
-                                        key={variant.id}
-                                        type="button"
-                                        onClick={() => setSelectedVariantId(variant.id)}
-                                        className={`rounded border px-4 py-2 ${
-                                            selectedVariantId === variant.id
-                                                ? dark
-                                                    ? "border-white bg-white text-black"
-                                                    : "border-black bg-black text-white"
-                                                : dark  
-                                                    ? "border-gray-600 text-white"
-                                                    : "border-gray-300 text-gray-800"
-                                        }`}
-                                    >
-                                        {variant.storage}
-                                    </button>
-                                ))
-                            }
-                        </div>    
-                    </div>    
-                )} */}
 
                 {/* Price */}
                 <p
@@ -291,8 +213,10 @@ export default function ProductDetailsClient({
                     showQuantity
                     dark={dark}
                 />
+                
             </div>
 
+        </div>                
         
     );
 }

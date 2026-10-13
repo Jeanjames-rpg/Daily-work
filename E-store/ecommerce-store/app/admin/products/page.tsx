@@ -2,6 +2,7 @@
 
 import React, {  useEffect, useState } from "react";
 import Image from "next/image";
+import ImageUpload from "@/app/components/admin/ImageUpload";
 
 
 type Product = {
@@ -349,10 +350,16 @@ async function handleDelete(id: number) {
                         required
                     />
 
-                    <input
+                    {/* <input
                         type="text" placeholder="Image path, e.g. /images/headphones.jpg" value={image} onChange={(e) => setImage(e.target.value)}
                         className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 md:col-span-2"
                         required
+                    /> */}
+
+                    <ImageUpload
+                        label="Product Image"
+                        value={image}
+                        onChange={setImage}
                     />
 
                     <textarea 
@@ -484,7 +491,7 @@ async function handleDelete(id: number) {
                                             required
                                         />
 
-                                        <input
+                                        {/* <input
                                             type="text"
                                             placeholder="Variant image path"
                                             value={variant.image}
@@ -496,6 +503,14 @@ async function handleDelete(id: number) {
                                                 )
                                             }
                                             className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                                        /> */}
+
+                                        <ImageUpload
+                                            label="Variant Image"
+                                            value={variant.image}
+                                            onChange={(value) => 
+                                                updateVariant(index, "image", value)
+                                            }
                                         />
                                     </div>       
                                 </div>    

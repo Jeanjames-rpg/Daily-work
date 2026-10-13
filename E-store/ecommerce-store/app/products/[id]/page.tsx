@@ -37,22 +37,9 @@ return (
         ← Back to Products
     </Link>
 
-    <section className="grid gap-10 md:grid-cols-2">
+    <section>
 
-        {/* Product Image */}
-        {/* <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
-            {product.image ? (
-                <img
-                    src={product.image}
-                    alt={product.title}
-                    className="h-full max-h-150 w-full object-cover"
-                />
-            ) : (
-                <div className="flex h-100 items-center justify-center text-gray-400">
-                    No image available
-                </div>
-            )}
-        </div> */}
+       
 
         {/* Product Information */}
         <div className="flex flex-col justify-center">
