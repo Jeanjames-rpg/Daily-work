@@ -43,22 +43,44 @@ export async function PATCH(request: Request,
 
         const body = await request.json();
 
-        const {
-            title,
-            description,
-            price,
-            image,
-            stock,
-            categoryId,
-            variants,
-        } = body;
+        // const {
+        //     title,
+        //     description,
+        //     price,
+        //     image,
+        //     stock,
+        //     categoryId,
+        //     variants,
+        // } = body;
+
+        const { title, description, categoryId, variants} = body;
+
+        // Validate product details 
+
+        // if (
+        //     !title || !description || price === undefined || !image || stock === undefined || !categoryId || !Array.isArray(variants) || variants.length === 0
+        // ) {
+        //     return NextResponse.json(
+        //         {error: "Product details and at least one variant are required."},
+        //         {status: 400}
+        //     );
+        // }
 
         if (
-            !title || !description || price === undefined || !image || stock === undefined || !categoryId || !Array.isArray(variants) || variants.length === 0
+            typeof title !== "string" ||
+            !title.trim() ||
+            typeof description !== "string" ||
+            !description.trim() ||
+            !Number.isInteger(Number(categoryId)) ||
+            Number(categoryId) <= 0 ||
+            !Array.isArray(variants) ||
+            variants.length === 0
         ) {
             return NextResponse.json(
-                {error: "Product details and at least one variant are required."},
-                {status: 400}
+                {
+                    error : "Enter a product title, description, valid vategory, and at least one variant.",
+                },
+                {status: 400 }
             );
         }
 
@@ -73,10 +95,12 @@ export async function PATCH(request: Request,
                 !Number.isFinite(Number(variant.price)) ||
                 Number(variant.price) < 0 ||
                 !Number.isInteger(Number(variant.stock)) ||
-                Number(variant.stock) < 0
+                Number(variant.stock) < 0 ||
+                typeof variant.image !== "string" ||
+                !variant.image.trim()
             ) {
                 return NextResponse.json(
-                    { error: "Each variant needs a SKU, valid price, and valid stock."},
+                    { error: "Each variant needs a SKU,image, valid price, and valid stock."},
                     {status: 400}
                 );
             }
@@ -96,15 +120,18 @@ export async function PATCH(request: Request,
                 existingProduct.variants.map((variant) => variant.id)
             );
 
+            // Use the first variant as the product's default values 
+            const firstVariant = variants[0];
+
             // Update  product details 
             await tx.product.update({
                 where: { id: productId},
                 data: {
-                    title,
-                    description,
-                    price: Number(price),
-                    image,
-                    stock: Number(stock),
+                    title: title.trim() ,
+                    description: description.trim(),
+                    price: Number(firstVariant.price),
+                    image: firstVariant.image.trim(),
+                    stock: Number(firstVariant.stock),
                     categoryId: Number(categoryId),
                 },
             });
@@ -113,11 +140,17 @@ export async function PATCH(request: Request,
             for (const variant of variants) {
                 const variantData =  {
                     sku: variant.sku.trim(),
-                    color: variant.color?.trim() || null,
-                    storage: variant.storage?.trim() || null,
+                    color: 
+                        typeof variant.color === "string"    
+                            ? variant.color?.trim() || null
+                            : null,
+                    storage: 
+                        typeof variant.storage === "string"
+                            ? variant.storage?.trim() || null
+                            : null,
                     price: Number(variant.price),
                     stock: Number(variant.stock),
-                    image: variant.image?.trim() || null,
+                    image: variant.image?.trim() ,
                 };
 
                 if (variant.id !== undefined && variant.id !== null) {
@@ -130,7 +163,7 @@ export async function PATCH(request: Request,
                     await tx.productVariant.update({
                         where: {
                             id: variantId,
-                            productId,
+                            // productId,
                         },
                         data: variantData,
                     });
@@ -158,31 +191,9 @@ export async function PATCH(request: Request,
             product,
         });
 
-        // const product = await prisma.product.update({
-        //     where: {
-        //         id: productId,
-        //     },
-        //     data: {
-        //         title,
-        //         description,
-        //         price: Number(price),
-        //         image,
-        //         stock: Number(stock),
-        //         categoryId: Number(categoryId),
-        //     },
-        // });
-
-        // return NextResponse.json({
-        //     message: "Product updated successfully.",
-        //     product,
-        // });
+        
     } catch (error) {
-        // console.error("Update product error:", error);
-
-        // return NextResponse.json(
-        //     { error: "Failed to update product."},
-        //     { status: 500 }
-        // );
+        
         if (error instanceof Error && error.message === "PRODUCT_NOT_FOUND") {
             return NextResponse.json(
                 { error: "Product not found."},
@@ -200,7 +211,7 @@ export async function PATCH(request: Request,
         console.error("Update product error:",error);
 
         return NextResponse.json(
-            { error: "Failed to update product. Check the SKUs are unique."},
+            { error: "Failed to update product. Check the category and ensure all SKUs are unique."},
             { status: 500 }
         );
     }

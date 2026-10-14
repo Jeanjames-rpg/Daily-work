@@ -47,10 +47,9 @@ export default function AdminProductsPage() {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    const [image, setImage] = useState("");
-    const [stock, setStock] = useState("");
-    // const [category, setCategory] = useState("");
+    // const [price, setPrice] = useState("");
+    // const [image, setImage] = useState("");
+    // const [stock, setStock] = useState("");
     
     const [editingProduct, setEditingProduct] = useState<Product | null >(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -117,9 +116,9 @@ export default function AdminProductsPage() {
 
         setTitle(product.title);
         setDescription(product.description);
-        setPrice(product.price);
-        setImage(product.image);
-        setStock(String(product.stock));
+        // setPrice(product.price);
+        // setImage(product.image);
+        // setStock(String(product.stock));
         setCategoryId(
             product.categoryId ? String(product.categoryId) : ""
         );
@@ -214,6 +213,11 @@ async function handleDelete(id: number) {
         setMessage("");
         setError("");
 
+        if (variants.length === 0) {
+            setError("Add at least one product variant.");
+            return;
+        }
+
         try {
 
             const url = isEditing
@@ -230,16 +234,19 @@ async function handleDelete(id: number) {
                 body: JSON.stringify({
                     title,
                     description,
-                    price: Number(price),
-                    image,
-                    stock: Number(stock),
+                    // price: Number(price),
+                    // image,
+                    // stock: Number(stock),
                     categoryId: Number(categoryId),
 
                     variants: variants.map((variant) => ({
-                        id: variant.id,
-                        sku: variant.sku,
-                        color: variant.color,
-                        storage: variant.storage,
+                        ...(variant.id !== undefined && {
+                            id: variant.id,
+                        }),
+                        // id: variant.id,
+                        sku: variant.sku.trim(),
+                        color: variant.color.trim() || null,
+                        storage: variant.storage.trim() || null,
                         price: Number(variant.price),
                         stock: Number(variant.stock),
                         image: variant.image,
@@ -250,7 +257,7 @@ async function handleDelete(id: number) {
             const data = await response.json();
 
             if (!response.ok) {
-                setError(data.error || "Failed to create product.");
+                setError(data.error || `Failed to ${isEditing ? "update" : "create"} product.`);
                 return;
             }
 
@@ -258,10 +265,21 @@ async function handleDelete(id: number) {
 
             setTitle("");
             setDescription("");
-            setPrice("");
-            setImage("");
-            setStock("");
+            // setPrice("");
+            // setImage("");
+            // setStock("");
             setCategoryId("");
+
+            setVariants([
+                {
+                    sku: "",
+                    color: "",
+                    storage: "",
+                    price: "",
+                    stock: "",
+                    image: "",
+                },
+            ]);
 
             setEditingProduct(null);
             setIsEditing(false);
@@ -338,7 +356,7 @@ async function handleDelete(id: number) {
                         ))}
                     </select>
 
-                    <input
+                    {/* <input
                         type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} min="0" step="0.01"
                         className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                         required
@@ -348,7 +366,7 @@ async function handleDelete(id: number) {
                         type="number" placeholder="Stock" value={stock} onChange={(e) => setStock(e.target.value)} min="0"
                         className="rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                         required
-                    />
+                    /> */}
 
                     {/* <input
                         type="text" placeholder="Image path, e.g. /images/headphones.jpg" value={image} onChange={(e) => setImage(e.target.value)}
@@ -356,11 +374,11 @@ async function handleDelete(id: number) {
                         required
                     /> */}
 
-                    <ImageUpload
+                    {/* <ImageUpload
                         label="Product Image"
                         value={image}
                         onChange={setImage}
-                    />
+                    /> */}
 
                     <textarea 
                         placeholder="Product description"
