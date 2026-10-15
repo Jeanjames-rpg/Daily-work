@@ -1,4 +1,5 @@
 import { verifySession } from "@/lib/auth";
+import { calculatePrice } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -35,7 +36,17 @@ export async function POST(request:Request) {
         // get request body 
         
         const body = await request.json();
-        const { items } = body;
+        const { items, couponCode } = body;
+
+        if (
+            couponCode !== undefined &&
+            (typeof couponCode !== "string" || couponCode.length > 100) 
+        ) {
+            return NextResponse.json(
+                { error: "Invalid coupon code."},
+                { status: 400 }
+            );
+        }
 
         if (!items || !Array.isArray(items) || items.length === 0) {
             return NextResponse.json(
@@ -91,7 +102,21 @@ export async function POST(request:Request) {
 
         // calculate total and prepare order items 
 
-        let total = 0;
+        // let total = 0;
+        const quantities = new Map<number, number>();
+
+        for (const item of items) {
+            if (quantities.has(item.variantId)) {
+                return NextResponse.json(
+                    { error: "Duplicate product variants are not allowed."},
+                    { status: 400 }
+                );
+            }
+
+            quantities.set(item.variantId, item.quantity);
+        }
+
+        let subtotal = 0;
 
         const orderItems: {
             productId: number;
@@ -126,9 +151,12 @@ export async function POST(request:Request) {
                 );
             }
 
-            const price = Number(variant.price);
+            subtotal += Number(variant.price) * item.quantity;
 
-            total += price * item.quantity;
+
+            // const price = Number(variant.price);
+
+            // total += price * item.quantity;
 
             orderItems.push({
                 productId: variant.productId,
@@ -139,6 +167,26 @@ export async function POST(request:Request) {
             });
         }
 
+        let pricing;
+
+        try {
+            pricing = await calculatePrice(subtotal, couponCode); 
+        } catch (error) {
+            return NextResponse.json(
+                {
+                    error:
+                        error instanceof Error
+                            ? error.message
+                            : "Unable to calculate your order price.",
+                },
+                { status: 400 }
+            );
+        }
+
+        const total = Number(pricing.total.toFixed(2));
+        const discount = Number(pricing.totalDiscount.toFixed(2));
+        const finalSubtotal = Number(subtotal.toFixed(2));
+
         // create order + order items + update stock 
         const order = await prisma.$transaction(async (tx) => {
             const newOrder = await tx.order.create({
@@ -146,6 +194,9 @@ export async function POST(request:Request) {
                     userId,
                     total,
                     items: {create: orderItems,},
+                    subtotal: finalSubtotal,
+                    discount,
+                    couponCode: pricing.appliedCoupon,
 
                 },
             });
@@ -193,6 +244,18 @@ export async function POST(request:Request) {
             {
                 message: "Order placed successfully.",
                 orderId: order.id,
+                pricing: {
+                    subtotal: finalSubtotal,
+                    automaticDiscount: Number(
+                        pricing.automaticDiscount.toFixed(2)
+                    ),
+                    couponDiscount: Number(
+                        pricing.couponDiscount.toFixed(2)
+                    ),
+                    discount,
+                    couponCode: pricing.appliedCoupon,
+                    total,
+                },
             },
             {status: 201}
         );
