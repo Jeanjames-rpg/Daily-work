@@ -10,7 +10,8 @@ type Variant = {
     storage: string | null;
     price: number;
     stock: number;
-}
+    image: string | null;
+};
 
 
 type Product = {

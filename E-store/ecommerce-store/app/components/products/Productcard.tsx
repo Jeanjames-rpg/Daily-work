@@ -19,6 +19,7 @@ type Product = {
     price: number;
     image: string;
     stock: number;
+    categoryId: number;
     categoryName?: string;
     variants: Variant[];
 };

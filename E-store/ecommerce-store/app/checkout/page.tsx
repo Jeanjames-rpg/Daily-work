@@ -18,6 +18,18 @@ export default function CheckoutPage() {
     const [loading, setLoading] = useState(true);
     const [placingOrder, setPlacingOrder] = useState(false);
     const [error, setError] = useState("");
+    const [couponCode, setCouponCode] = useState("");
+    const [couponMessage, setCouponMessage] = useState("");
+    const [discountResult, setDiscountResult] = useState<{
+        subtotal: number;
+        automaticDiscount: number;
+        couponDiscount: number;
+        totalDiscount: number;
+        total: number;
+        appliedCoupon: string | null;
+    } | null >(null);
+
+    const [applyingCoupon, setApplyingCoupon] = useState(false);
 
     useEffect(() => {
         async function checkAuth() {
@@ -40,6 +52,43 @@ export default function CheckoutPage() {
 
         checkAuth();
     }, [router]);
+
+    async function handleApplyCoupon() {
+        setApplyingCoupon(true) ;
+        setCouponMessage("");
+        setDiscountResult(null);
+
+        try {
+            const response = await fetch("/api/discounts/apply", {
+                method: "Post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    subtotal: total,
+                    couponCode: couponCode.trim(),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setCouponMessage(data.error || "Unable to apply coupon.");
+                return;
+            }
+
+            setDiscountResult(data);
+            setCouponMessage(
+                data.appliedCoupon 
+                    ? `Coupon ${data.appliedCoupon} applied successfully!`
+                    : "Automatic promotion calculated."
+            );
+        } catch {
+            setCouponMessage("Something went wrong. Please try again.");
+        } finally {
+            setApplyingCoupon(false);
+        }
+    }
 
     if (loading) {
         return (
@@ -153,6 +202,47 @@ export default function CheckoutPage() {
                         Order Summary
                     </h2>
 
+                    {/* Coupon section  */}
+                    <div className="mb-6">
+                        <label
+                            htmlFor="couponCode"
+                            className="mb-2 block text-sm font-medium"
+                        >
+                            Have a coupon
+                        </label>
+
+                        <div className="flex gap-2">
+                            <input
+                                id="couponCode"
+                                type="text"
+                                value={couponCode}
+                                onChange={(e) => setCouponCode(e.target.value)}
+                                placeholder="Enter coupon code"
+                                className="min-w-0 flex-1 rounded-lg border px-3 py-2"
+                            />
+
+                            <button
+                                type="button"
+                                // onClick={() => {
+                                //     setCouponMessage(
+                                //         "Coupon validation will be connected in the next step."
+                                //     );
+                                // }}
+                                onClick={handleApplyCoupon}
+                                disabled={applyingCoupon}
+                                className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+                            >
+                                {applyingCoupon ? "Applying..." : "Apply"}
+                            </button>
+                        </div>
+
+                        {couponMessage && (
+                            <p className="mt-2 text-sm">
+                                {couponMessage}
+                            </p>
+                        )}
+                    </div>
+
                     <div className="space-y-4">
                         {cart.map((item) => (
                             <div 
@@ -176,9 +266,45 @@ export default function CheckoutPage() {
                         ))}
                     </div>
 
-                    <div className="flex justify-between text-xl font-bold mt-6">
+                    {/* <div className="flex justify-between text-xl font-bold mt-6">
                         <span>Total</span>
                         <span>₹{total}</span>
+                    </div> */}
+
+                    {discountResult && (
+                        <div className="mt-4 space-y-2 text-sm">
+                            <div className="flex justify-between">
+                                <span>Automatic discount</span>
+
+                                <span>
+                                    -₹{discountResult.automaticDiscount.toFixed(2)}
+                                </span>
+                            </div>    
+
+                            <div>
+                                <span>Coupon discount</span>
+
+                                <span>
+                                    -₹{discountResult.couponDiscount.toFixed(2)}
+                                </span>
+                            </div>    
+
+                            <div className="flex justify-between font-medium">
+                                <span>Total savings</span>
+
+                                <span>
+                                    ₹{discountResult.totalDiscount.toFixed(2)}
+                                </span>
+                            </div>    
+                        </div>    
+                    )}
+
+                    <div className="mt-6 flex justify-between text-xl font-bold">
+                        <span>Total</span>
+
+                        <span>
+                            ₹{(discountResult?.total ?? total).toFixed(2)}
+                        </span>
                     </div>
                     
                     {error && (

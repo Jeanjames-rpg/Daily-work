@@ -74,7 +74,7 @@ export async function calculatePrice(subtotal:number, couponCode?: string) {
             where: { code: couponCode.trim().toUpperCase() },
         });
 
-        if (!coupon || coupon.isActive) {
+        if (!coupon || !coupon.isActive) {
             throw new Error("Invalid or inactive coupon.");
         }
 
