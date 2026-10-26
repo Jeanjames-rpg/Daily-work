@@ -69,10 +69,23 @@ export default async function AdminPage() {
                         Manage product stock
                     </p>
                </Link>
+               
+               <Link
+                className="rounded-2xl border bg-white p-6 shadow-sm"
+                href="/admin/discounts"
+               >
+                    <h2 className="text-lg font-semibold text-slate-500">
+                            Discounts & Coupons
+                    </h2>
+
+                    <p className="mt-2 text-gray-500">
+                        Create and manage discount coupons and promotions.
+                    </p>
+               </Link>
             </div>
 
             {user.role === "OWNER" && (
-                <div>
+                <div className="mt-5">
                     <h2 className="text-lg font-semibold">
                         Owner Controls
                     </h2>
