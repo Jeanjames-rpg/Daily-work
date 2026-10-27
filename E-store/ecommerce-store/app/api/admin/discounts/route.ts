@@ -85,7 +85,7 @@ function parseDiscount(body: Record<string, unknown>) {
     const end = parseDate(endsAt, "end date");
 
     if (start && end && start > end) {
-        throw new Error("End date must be after state date.");
+        throw new Error("End date must be after start date.");
     }
 
     const minOrderValue = parseOptionalAmount(minOrder, "Minimum order");
@@ -94,7 +94,11 @@ function parseDiscount(body: Record<string, unknown>) {
     const perUserLimitValue = parseOptionalInteger(perUserLimit, "Per-user limit");
 
     if (usageLimitValue === 0 || perUserLimitValue === 0) {
-        throw new Error("Usage limits must be grater than zero.");
+        throw new Error("Usage limits must be greater than zero.");
+    }
+
+    if (isActive !== undefined && typeof isActive !== "boolean") {
+        throw new Error("isActive must be a boolean.");
     }
 
     return {
@@ -205,25 +209,31 @@ export async function POST(request: Request) {
 
         return NextResponse.json({ coupon }, {status: 201});
     } catch (error) {
-        if ( error instanceof Error) {
-            if (error.message.includes("Unique cosntraint")) {
+            if (
+                error instanceof Prisma.PrismaClientKnownRequestError &&
+                error.code === "P2002"
+            ) {
                 return NextResponse.json(
                     { error: "That coupon code already exists."},
                     { status: 409}
                 );
             }
 
-            if (
-                error.message.includes("required") ||
-                error.message.includes("Invalid") ||
-                error.message.includes("must") ||
-                error.message.includes("cannot exceed")
-            ) {
-                return NextResponse.json({ error: error.message }, { status: 400 });
-            }
+
+            if (error instanceof Error) {
+
+                if (
+                    error.message.includes("required") ||
+                    error.message.includes("Invalid") ||
+                    error.message.includes("must") ||
+                    error.message.includes("cannot exceed")
+                ) {
+                    return NextResponse.json({ error: error.message }, { status: 400 });
+                }
         }
 
         console.error("Create discount error:", error);
+        
         return NextResponse.json(
             { error: "Failed to create discount."},
             { status: 500 }

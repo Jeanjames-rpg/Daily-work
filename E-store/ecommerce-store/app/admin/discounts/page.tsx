@@ -12,6 +12,9 @@ type Coupon = {
     minOrder: string | null;
     usedCount: number;
     usageLimit: number | null;
+    startsAt: string | null;
+    endsAt: string | null;
+    maxDiscount: string | null;
 };
 
 type Promotion = {
@@ -23,7 +26,17 @@ type Promotion = {
     minOrder: string | null;
     startsAt: string | null;
     endsAt: string | null;
+    maxDiscount: string | null;
 };
+
+function formatDate(date: string | null) {
+    if (!date) return "No restriction";
+
+    return new Date(date).toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "short",
+    });
+}
 
 export default function DiscountsPage() {
     const [coupons, setCoupons] = useState<Coupon[]>([]);
@@ -42,6 +55,15 @@ export default function DiscountsPage() {
     const [promotionType, setPromotionType] = useState<"PERCENTAGE" | "FIXED">("PERCENTAGE");
     const [promotionValue, setPromotionValue] = useState("");
     const [promotionMinOrder, setPromotionMinOrder] = useState("");
+
+    const [promotionStartsAt, setPromotionStartsAt] = useState("");
+    const [promotionEndsAt, setPromotionEndsAt] = useState("");
+    const [promotionMaxDiscount, setPromotionMaxDiscount] = useState("");
+
+    const [startsAt, setStartsAt] = useState("");
+    const [endsAt, setEndsAt] = useState("");
+    const [maxDiscount, setMaxDiscount] = useState("");
+    const [usageLimit, setUsageLimit] = useState("");
 
     useEffect(() => {
         async function fetchDiscounts() {
@@ -83,6 +105,10 @@ export default function DiscountsPage() {
                     value: Number(value),
                     minOrder: minOrder ? Number(minOrder) : null,
                     isActive: true,
+                    startsAt: startsAt ? new Date(startsAt).toISOString() : null,
+                    endsAt: endsAt ? new Date(endsAt).toISOString() : null,
+                    maxDiscount: maxDiscount ? Number(maxDiscount) : null,
+                    usageLimit: usageLimit ? Number(usageLimit) : null,
                 }),
             });
 
@@ -96,6 +122,12 @@ export default function DiscountsPage() {
             setCode("");
             setValue("");
             setMinOrder("");
+
+            setStartsAt("");
+            setEndsAt("");
+            setMaxDiscount("");
+            setUsageLimit("");
+
             setMessage("Coupon created successfully!");
         } catch (error) {
             setMessage(
@@ -126,6 +158,15 @@ export default function DiscountsPage() {
                         ? Number(promotionMinOrder)
                         : null,
                         isActive: true,
+                    startsAt: promotionStartsAt
+                        ? new Date(promotionStartsAt).toISOString()
+                        : null,
+                    endsAt: promotionEndsAt
+                        ? new Date(promotionEndsAt).toISOString()
+                        : null,
+                    maxDiscount: promotionMaxDiscount
+                        ? Number(promotionMaxDiscount)
+                        : null,
                 }),
             });
 
@@ -139,6 +180,11 @@ export default function DiscountsPage() {
             setPromotionName("");
             setPromotionValue("");
             setPromotionMinOrder("");
+
+            setPromotionStartsAt("");
+            setPromotionEndsAt("");
+            setPromotionMaxDiscount("");
+
             setMessage("Promotion created successfully!");
         } catch (error) {
             setMessage(
@@ -248,6 +294,33 @@ export default function DiscountsPage() {
                         className="rounded-lg border p-3"
                     />
 
+                    <input
+                        type="datetime-local"
+                        value={promotionStartsAt}
+                        onChange={(e) => setPromotionStartsAt(e.target.value)}
+                        aria-label="Promotion start date"
+                        className="rounded-lg border p-3"
+                    />    
+
+                    <input
+                        type="datetime-local"
+                        value={promotionEndsAt}
+                        min={promotionStartsAt || undefined}
+                        onChange={(e) => setPromotionEndsAt(e.target.value)}
+                        aria-label="Promotion end date"
+                        className="rounded-lg border p-3"
+                    />
+
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={promotionMaxDiscount}
+                        onChange={(e) => setPromotionMaxDiscount(e.target.value)}
+                        placeholder="Maximum discount (₹, optional)"
+                        className="rounded-lg border p-3"
+                    />
+
                     <button
                         type="submit"
                         disabled={saving}
@@ -270,6 +343,9 @@ export default function DiscountsPage() {
                                     <th className="p-3 text-slate-600">Name</th>
                                     <th className="p-3 text-slate-600">Discounts</th>
                                     <th className="p-3 text-slate-600">Minimum Orders</th>
+                                    <th className="p-3 text-slate-600">Starts At</th>
+                                    <th className="p-3 text-slate-600">Ends At</th>
+                                    <th className="p-3 text-slate-600">Max Discount</th>
                                     <th className="p-3 text-slate-600">Status</th>
                                 </tr>
                             </thead>
@@ -289,6 +365,22 @@ export default function DiscountsPage() {
                                                 : "No minimum"
                                             }
                                         </td>
+
+                                        <td className="p-3 whitespace-nowrap">
+                                            {formatDate(promotion.startsAt)}
+                                        </td>    
+
+                                        <td className="p-3 whitespace-nowrap">
+                                            {formatDate(promotion.endsAt)}
+                                        </td>
+
+                                        <td className="p-3 whitespace-nowrap">
+                                            {promotion.maxDiscount
+                                                ? `₹${promotion.maxDiscount}`
+                                                : "No cap"
+                                            }
+                                        </td>
+
                                         <td className="p-3">
                                             <button
                                                 type="button"
@@ -361,6 +453,43 @@ export default function DiscountsPage() {
                     className="rounded-lg border p-3"
                 />
 
+                <input
+                    type="datetime-local"
+                    value={startsAt}
+                    onChange={(e) => setStartsAt(e.target.value)}
+                    className="rounded-lg border p-3"
+                    aria-label="Coupon start date"
+                />
+
+                <input
+                    type="datetime-local"
+                    value={endsAt}
+                    min={startsAt || undefined}
+                    onChange={(e) => setEndsAt(e.target.value)}
+                    className="rounded-lg border p-3"
+                    aria-label="Coupon end date"
+                />
+
+                <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={maxDiscount}
+                    onChange={(e) => setMaxDiscount(e.target.value)}
+                    placeholder="Maximum discount (₹, optional)"
+                    className="rounded-lg border p-3"
+                />
+
+                <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={usageLimit}
+                    onChange={(e) => setUsageLimit(e.target.value)}
+                    placeholder="Total usage limit (optional)"
+                    className="rounded-lg border p-3"
+                />
+
                 <button
                     type="submit"
                     disabled={saving}
@@ -389,6 +518,9 @@ export default function DiscountsPage() {
                                 <th className="p-3 text-slate-700">Discount</th>
                                 <th className="p-3 text-slate-700">Minimum Order</th>
                                 <th className="p-3 text-slate-700">Usage</th>
+                                <th className="p-3 text-slate-700" >Starts At</th>
+                                <th className="p-3 text-slate-700" >Ends At</th>
+                                <th className="p-3 text-slate-700">Max Discount</th>
                                 <th className="p-3 text-slate-700">Status</th>
                             </tr>
                         </thead>
@@ -414,6 +546,21 @@ export default function DiscountsPage() {
                                         {coupon.usageLimit !== null
                                             ? ` / ${coupon.usageLimit}`
                                             : " / Unlimited"
+                                        }
+                                    </td>
+
+                                    <td className="p-3 whitespace-nowrap">
+                                        {formatDate(coupon.startsAt)}    
+                                    </td>    
+
+                                    <td className="p-3 whitespace-nowrap">
+                                        {formatDate(coupon.endsAt)}    
+                                    </td>    
+
+                                    <td className="p-3 whitespace-nowrap">
+                                        {coupon.maxDiscount
+                                            ? `₹${coupon.maxDiscount}`
+                                            : "No cap"
                                         }
                                     </td>
 
