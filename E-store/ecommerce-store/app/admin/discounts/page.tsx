@@ -29,6 +29,11 @@ type Promotion = {
     maxDiscount: string | null;
 };
 
+type EditingDiscount = {
+    id: number;
+    kind: "coupon" | "promotion";
+};
+
 function formatDate(date: string | null) {
     if (!date) return "No restriction";
 
@@ -64,6 +69,18 @@ export default function DiscountsPage() {
     const [endsAt, setEndsAt] = useState("");
     const [maxDiscount, setMaxDiscount] = useState("");
     const [usageLimit, setUsageLimit] = useState("");
+
+    const [editingDiscount, setEditingDiscount] = useState<EditingDiscount | null>(null);
+
+    const [editName, setEditName] = useState("");
+    const [editCode, setEditCode] = useState("");
+    const [editType, setEditType] = useState<"PERCENTAGE" | "FIXED">("PERCENTAGE");
+    const [editValue, setEditValue] = useState("");
+    const [editMinOrder, setEditMinOrder] = useState("");
+    const [editMaxDiscount, setEditMaxDiscount] = useState("");
+    const [editStartsAt, setEditStartsAt] = useState("");
+    const [editEndsAt, setEditEndsAt] = useState("");
+    const [editUsageLimit, setEditUsageLimit] = useState("");
 
     useEffect(() => {
         async function fetchDiscounts() {
@@ -234,6 +251,29 @@ export default function DiscountsPage() {
         setMessage(`Discount ${isActive ? "activated" : "deactivated"}.`);
     }
 
+    function openEditCoupon(coupon: Coupon) {
+        setEditingDiscount({ id: coupon.id, kind: "coupon" });
+        setEditCode(coupon.code);
+        setEditType(coupon.type);
+        setEditValue(coupon.value);
+        setEditMinOrder(coupon.minOrder ?? "");
+        setEditMaxDiscount(coupon.maxDiscount ?? "");
+        setEditStartsAt(coupon.startsAt ? coupon.startsAt.slice(0, 16) : "");
+        setEditEndsAt(coupon.endsAt ? coupon.endsAt.slice(0, 16) : "");
+        setEditUsageLimit(coupon.usageLimit === null ? "" : String(coupon.usageLimit));
+    }
+
+    function openEditPromotion(promotion: Promotion) {
+        setEditingDiscount({ id: promotion.id, kind: "promotion"});
+        setEditName(promotion.name);
+        setEditType(promotion.type);
+        setEditValue(promotion.value);
+        setEditMinOrder(promotion.minOrder ?? "");
+        setEditMaxDiscount(promotion.maxDiscount ?? "");
+        setEditStartsAt(promotion.startsAt ? promotion.startsAt.slice(0, 16) : "");
+        setEditEndsAt(promotion.endsAt ? promotion.endsAt.slice(0, 16) : "");
+    }
+
     if (loading) return <p className="p-6">Loading discounts...</p>;
 
     if (error) return <p className="p-6 text-red-600">{error}</p>;
@@ -347,6 +387,7 @@ export default function DiscountsPage() {
                                     <th className="p-3 text-slate-600">Ends At</th>
                                     <th className="p-3 text-slate-600">Max Discount</th>
                                     <th className="p-3 text-slate-600">Status</th>
+                                    <th className="p-3 text-slate-600">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -394,6 +435,16 @@ export default function DiscountsPage() {
                                                 className="rounded border px-3 py-1"
                                             >
                                                 {promotion.isActive ? "Active" : "Inactive"}
+                                            </button>
+                                        </td>
+
+                                        <td className="p-3">
+                                            <button
+                                                type="button"
+                                                onClick={() => openEditPromotion(promotion)}
+                                                className="rounded border px-3 py-1"
+                                            >
+                                                Edit
                                             </button>
                                         </td>
                                     </tr>
@@ -505,6 +556,163 @@ export default function DiscountsPage() {
                 )}
             </form>
 
+            {editingDiscount && (
+                <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <h2 className="mb-4 text-xl font-semibold">
+                         Edit {editingDiscount.kind === "coupon" ? "Coupon" : "Promotion"}   
+                    </h2>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                        {editingDiscount.kind === "coupon" ? (
+                            <div>
+                                <label className="mb-1 block text-sm font-medium">
+                                    Coupon Code
+                                </label>
+
+                                <input
+                                    value={editCode}
+                                    onChange={(e) => setEditCode(e.target.value)}
+                                    className="w-full rounded-lg border p-2"
+                                />
+                                
+                            </div>    
+                        ) : (
+                            <div>
+                                <label className="mb-1 block text-sm font-medium">
+                                    Promotion Name
+                                </label>
+
+                                <input
+                                    value={editName}
+                                    onChange={(e) => setEditName(e.target.value)}
+                                    className="w-full rounded-lg border p-2"
+                                />
+                            </div>    
+                        )}
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium">
+                                Discount Type
+                            </label>
+
+                            <select
+                                value={editType}
+                                onChange={(e) => setEditType(e.target.value as "PERCENTAGE" | "FIXED")}
+                                className="w-full rounded-lg border p-2"
+                            >
+                                <option value="PERCENTAGE">Percentage</option>
+                                <option value="FIXED">Fixed Amount</option>
+
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium">
+                                Discount Value
+                            </label>
+
+                            <input
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                value={editValue}
+                                onChange={(e) => setEditValue(e.target.value)}
+                                className="w-full rounded-lg border p-2"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium">
+                                Minimum Order Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                value={editMinOrder}
+                                onChange={(e) => setEditMinOrder(e.target.value)}
+                                className="w-full rounded-lg border p-2"
+                            />
+                        </div>
+
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium">
+                                Maximum Discount
+                            </label>
+
+                            <input
+                                type="number"
+                                value={editMaxDiscount}
+                                onChange={(e) => setEditMaxDiscount(e.target.value)}
+                                className="w-full rounded-lg border p-2"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium">
+                                Starts At
+                            </label>
+
+                            <input
+                                type="datetime-local"
+                                value={editStartsAt}
+                                onChange={(e) => setEditStartsAt(e.target.value)}
+                                className="w-full rounded-lg border p-2"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium">
+                                Ends At
+                            </label>
+
+                            <input
+                                type="datetime-local"
+                                value={editEndsAt}
+                                onChange={(e) => setEditEndsAt(e.target.value)}
+                                className="w-full rounded-lg border p-2"
+                            />
+                        </div>
+
+                        {editingDiscount.kind === "coupon" && (
+                            <div>
+                                <label className="mb-1 block text-sm font-medium">
+                                    Usage Limit
+                                </label>
+
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={editUsageLimit}
+                                    onChange={(e) => setEditUsageLimit(e.target.value)}
+                                    className="w-full rounded-lg border p-2"
+                                />
+                            </div>    
+                        )}
+
+                    </div>
+
+                    <div className="mt-5 flex gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setEditingDiscount(null)}
+                            className="rounded-lg border px-4 py-2"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={}
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+                        >
+                            Save Changes
+                        </button>
+                    </div>    
+
+                </div>
+            )}
+
             <h2 className="mb-3 text-lg font-semibold">Coupons</h2>
 
             {coupons.length === 0 ? (
@@ -522,6 +730,7 @@ export default function DiscountsPage() {
                                 <th className="p-3 text-slate-700" >Ends At</th>
                                 <th className="p-3 text-slate-700">Max Discount</th>
                                 <th className="p-3 text-slate-700">Status</th>
+                                <th className="p-3 text-slate-700">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -573,6 +782,16 @@ export default function DiscountsPage() {
                                             className="rounded border px-3 py-1"
                                         >
                                             {coupon.isActive ? "Active" : "Inactive"}
+                                        </button>
+                                    </td>
+
+                                    <td className="p-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => openEditCoupon(coupon)}
+                                            className="rounded border px-3 py-1"
+                                        >
+                                            Edit
                                         </button>
                                     </td>
                                 </tr>
