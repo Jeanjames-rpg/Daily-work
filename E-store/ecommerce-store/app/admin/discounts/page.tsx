@@ -82,24 +82,41 @@ export default function DiscountsPage() {
     const [editEndsAt, setEditEndsAt] = useState("");
     const [editUsageLimit, setEditUsageLimit] = useState("");
 
-    useEffect(() => {
-        async function fetchDiscounts() {
-            try {
-                const response = await fetch("/api/admin/discounts");
+    async function fetchDiscounts() {
+        try {
+            const response = await fetch("/api/admin/discounts");
+            const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error("Failed to load discounts");
-                }
-
-                const data = await response.json();
-                setCoupons(data.coupons ?? []);
-                setPromotions(data.promotions ?? []);
-            } catch {
-                 setError("Could not load coupons. Please check your login.");
-            } finally {
-                setLoading(false);
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to fetch discounts");
             }
+
+            setCoupons(data.coupons);
+            setPromotions(data.promotions);
+        } catch (error) {
+            console.error(error);
+            setMessage("Failed to load discounts.");
         }
+    }
+
+    useEffect(() => {
+        // async function fetchDiscounts() {
+        //     try {
+        //         const response = await fetch("/api/admin/discounts");
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to load discounts");
+        //         }
+
+        //         const data = await response.json();
+        //         setCoupons(data.coupons ?? []);
+        //         setPromotions(data.promotions ?? []);
+        //     } catch {
+        //          setError("Could not load coupons. Please check your login.");
+        //     } finally {
+        //         setLoading(false);
+        //     }
+        // }
 
         fetchDiscounts();
     }, []);
@@ -272,6 +289,68 @@ export default function DiscountsPage() {
         setEditMaxDiscount(promotion.maxDiscount ?? "");
         setEditStartsAt(promotion.startsAt ? promotion.startsAt.slice(0, 16) : "");
         setEditEndsAt(promotion.endsAt ? promotion.endsAt.slice(0, 16) : "");
+    }
+    
+
+    async function saveEditedDiscount() {
+        if (!editingDiscount) return;
+
+        try {
+            setSaving(true);
+            setMessage("");
+
+            const payload: Record<string, string | number | null> = {
+                kind: editingDiscount.kind,
+                type: editType,
+                value: editValue,
+                minOrder: editMinOrder || null,
+                maxDiscount: editMaxDiscount || null,
+                startsAt: editStartsAt
+                    ? new Date(editStartsAt).toISOString()
+                    : null,
+                endsAt: editEndsAt
+                    ? new Date(editEndsAt).toISOString()
+                    : null,
+            };
+
+            if (editingDiscount.kind === "coupon") {
+                payload.code = editCode.trim().toUpperCase();
+                payload.usageLimit = editUsageLimit
+                    ? Number(editUsageLimit)
+                    : null;
+            } else {
+                payload.name = editName.trim();
+            }
+
+            const response = await fetch(
+                `/api/admin/discounts/${editingDiscount.id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setMessage(data.error || "Failed to update discount.");
+                return;
+            }
+
+            setMessage("Discount updated successfully.");
+            setEditingDiscount(null);
+
+            //Refresh the discount lists from db
+            await fetchDiscounts();
+        } catch (error) {
+            console.error(error);
+            setMessage("Something went wrong while updating the discount.");
+        } finally {
+            setSaving(false);
+        }
     }
 
     if (loading) return <p className="p-6">Loading discounts...</p>;
@@ -558,11 +637,11 @@ export default function DiscountsPage() {
 
             {editingDiscount && (
                 <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <h2 className="mb-4 text-xl font-semibold">
+                    <h2 className="mb-4 text-xl font-semibold text-slate-600">
                          Edit {editingDiscount.kind === "coupon" ? "Coupon" : "Promotion"}   
                     </h2>
 
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 md:grid-cols-2 text-slate-600">
                         {editingDiscount.kind === "coupon" ? (
                             <div>
                                 <label className="mb-1 block text-sm font-medium">
@@ -696,14 +775,14 @@ export default function DiscountsPage() {
                         <button
                             type="button"
                             onClick={() => setEditingDiscount(null)}
-                            className="rounded-lg border px-4 py-2"
+                            className="rounded-lg border px-4 py-2 text-slate-600"
                         >
                             Cancel
                         </button>
 
                         <button
                             type="button"
-                            onClick={}
+                            onClick={saveEditedDiscount}
                             className="rounded-lg bg-blue-600 px-4 py-2 text-white"
                         >
                             Save Changes
