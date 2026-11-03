@@ -96,6 +96,8 @@ export default function DiscountsPage() {
         } catch (error) {
             console.error(error);
             setMessage("Failed to load discounts.");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -353,6 +355,49 @@ export default function DiscountsPage() {
         }
     }
 
+    async function deleteDiscount(
+        kind: "coupon" | "promotion" ,
+        id: number
+    ) {
+        const confirmed = window.confirm(
+            `Are you sure you want to delete this ${kind}?`
+        );
+
+        if (!confirmed) return;
+
+        try {
+            setSaving(true);
+            setMessage("");
+
+            const response = await fetch(`/api/admin/discounts/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ kind }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setMessage(data.error || "Failed to delete discount");
+                return;
+            }
+
+            if (editingDiscount?.id === id && editingDiscount.kind === kind) {
+                setEditingDiscount(null);
+            }
+
+            await fetchDiscounts();
+            setMessage(`${kind === "coupon" ? "Coupon" : "Promotion"} deleted successfully.`);
+        } catch (error) {
+            console.error(error);
+            setMessage("Something went wrong while deleting.");
+        } finally {
+            setSaving(false);
+        }
+    }
+
     if (loading) return <p className="p-6">Loading discounts...</p>;
 
     if (error) return <p className="p-6 text-red-600">{error}</p>;
@@ -387,7 +432,7 @@ export default function DiscountsPage() {
                         className="rounded-lg border p-3"
                     >
                         <option value="PERCENTAGE">Percentage (%)</option>            
-                        <option>Fixed amount (₹)</option>
+                        <option value="FIXED">Fixed amount (₹)</option>
 
                     </select>
 
@@ -466,7 +511,7 @@ export default function DiscountsPage() {
                                     <th className="p-3 text-slate-600">Ends At</th>
                                     <th className="p-3 text-slate-600">Max Discount</th>
                                     <th className="p-3 text-slate-600">Status</th>
-                                    <th className="p-3 text-slate-600">Actions</th>
+                                    <th className="p-3 text-slate-600" colSpan={2}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -524,6 +569,17 @@ export default function DiscountsPage() {
                                                 className="rounded border px-3 py-1"
                                             >
                                                 Edit
+                                            </button>
+                                        </td>
+
+                                        <td className="p-3">
+                                            <button
+                                            type="button"
+                                            onClick={() => deleteDiscount("promotion", promotion.id)}
+                                            disabled={saving}
+                                            className="rounded-lg bg-red-600 px-3 py-1 text-white hover:bg-red-700 disabled:opacity-50"
+                                            >
+                                                Delete
                                             </button>
                                         </td>
                                     </tr>
@@ -783,9 +839,10 @@ export default function DiscountsPage() {
                         <button
                             type="button"
                             onClick={saveEditedDiscount}
+                            disabled={saving}
                             className="rounded-lg bg-blue-600 px-4 py-2 text-white"
                         >
-                            Save Changes
+                            {saving ? "Saving... " : "Save Changes"}
                         </button>
                     </div>    
 
@@ -797,7 +854,7 @@ export default function DiscountsPage() {
             {coupons.length === 0 ? (
                 <p> No coupons found. </p>
             ) : (
-                <div className="overflow-x-auto rounded-lg border">
+                <div className=" overflow-x-auto rounded-lg border">
                     <table className="w-full text-left text-sm">
                         <thead className="bg-gray-100">
                             <tr>
@@ -809,7 +866,7 @@ export default function DiscountsPage() {
                                 <th className="p-3 text-slate-700" >Ends At</th>
                                 <th className="p-3 text-slate-700">Max Discount</th>
                                 <th className="p-3 text-slate-700">Status</th>
-                                <th className="p-3 text-slate-700">Action</th>
+                                <th className="p-3 text-slate-700" colSpan={2}>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -871,6 +928,17 @@ export default function DiscountsPage() {
                                             className="rounded border px-3 py-1"
                                         >
                                             Edit
+                                        </button>
+                                    </td>
+
+                                    <td className="p-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => deleteDiscount("coupon", coupon.id)}
+                                            disabled={saving}
+                                            className="rounded-lg bg-red-600 px-3 py-1 text-white hover:bg-red-700 disabled:opacity-50"
+                                        >
+                                            Delete
                                         </button>
                                     </td>
                                 </tr>

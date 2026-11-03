@@ -299,3 +299,54 @@ export async function PATCH(
         );
     }
 }
+
+export async function DELETE(request:Request, context: {params: Promise<{ id: string }>}) {
+    try {
+        const user = await getCurrentUser();
+
+        if (!user || !["ADMIN", "OWNER"].includes(user.role)) {
+            return NextResponse.json(
+                { error: "Unauthorized"},
+                { status: 403 }
+            );
+        }
+
+        const { id } = await context.params;
+        const discountId = Number(id);
+
+        if(!Number.isInteger(discountId) || discountId <= 0) {
+            return NextResponse.json(
+                { error: "Invalid discount ID"},
+                { status: 400 }
+            );
+        }
+
+        const { kind } = await request.json();
+
+        if (kind === "coupon") {
+            await prisma.coupon.delete({
+                where: { id: discountId },
+            });
+        } else if (kind === "promotion") {
+            await prisma.coupon.delete({
+                where: { id: discountId },
+            });
+        } else {
+            return NextResponse.json(
+                { error: "Invalid discount type "},
+                {status: 400}
+            );
+        }
+
+        return NextResponse.json({
+            message: "Discount deleted successfully",
+        });
+    } catch (error) {
+        console.error("Delete discount error:", error);
+
+        return NextResponse.json(
+            { error: "Failed to delete discount"},
+            { status: 500 }
+        );
+    }
+}
