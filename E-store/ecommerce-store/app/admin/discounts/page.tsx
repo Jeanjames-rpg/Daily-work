@@ -1,5 +1,6 @@
 "use client";
 
+import DiscountAnalytics from "@/app/components/admin/discounts/DiscountAnalytics";
 import React, { SyntheticEvent, useEffect, useState } from "react";
 
 
@@ -32,6 +33,15 @@ type Promotion = {
 type EditingDiscount = {
     id: number;
     kind: "coupon" | "promotion";
+};
+
+type DiscountAnalytics = {
+    totalCoupons: number;
+    activeCoupons: number;
+    totalPromotions: number;
+    activePromotions: number;
+    couponUsage: number;
+    recordedDiscounts: string;
 };
 
 function formatDate(date: string | null) {
@@ -82,6 +92,8 @@ export default function DiscountsPage() {
     const [editEndsAt, setEditEndsAt] = useState("");
     const [editUsageLimit, setEditUsageLimit] = useState("");
 
+    const [analytics, setAnalytics] = useState<DiscountAnalytics | null >(null);
+
     async function fetchDiscounts() {
         try {
             const response = await fetch("/api/admin/discounts");
@@ -98,6 +110,22 @@ export default function DiscountsPage() {
             setMessage("Failed to load discounts.");
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function fetchAnalytics() {
+        try {
+            const response = await fetch("/api/admin/discounts/analytics");
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to fetch analytics");
+            }
+
+            setAnalytics(data);
+        } catch (error) {
+            console.error("Analytics error:", error);
         }
     }
 
@@ -121,6 +149,7 @@ export default function DiscountsPage() {
         // }
 
         fetchDiscounts();
+        fetchAnalytics();
     }, []);
 
     async function handleCreateCoupon(e: React.SyntheticEvent<HTMLFormElement>) {
@@ -405,6 +434,8 @@ export default function DiscountsPage() {
     return (
         <main className="mx-auto max-w-5xl p-6">
             <h1 className="mb-6 text-2xl font-bold">Discount Management</h1>
+
+            <DiscountAnalytics analytics={analytics}/>
 
             <section className="mb-10">
                 <h2 className="mb-4 text-lg font-semibold">
