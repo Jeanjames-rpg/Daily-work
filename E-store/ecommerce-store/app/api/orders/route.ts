@@ -1,12 +1,15 @@
 import { verifySession } from "@/lib/auth";
 import { calculatePrice } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
+import { razorpay } from "@/lib/razorpay";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 
 
 export async function POST(request:Request) {
+    let reservedOrderId: number | null = null;
+
     try{
         // get session
 
@@ -82,6 +85,13 @@ export async function POST(request:Request) {
             (item: { variantId: number}) => item.variantId
         );
 
+        if (new Set(variantIds).size !== variantIds.length) {
+            return NextResponse.json(
+                { error: "Duplicate product variants are not allowed."},
+                { status: 400 }
+            );
+        }
+
         const variants = await prisma.productVariant.findMany({
             where: {
                 id: {
@@ -103,18 +113,18 @@ export async function POST(request:Request) {
         // calculate total and prepare order items 
 
         // let total = 0;
-        const quantities = new Map<number, number>();
+        // const quantities = new Map<number, number>();
 
-        for (const item of items) {
-            if (quantities.has(item.variantId)) {
-                return NextResponse.json(
-                    { error: "Duplicate product variants are not allowed."},
-                    { status: 400 }
-                );
-            }
+        // for (const item of items) {
+        //     if (quantities.has(item.variantId)) {
+        //         return NextResponse.json(
+        //             { error: "Duplicate product variants are not allowed."},
+        //             { status: 400 }
+        //         );
+        //     }
 
-            quantities.set(item.variantId, item.quantity);
-        }
+        //     quantities.set(item.variantId, item.quantity);
+        // }
 
         let subtotal = 0;
 
@@ -122,7 +132,7 @@ export async function POST(request:Request) {
             productId: number;
             variantId: number;
             quantity: number;
-            price: typeof variants[number]["price"];
+            price: (typeof variants)[number]["price"];
         }[] = [];
 
         for (const item of items) {
@@ -153,11 +163,6 @@ export async function POST(request:Request) {
 
             subtotal += Number(variant.price) * item.quantity;
 
-
-            // const price = Number(variant.price);
-
-            // total += price * item.quantity;
-
             orderItems.push({
                 productId: variant.productId,
                 variantId: variant.id,
@@ -187,34 +192,32 @@ export async function POST(request:Request) {
         const discount = Number(pricing.totalDiscount.toFixed(2));
         const finalSubtotal = Number(subtotal.toFixed(2));
 
-        // create order + order items + update stock 
+        if (!Number.isFinite(total) || total <= 0) {
+            return NextResponse.json(
+                { error: "Invalid order total. "},
+                { status: 400 }
+            );
+        }
+
+        // Razorpay needs money in paise 
+        const amountInPaise = Math.round(total * 100);
+
+
+        // . Reserve stock and create pending database order
         const order = await prisma.$transaction(async (tx) => {
-            const newOrder = await tx.order.create({
-                data: {
-                    userId,
-                    total,
-                    items: {create: orderItems,},
-                    subtotal: finalSubtotal,
-                    discount,
-                    couponCode: pricing.appliedCoupon,
+            // const newOrder = await tx.order.create({
+            //     data: {
+            //         userId,
+            //         total,
+            //         items: {create: orderItems,},
+            //         subtotal: finalSubtotal,
+            //         discount,
+            //         couponCode: pricing.appliedCoupon,
 
-                },
-            });
+            //     },
+            // });
 
-            // for (const item of items) {
-            //     await tx.product.update({
-            //         where: {
-            //             id: item.productId,
-            //             stock: {
-            //                 gte: item.quantity,
-            //             },
-            //         },
-            //         data: {
-            //             stock: { decrement: item.quantity,},
-            //         },
-            //     });
-            // }
-
+            
             for (const item of items) {
                 const updatedVariant = await tx.productVariant.updateMany({
                     where: {
@@ -237,13 +240,54 @@ export async function POST(request:Request) {
                 }
             }
 
-            return newOrder;
+            return tx.order.create({
+                data: {
+                    userId,
+                    total,
+                    subtotal: finalSubtotal,
+                    discount,
+                    couponCode: pricing.appliedCoupon ?? null,
+                    paymentStatus: "PENDING",
+                    status: "PENDING",
+                    items: {
+                        create: orderItems,
+                    },
+                },
+            });
+        });
+
+        reservedOrderId = order.id;
+
+        // Create Razorpay order 
+        const razorpayOrder = await razorpay.orders.create({
+            amount: amountInPaise,
+            currency: "INR",
+            receipt: `order_${order.id}`,
+        });
+
+        // Save Razorpay order id 
+        await prisma.order.update({
+            where: {
+                id: order.id,
+            },
+            data: {
+                razorpayOrderId: razorpayOrder.id,
+            },
         });
 
         return NextResponse.json(
             {
-                message: "Order placed successfully.",
+                message: "Payment order created successfully.",
+
                 orderId: order.id,
+
+                razorpay: {
+                    orderId: razorpayOrder.id,
+                    amount: amountInPaise,
+                    currency: "INR",
+                    key: process.env.RAZORPAY_KEY_ID,
+                },
+
                 pricing: {
                     subtotal: finalSubtotal,
                     automaticDiscount: Number(
@@ -262,8 +306,50 @@ export async function POST(request:Request) {
     }catch (error) {
         console.error("Order creation error.",error);
 
+        // Release reserved stock if Razorpay order creation fails 
+        if (reservedOrderId !== null) {
+            try {
+                await prisma.$transaction(async (tx) => {
+                    const cancelled = await tx.order.updateMany({
+                        where: {
+                            id: reservedOrderId!,
+                            paymentStatus: "PENDING",
+                            status: "PENDING",
+                        },
+                        data: {
+                            paymentStatus: "FAILED",
+                            status: "CANCELLED",
+                        },
+                    });
+
+                    if (cancelled.count === 1) {
+                        const failedOrder = await tx.order.findUnique({
+                            where: { id: reservedOrderId! },
+                            include: { items: true },
+                        });
+
+                        if (failedOrder) {
+                            
+                            for (const item of failedOrder.items) {
+                                await tx.productVariant.update({
+                                    where: { id: item.variantId },
+                                    data: {
+                                        stock: {
+                                            increment: item.quantity,
+                                        },
+                                    },
+                                });
+                            }
+                        }
+                    }
+                });
+            } catch (cleanupError) {
+                console.error("Stock release error:", cleanupError);
+            }
+        }
+
         return NextResponse.json(
-            { error: "Something went wrong while placing the order.",},
+            { error: "Unable to create payment order.",},
             { status: 500}
         );
     }

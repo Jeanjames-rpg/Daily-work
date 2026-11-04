@@ -54,6 +54,8 @@ model User {
 
   orders Order[]
   cart   Cart?
+
+  CouponRedemption CouponRedemption[]
 }
 
 enum OrderStatus {
@@ -64,11 +66,21 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model Order {
   id        Int         @id @default(autoincrement())
   total     Decimal     @db.Decimal(10, 2)
   status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now())
+
+  paymentStatus       PaymentStatus  @default(PENDING)
+  razorpayOrderId     String?        @unique
+  razorpayPaymentId   String?        @unique
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
@@ -78,6 +90,8 @@ model Order {
   subtotal   Decimal?       @db.Decimal(10, 2)
   discount   Decimal        @default(0) @db.Decimal(10, 2)
   couponCode  String?
+
+  CouponRedemption CouponRedemption?
 }
 
 model OrderItem {
@@ -170,4 +184,24 @@ model Coupon {
   usedCount   Int         @default(0)
   perUserLimit  Int?
   createdAt    DateTime   @default(now())
+
+  CouponRedemption CouponRedemption[]
+}
+
+model CouponRedemption {
+  id Int  @id @default(autoincrement())
+
+  couponId Int
+  userId   Int
+  orderId  Int    @unique
+
+  discount  Decimal @db.Decimal(10,2)
+
+  createdAt  DateTime @default(now())
+
+  coupon    Coupon    @relation(fields: [couponId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  order     Order     @relation(fields: [orderId], references: [id])
+
+  @@index([couponId, userId])
 }
