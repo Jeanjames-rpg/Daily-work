@@ -92,6 +92,8 @@ model Order {
   couponCode  String?
 
   CouponRedemption CouponRedemption?
+
+  couponDiscount  Decimal   @default(0) @db.Decimal(10,2)
 }
 
 model OrderItem {

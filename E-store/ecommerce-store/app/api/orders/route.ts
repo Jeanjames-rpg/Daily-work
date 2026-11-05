@@ -246,6 +246,7 @@ export async function POST(request:Request) {
                     total,
                     subtotal: finalSubtotal,
                     discount,
+                    couponDiscount: pricing.couponDiscount,
                     couponCode: pricing.appliedCoupon ?? null,
                     paymentStatus: "PENDING",
                     status: "PENDING",

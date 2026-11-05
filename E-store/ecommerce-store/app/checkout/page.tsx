@@ -3,6 +3,50 @@
 import { useRouter } from "next/navigation";
 import { useCart } from "../context/CartContext";
 import {  useEffect, useState } from "react";
+import Script from "next/script";
+import payments from "razorpay/dist/types/payments";
+import { razorpay } from "@/lib/razorpay";
+
+
+type RazorpaySuccessResponse = {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+};
+
+type RazorpayOptions = {
+    key: string;
+    amount: number;
+    currency: string;
+    name: string;
+    description: string;
+    order_id: string;
+    prefill: {
+        name: string;
+        email: string;
+    };
+    theme: {
+        color: string;
+    };
+    handler: (response: RazorpaySuccessResponse) => void;
+    modal?: {
+        ondismiss?: () => void;
+    };
+};
+
+declare global {
+    interface Window {
+        Razorpay: new (options: RazorpayOptions) => {
+            open: () => void;
+            on: (
+                event: "payment.failed",
+                callback: (response: {
+                    error?: {description?: string} ;
+                }) => void
+            ) => void;
+        };
+    }
+}
 
 type User = {
     id: number;
@@ -30,6 +74,8 @@ export default function CheckoutPage() {
     } | null >(null);
 
     const [applyingCoupon, setApplyingCoupon] = useState(false);
+
+    const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
     useEffect(() => {
         async function checkAuth() {
@@ -121,6 +167,20 @@ export default function CheckoutPage() {
 
     async function handlePlaceOrder() {
         setError("");
+
+        const currentUser = user;
+
+        if (!currentUser) {
+            setError("Please log in before placing an order.");
+            router.push("/login");
+            return;
+        }
+
+        if (!razorpayLoaded) {
+            setError("Payment system is still laoding . Please try again.");
+            return;
+        }
+
         setPlacingOrder(true);
 
         try {
@@ -131,35 +191,129 @@ export default function CheckoutPage() {
                 },
                 body: JSON.stringify({
                     items: cart.map((item) => ({
-                        // productId: item.id,
                         variantId: item.variantId,
                         quantity: item.quantity,
                     })),
+                    couponCode: discountResult?.appliedCoupon ?? null,
                 }),
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                alert(data.error || "Failed to place order");
-                return;
+                throw new Error(data.message || data.error || "Failed to create order.");
             }
 
-             await clearCart();
+            // open Razorpay  Checkout 
+            const checkout = new window.Razorpay({
+                key: data.razorpay.key,
+                amount: data.razorpay.amount,
+                currency: data.razorpay.currency,
+                name: "Your E-commerce Store",
+                description: "Order Payment",
+                order_id: data.razorpay.orderId,
 
-            alert(`Order placed successfully! Order Id: ${data.orderId}`);
+                prefill: {
+                    name: currentUser.name,
+                    email: currentUser.email,
+                },
 
-            router.push("/orders");
+                theme: {
+                    color: "#4F46E5",
+                },
+
+                handler: async (PaymentResponse) => {
+                    try {
+                        const verifyResponse = await fetch(
+                            "/api/orders/verify-payment",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    OrderId: data.orderId,
+                                    razorpay_order_id:
+                                        PaymentResponse.razorpay_order_id,
+                                    razorpay_payment_id:
+                                        PaymentResponse.razorpay_payment_id,
+                                    razorpay_signature:
+                                        PaymentResponse.razorpay_signature,
+                                }),
+                            }
+                        );
+
+                        const verifyData = await verifyResponse.json();
+
+                        if (!verifyResponse.ok) {
+                            throw new Error(
+                                verifyData.message || "Payment verification failed."
+                            );
+                        }
+
+                        await clearCart();
+
+                        router.push("/orders");
+                    } catch (error) {
+                        console.error("Verification error:", error);
+
+                        setError(
+                            error instanceof Error
+                                ? error.message
+                                : "Payment verification failed."
+                        );
+                    } finally {
+                        setPlacingOrder(false);
+                    }
+                },
+
+                // Customer closes th payment window 
+                modal: {
+                    ondismiss: () => {
+                        setPlacingOrder(false);
+                    },
+                },
+            });
+
+            // Handle payment failure
+            checkout.on("payment.failed", (PaymentResponse) => {
+                setError(
+                    PaymentResponse.error?.description ||
+                    "Payment failed. Please try again."
+                );
+
+                setPlacingOrder(false);
+            });
+
+            checkout.open();
+
+            //  await clearCart();
+
+            // alert(`Order placed successfully! Order Id: ${data.orderId}`);
+
+            // router.push("/orders");
         } catch (error) {
-            console.error(error);
-            setError("Something went wrong while placing the order.");
-        } finally {
+            console.error("Orrder creation error:", error);
+
+            setError(
+                error instanceof Error ? error.message : "Something went wrong."
+            );
+            // setError("Something went wrong while placing the order.");
+            
             setPlacingOrder(false);
         }
     }
 
     return (
         <main className="max-w-5xl mx-auto px-6 py-12">
+            <Script
+                src="https://checkout.razorpay.com/v1/checkout.js"
+                strategy="afterInteractive"
+                onLoad={() => setRazorpayLoaded(true)}
+                onError={() => setError("Unable to load Razorpay Checkout.")}
+            />
+
+
             <h1 className="text-3xl font-bold mb-8">
                 Checkout
             </h1>
@@ -315,10 +469,14 @@ export default function CheckoutPage() {
 
                     <button 
                         onClick={handlePlaceOrder}
-                        disabled={placingOrder}
+                        disabled={placingOrder || !razorpayLoaded}
                         className="mt-6 w-full rounded-lg bg-green-600 py-3 font-semibold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        {placingOrder ? "Placing Order..." : "Place Order"}
+                        {!razorpayLoaded
+                            ? "Loading Payment.."
+                            : placingOrder
+                                ? "Processinf.."
+                                : "Proceed to payment"}
                     </button>
                 </div>
 
