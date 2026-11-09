@@ -99,6 +99,36 @@ export default function CheckoutPage() {
         checkAuth();
     }, [router]);
 
+    useEffect(() => {
+        async function fetchInitialPricing() {
+            try {
+                const response = await fetch("/api/discounts/apply", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        subtotal: total,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Pricing calculation failed.");
+                }
+
+                setDiscountResult(data);
+            } catch (error) {
+                console.error("Initial pricing error:", error);
+            }
+        }
+
+        if (cart.length > 0) {
+            fetchInitialPricing();
+        }
+    }, [total, cart.length]);
+
     async function handleApplyCoupon() {
         setApplyingCoupon(true) ;
         setCouponMessage("");
@@ -184,6 +214,7 @@ export default function CheckoutPage() {
         setPlacingOrder(true);
 
         try {
+            console.log("Applied coupon:", discountResult?.appliedCoupon);
             const response = await fetch("/api/orders", {
                 method: "POST",
                 headers: {
@@ -199,6 +230,12 @@ export default function CheckoutPage() {
             });
 
             const data = await response.json();
+
+            console.log("Checkout displayed total:", discountResult?.total ?? total);
+            console.log("Backend subtotal:", data.pricing?.subtotal);
+            console.log("Backend discount:", data.pricing?.totalDiscount);
+            console.log("Backend total:", data.pricing?.total);
+            console.log("Razorpay amount:", data.razorpay?.amount / 100);
 
             if (!response.ok) {
                 throw new Error(data.message || data.error || "Failed to create order.");
@@ -224,6 +261,12 @@ export default function CheckoutPage() {
 
                 handler: async (PaymentResponse) => {
                     try {
+                        console.log("Razorpay response:", {
+                            orderId: data.orderId,
+                            razorpay_order_id: PaymentResponse.razorpay_order_id,
+                            razorpay_payment_id: PaymentResponse.razorpay_payment_id,
+                            razorpay_signature_recieved: !!PaymentResponse.razorpay_signature
+                        })
                         const verifyResponse = await fetch(
                             "/api/orders/verify-payment",
                             {
@@ -232,7 +275,7 @@ export default function CheckoutPage() {
                                     "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
-                                    OrderId: data.orderId,
+                                    orderId: data.orderId,
                                     razorpay_order_id:
                                         PaymentResponse.razorpay_order_id,
                                     razorpay_payment_id:
@@ -307,10 +350,14 @@ export default function CheckoutPage() {
     return (
         <main className="max-w-5xl mx-auto px-6 py-12">
             <Script
+                id="razorpay-checkout"
                 src="https://checkout.razorpay.com/v1/checkout.js"
                 strategy="afterInteractive"
-                onLoad={() => setRazorpayLoaded(true)}
-                onError={() => setError("Unable to load Razorpay Checkout.")}
+                onReady={() => setRazorpayLoaded(true)}
+                onError={() => {
+                    setRazorpayLoaded(false);
+                    setError("Unable to load Razorpay Checkout.");
+                }}
             />
 
 
@@ -475,7 +522,7 @@ export default function CheckoutPage() {
                         {!razorpayLoaded
                             ? "Loading Payment.."
                             : placingOrder
-                                ? "Processinf.."
+                                ? "Processing.."
                                 : "Proceed to payment"}
                     </button>
                 </div>

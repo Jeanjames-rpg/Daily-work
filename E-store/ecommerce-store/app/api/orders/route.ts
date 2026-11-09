@@ -42,7 +42,7 @@ export async function POST(request:Request) {
         const { items, couponCode } = body;
 
         if (
-            couponCode !== undefined &&
+            couponCode !== null &&
             (typeof couponCode !== "string" || couponCode.length > 100) 
         ) {
             return NextResponse.json(

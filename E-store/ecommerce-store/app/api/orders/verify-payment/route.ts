@@ -31,21 +31,51 @@ export async function POST(request: Request) {
 
         const userId = payload.userId;
 
+        const body = await request.json();
+
+        console.log("Backend recieved:", body);
+
         const {
             orderId,
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
-        } = await request.json();
+        } = body;
 
-        if (
-            !orderId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature
-        ) {
+        const recieved = {
+            orderId: !!orderId,
+            razorpay_order_id: !!razorpay_order_id,
+            razorpay_payment_id: !!razorpay_payment_id,
+            razorpay_signature: !!razorpay_signature,
+        };
+
+        console.log("Payment details received:", recieved);
+
+        if (Object.values(recieved).some((value) => !value)) {
             return NextResponse.json(
-                { message: "Missing payment details."},
-                { status: 400 }
+                {
+                    message: "Missing payment details.",
+                    recieved,
+                },
+                {status: 400 }
             );
         }
+
+        // console.log("Verification request:", {
+        //     orderId,
+        //     razorpay_order_id,
+        //     razorpay_payment_id,
+        //     hasSignature: !!razorpay_signature,
+        // });
+
+        // if (
+        //     !orderId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature
+        // ) {
+        //     return NextResponse.json(
+        //         { message: "Missing payment details."},
+        //         { status: 400 }
+        //     );
+        // }
 
         // find order blonging to this user 
         const order = await prisma.order.findFirst({
@@ -83,7 +113,7 @@ export async function POST(request: Request) {
         const expectedBuffer = Buffer.from(expectedSignature, "hex");
         const recievedBuffer = Buffer.from(razorpay_signature, "hex");
 
-        if ( expectedSignature.length !== recievedBuffer.length || !timingSafeEqual(expectedBuffer, recievedBuffer)) {
+        if ( expectedBuffer.length !== recievedBuffer.length || !timingSafeEqual(expectedBuffer, recievedBuffer)) {
             return NextResponse.json(
                 { message: "Invalid payment signature."},
                 { status: 400 }
