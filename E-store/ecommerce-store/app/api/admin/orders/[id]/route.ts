@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 const allowedStatuses = [
     "PENDING",
+    "PAID",
     "CONFIRMED",
     "SHIPPED",
     "DELIVERED",

@@ -60,6 +60,7 @@ model User {
 
 enum OrderStatus {
   PENDING
+  PAID
   CONFIRMED
   SHIPPED
   DELIVERED

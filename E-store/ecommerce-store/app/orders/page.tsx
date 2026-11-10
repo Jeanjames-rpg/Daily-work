@@ -145,6 +145,8 @@ export default function OrdersPage() {
                                         className={`rounded-full px-3 py-1 text-sm font-medium ${
                                             order.status === "PENDING"
                                                 ? "bg-yellow-100 text-yellow-700"
+                                                : order.status === "PAID"
+                                                ? "bg-emerald-100 text-emerald-700"
                                                 : order.status === "CONFIRMED"
                                                 ? "bg-blue-100 text-blue-700"
                                                 : order.status === "SHIPPED"
@@ -156,7 +158,7 @@ export default function OrdersPage() {
                                                 : "bg-gray-100 text-gray-700"
                                         }`}
                                     >
-                                        {order.status}
+                                        {order.status.charAt(0) + order.status.slice(1).toLowerCase()}
                                     </span>
                                 </div>    
                             </div>

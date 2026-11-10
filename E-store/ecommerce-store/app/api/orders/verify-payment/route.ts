@@ -149,7 +149,7 @@ export async function POST(request: Request) {
                 data: {
                     paymentStatus: "PAID",
                     razorpayPaymentId: razorpay_payment_id,
-                    status: "CONFIRMED",
+                    status: "PAID",
                 },
             });
 

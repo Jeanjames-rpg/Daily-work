@@ -39,6 +39,7 @@ type Order = {
 
 const statusSteps = [
     "PENDING",
+    "PAID",
     "CONFIRMED",
     "SHIPPED",
     "DELIVERED",
@@ -142,15 +143,61 @@ export default function OrderDetailsPage() {
             </div>
 
             {/* status  */}
-           <div className="mt-10 rounded-2xl border bg-white p-6">
+
+            <div className="mt-10 rounded-2xl border bg-white p-6">
                 <h2 className="text-xl font-bold text-slate-600">
-                    Order Status
+                        Order Status
                 </h2>
 
                 <div className="mt-6 flex items-center text-slate-500">
+                        {statusSteps.map((step, index) =>  (
+                            <div key={step} className="flex flex-1 items-center">
+                                <div className="flex flex-col items-center">
+                                    <div
+                                        className={`flex h-8 w-8 items-center justify-center rounded-full ${
+                                        
+                                            currentStatusIndex >= index
+                                                ? "bg-green-500 text-white"
+                                                : "bg-gray-300 text-white"
+                                         }`} 
+                                    >  
+                                        {currentStatusIndex >= index ? "✓" : index + 1}
+                                    </div>  
+
+                                    <p className="mt-2 text-xs text-center">
+                                        {step.charAt(0) + step.slice(1).toLowerCase()}
+                                    </p>  
+                                </div>
+
+                                {index < statusSteps.length - 1 && (
+                                    <div
+                                        className={`mx-2 h-1 flex-1 ${
+                                            currentStatusIndex > index
+                                                ? "bg-green-500"
+                                                : "bg-gray-200"
+                                        }`}
+                                    />  
+                                )}    
+
+                            </div>    
+                        ))}
+                </div>            
+            </div>             
+
+
+
+
+
+
+           {/* <div className="mt-10 rounded-2xl border bg-white p-6">
+                <h2 className="text-xl font-bold text-slate-600">
+                    Order Status
+                </h2> */}
+
+                {/* <div className="mt-6 flex items-center text-slate-500"> */}
 
                     {/* Placed  */}
-                    <div className="min-width: 70px text-center">
+                    {/* <div className="min-width: 70px text-center">
                         <div
                             className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
                                 currentStatusIndex >= 0
@@ -158,26 +205,26 @@ export default function OrderDetailsPage() {
                                     : "bg-gray-300"
                             }`}
                         >
-                            {currentStatusIndex >= 0 ? "✓" : "1"}
-                        </div>
+                            {currentStatusIndex >= 0 ? "✓" : "1"} */}
+                        {/* </div>
                         
                         <p className="mt-2 text-sm">
                             Placed
                         </p>
-                    </div>
+                    </div> */}
 
 
                     {/* Line  */}
-                    <div
+                    {/* <div
                         className={`mx-2 h-1 flex-1 ${
                             currentStatusIndex >= 1
                                 ? "bg-green-500"
                                 : "bg-gray-200"
                         }`}
-                    />
+                    /> */}
 
                     {/* Confirmed  */}
-                    <div className="min-width: 80px text-center">
+                    {/* <div className="min-width: 80px text-center">
                         <div
                             className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
                                 currentStatusIndex >= 1
@@ -191,19 +238,19 @@ export default function OrderDetailsPage() {
                         <p className="mt-2 text-sm">
                             Confirmed
                         </p>
-                    </div>
+                    </div> */}
 
                     {/* Line  */}
-                    <div
+                    {/* <div
                         className={`mx-2 h-1 flex-1 ${
                             currentStatusIndex >= 2
                                 ? "bg-green-500"
                                 : "bg-gray-200"
                         }`}
-                    />
+                    /> */}
 
                     {/* Shipped  */}
-                    <div className="min-width: 70px text-center">
+                    {/* <div className="min-width: 70px text-center">
                         <div
                             className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
                                 currentStatusIndex >= 2
@@ -218,20 +265,20 @@ export default function OrderDetailsPage() {
                             Shipped
                         </p>
 
-                    </div>
+                    </div> */}
 
 
                     {/* Line  */}
-                    <div
+                    {/* <div
                         className={`mx-2 h-1 flex-1 ${
                             currentStatusIndex >= 3
                                 ? "bg-green-500"
                                 : "bg-gray-200"
                         }`}
-                    />
+                    /> */}
 
                     {/* Delivered  */}
-                    <div className="min-width: 75px text-center">
+                    {/* <div className="min-width: 75px text-center">
                         <div
                             className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full ${
                                 currentStatusIndex >= 3
@@ -248,7 +295,7 @@ export default function OrderDetailsPage() {
                     </div>
 
                 </div>
-           </div>
+           </div> */}
 
             {/* products  */}
             <div className="mt-8 rounded-2xl border bg-white p-6">

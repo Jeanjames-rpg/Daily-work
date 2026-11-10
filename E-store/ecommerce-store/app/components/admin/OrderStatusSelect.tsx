@@ -10,6 +10,7 @@ type OrderStatusSelectProps = {
 
 const statuses = [
   "PENDING",
+  "PAID",
   "CONFIRMED",
   "SHIPPED",
   "DELIVERED",
