@@ -175,7 +175,7 @@ export async function POST(request:Request) {
         let pricing;
 
         try {
-            pricing = await calculatePrice(subtotal, couponCode); 
+            pricing = await calculatePrice(subtotal, couponCode ?? undefined, userId); 
         } catch (error) {
             return NextResponse.json(
                 {

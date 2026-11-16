@@ -40,7 +40,7 @@ function calculatedDiscount(
     return Math.min(subtotal, Math.max(0, discount));
 }
 
-export async function calculatePrice(subtotal:number, couponCode?: string) {
+export async function calculatePrice(subtotal:number, couponCode?: string, userId?: number) {
     if (!Number.isFinite(subtotal) || subtotal < 0 ) {
         throw new Error("Invalid subtotal.");
     }
@@ -90,6 +90,27 @@ export async function calculatePrice(subtotal:number, couponCode?: string) {
             coupon.usedCount >= coupon.usageLimit
         ) {
             throw new Error("This has reached its usage limit.");
+        }
+
+        if (
+            coupon.perUserLimit !== null
+        ) {
+            if (!userId) {
+                throw new Error("Please log in to use this coupon");
+            }
+
+            const userUsageCount = await prisma.couponRedemption.count({
+                where: {
+                    couponId: coupon.id,
+                    userId,
+                },
+            });
+
+            if (userUsageCount >= coupon.perUserLimit) {
+                throw new Error(
+                    "You have reached the usage limit for this coupon."
+                );
+            }
         }
 
         const couponRule: DiscountRule = coupon;
