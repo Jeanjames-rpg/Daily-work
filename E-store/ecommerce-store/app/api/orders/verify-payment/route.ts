@@ -168,27 +168,71 @@ export async function POST(request: Request) {
                 throw new Error("Order has already been processed.");
             }
 
+            // if (order.couponCode) {
+            //     const coupon = await tx.coupon.findUnique({
+            //         where: { code: order.couponCode },
+            //     });
+
+            //     if (coupon) {
+            //         await tx.couponRedemption.create({
+            //             data: {
+            //                 couponId: coupon.id,
+            //                 userId,
+            //                 orderId: order.id,
+            //                 discount: order.couponDiscount,
+            //             },
+            //         });
+
+            //         await tx.coupon.update({
+            //             where: {id: coupon.id},
+            //             data: {
+            //                 usedCount: { increment: 1 },
+            //             },
+            //         });
+            //     }
+            // }
+
+            // Redeem the coupon reservation after successfull payment 
+
             if (order.couponCode) {
-                const coupon = await tx.coupon.findUnique({
-                    where: { code: order.couponCode },
+                const redemption = await tx.couponRedemption.findFirst({
+                    where: {
+                        orderId: order.id,
+                        status: "RESERVED",
+                    },
                 });
 
-                if (coupon) {
-                    await tx.couponRedemption.create({
+                if (redemption) {
+                    const redeemed = await tx.couponRedemption.updateMany({
+                        where: {
+                            id: redemption.id,
+                            status: "RESERVED",
+                        },
                         data: {
-                            couponId: coupon.id,
-                            userId,
-                            orderId: order.id,
-                            discount: order.couponDiscount,
+                            status: "REDEEMED",
                         },
                     });
 
-                    await tx.coupon.update({
-                        where: {id: coupon.id},
-                        data: {
-                            usedCount: { increment: 1 },
-                        },
-                    });
+                    if (redeemed.count === 1) {
+                        await tx.coupon.update({
+                            where: { id: redemption.couponId},
+                            data: {
+                                reservedCount: {
+                                    decrement: 1,
+                                },
+                                usedCount: {
+                                    increment: 1,
+                                },
+
+                            },
+                        });
+                    }
+                } else {
+                    // Payment has succeeded, but the reservation is missing.
+                    // Log this for reconciliation; do not undo the paid order.
+                    console.error(
+                    `Missing coupon reservation for paid order ${order.id}`
+                    );
                 }
             }
             return "paid";

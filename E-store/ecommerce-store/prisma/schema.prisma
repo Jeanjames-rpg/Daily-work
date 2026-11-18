@@ -160,6 +160,12 @@ enum DiscountType {
   FIXED
 }
 
+enum CouponRedemptionStatus {
+  RESERVED
+  REDEEMED
+  RELEASED
+}
+
 model Promotion {
   id        Int         @id @default (autoincrement())
   name      String      
@@ -187,6 +193,7 @@ model Coupon {
   usedCount   Int         @default(0)
   perUserLimit  Int?
   createdAt    DateTime   @default(now())
+  reservedCount Int       @default(0)
 
   CouponRedemption CouponRedemption[]
 }
@@ -200,6 +207,7 @@ model CouponRedemption {
 
   discount  Decimal @db.Decimal(10,2)
 
+  status     CouponRedemptionStatus     @default(RESERVED)
   createdAt  DateTime @default(now())
 
   coupon    Coupon    @relation(fields: [couponId], references: [id])

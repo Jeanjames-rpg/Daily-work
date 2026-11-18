@@ -205,19 +205,71 @@ export async function POST(request:Request) {
 
         // . Reserve stock and create pending database order
         const order = await prisma.$transaction(async (tx) => {
-            // const newOrder = await tx.order.create({
-            //     data: {
-            //         userId,
-            //         total,
-            //         items: {create: orderItems,},
-            //         subtotal: finalSubtotal,
-            //         discount,
-            //         couponCode: pricing.appliedCoupon,
+            let couponIdToReserve: number | undefined = undefined;
 
-            //     },
-            // });
+            if (pricing.appliedCoupon) {
 
-            
+                await tx.$queryRaw<Array<{ id: number }>>`
+                    SELECT "id"
+                    FROM "Coupon"
+                    WHERE "code" = ${pricing.appliedCoupon}
+                    FOR UPDATE
+                `;
+
+                const coupon = await tx.coupon.findUnique({
+                    where: { code: pricing.appliedCoupon },
+                });
+
+                if (!coupon || !coupon.isActive) {
+                    throw new Error("Coupon is no longer available.");
+                }
+
+                const now = new Date();
+
+                if (coupon.startsAt && coupon.startsAt > now) {
+                    throw new Error("Coupon is not active yet.");
+                }
+
+                if (coupon.endsAt && coupon.endsAt < now) {
+                    throw new Error("Coupon has expired.");
+                }
+
+                if (
+                    coupon.usageLimit !== null &&
+                    coupon.usedCount + coupon.reservedCount >= coupon.usageLimit
+                ) {
+                    throw new Error("Coupon usage limit reached.");
+                }
+
+                // Check how many times this user has reserved or redeemed it.
+                if (coupon.perUserLimit !== null) {
+                    const userUsageCount = await tx.couponRedemption.count({
+                        where: {
+                            couponId: coupon.id,
+                            userId,
+                            status: {
+                                in: ["RESERVED", "REDEEMED"],
+                            },
+                        },
+                    });
+
+                    if (userUsageCount >= coupon.perUserLimit) {
+                        throw new Error("You have already used this coupon.");
+                    }
+                }
+
+                if (
+                    coupon.minOrder !== null &&
+                    subtotal < Number(coupon.minOrder)
+                ) {
+                    throw new Error("Minimum order amount not reached.");
+                }
+
+                // Save the coupon for reservation after the order is created.
+                couponIdToReserve = coupon.id;
+            }
+
+
             for (const item of items) {
                 const updatedVariant = await tx.productVariant.updateMany({
                     where: {
@@ -240,7 +292,23 @@ export async function POST(request:Request) {
                 }
             }
 
-            return tx.order.create({
+            // return tx.order.create({
+            //     data: {
+            //         userId,
+            //         total,
+            //         subtotal: finalSubtotal,
+            //         discount,
+            //         couponDiscount: pricing.couponDiscount,
+            //         couponCode: pricing.appliedCoupon ?? null,
+            //         paymentStatus: "PENDING",
+            //         status: "PENDING",
+            //         items: {
+            //             create: orderItems,
+            //         },
+            //     },
+            // });
+
+            const createOrder = await tx.order.create({
                 data: {
                     userId,
                     total,
@@ -255,6 +323,68 @@ export async function POST(request:Request) {
                     },
                 },
             });
+
+            // Reserve coupon usage
+
+            if (couponIdToReserve !== undefined) {
+    
+                await tx.coupon.update({
+                    where: {id: couponIdToReserve,},
+                    data: {
+                        reservedCount: {
+                            increment: 1,
+                        },
+                    },
+                });
+
+                await tx.couponRedemption.create({
+                    data: {
+                        couponId: couponIdToReserve,
+                        userId,
+                        orderId: order.id,
+                        discount: pricing.couponDiscount,
+                        status: "RESERVED",
+                    },
+                });
+            }
+
+            return createOrder;
+          
+           
+        //     if (pricing.appliedCoupon) {
+        //         const coupon = await tx.coupon.findUnique({
+        //             where: {
+        //                 code: pricing.appliedCoupon,
+        //             },
+        //         });
+
+        //         if (!coupon) {
+        //             throw new Error("Coupon not found.");
+        //         }
+
+        //         await tx.coupon.update({
+        //             where: {
+        //                 id: coupon?.id,
+        //             },
+        //             data: {
+        //                 reservedCount: {
+        //                     increment: 1,
+        //                 },
+        //             },
+        //         });
+
+        //         await tx.couponRedemption.create({
+        //             data: {
+        //                 couponId: coupon?.id,
+        //                 userId,
+        //                 orderId: order.id,
+        //                 discount: pricing.couponDiscount,
+        //                 status: "RESERVED",
+        //             },
+        //         });
+        //     }
+
+        //     return order;
         });
 
         reservedOrderId = order.id;
@@ -337,6 +467,39 @@ export async function POST(request:Request) {
                                     data: {
                                         stock: {
                                             increment: item.quantity,
+                                        },
+                                    },
+                                });
+                            }
+                        }
+                        
+                        // Release reserved coupon usage
+                        const redemption = await tx.couponRedemption.findFirst({
+                            where: {
+                                orderId: reservedOrderId!,
+                                status: "RESERVED",
+                            },
+                        });
+
+                        if (redemption) {
+                            const released = await tx.couponRedemption.updateMany({
+                                where: {
+                                    id: redemption.id,
+                                    status: "RESERVED",
+                                },
+                                data: {
+                                    status: "RELEASED",
+                                },
+                            });
+
+                            if (released.count === 1 ) {
+                                await tx.coupon.update({
+                                    where: {
+                                        id: redemption.couponId,
+                                    },
+                                    data: {
+                                        reservedCount: {
+                                            decrement: 1,
                                         },
                                     },
                                 });
